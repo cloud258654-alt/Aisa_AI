@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 10 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 10
+• 時間長度: 8 秒 (72 - 80秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 下坡行駛時，按下中控台動能回收按鍵，回充系統啟動，甚至能讓您「越開電越多」，完美消除里程焦慮。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：實體按鍵按下的清脆回彈聲，隨後傳來微弱的電流回充科幻音效。背景音樂：節奏轉為輕快、有活力，展現能量源源不絕的動態感。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A close-up shot of a driver's hand pressing the physical 'Regeneration Boost' button next to the rotary shifter on the TOYOTA bZ4X center console. Warm, bright natural sunlight streams through the window, illuminating the dashboard. As the button is pressed, a clean, bright green digital energy flow graphic animates around it. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+特寫鏡頭，司機的手指按下 TOYOTA bZ4X 中控台旋鈕排檔座旁的「Regeneration Boost」實體按鍵。溫暖明亮的自然陽光透過車窗照亮整個儀表台。隨著按鍵被按下，周圍亮起乾淨明亮的綠色數位能量回充電流特效。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

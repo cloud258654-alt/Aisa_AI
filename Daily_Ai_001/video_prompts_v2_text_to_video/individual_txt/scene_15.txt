@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 15 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 15
+• 時間長度: 8 秒 (112 - 120秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 因為掛著 TOYOTA 廠徽，結合和泰官方二手中古車托底機制，這台車就是電車界的保值金字招牌。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：高檔展間開闊的環境音，皮鞋走在乾淨地板上的踏步聲。背景音樂：高雅、從容的弦樂重奏，凸顯品牌的高保值與高貴質感。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A slow cinematic panning shot of a spacious, ultra-modern Toyota Certified Pre-Owned showroom in Taiwan. Floor-to-ceiling windows flood the space with bright, brilliant natural afternoon sunlight. Clean silver Toyota cars reflect the sun beautifully, with a prominent Hotai Motor logo on the wall. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+電影級慢速橫向平移鏡頭，展示台灣一個寬敞、極現代化的 Toyota 認證中古車展間。大片落地窗將明亮燦爛的午後陽光引入室內。乾淨的銀色 Toyota 車輛折射著美麗日光，牆上有顯眼的和泰汽車標誌。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

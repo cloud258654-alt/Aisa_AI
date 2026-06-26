@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 08 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 08
+• 時間長度: 8 秒 (56 - 64秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 針對台灣真實路況，AI 一日生活模擬器將為您量身打造無憂的行駛能耗預估。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：高科技電子流動的沙沙聲。背景音樂：科技感電子樂與自然風光音樂融合，節奏穩定前進。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A 3D cinematic camera fly-through following a glowing green route line winding through sun-drenched digital green mountains from Taipei to Yilan, on a highly detailed 3D topographic map of Taiwan set against a clean white studio background. Futuristic clean data interface overlays floating in the air. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+電影級 3D 相機穿梭運鏡，跟隨一條綠色發光的路線蜿蜒穿過陽光普照的數位綠色山脈（從台北到宜蘭），地圖為乾淨白色工作室背景上的高精度台灣 3D 地形圖。空中懸浮著未來感且簡潔的數據介面。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

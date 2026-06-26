@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 09 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 09
+• 時間長度: 8 秒 (64 - 72秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 在擁擠的雪隧塞車時，車內是毫無引擎震動的靜音城堡，冷氣清新，不再吸入任何廢氣。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：車外微弱的塞車喇叭聲與車流聲，對比車內極致安靜、微弱的冷氣空調出風聲。背景音樂：音樂轉為極其溫馨、柔和的搖籃曲風格鋼琴聲，營造絕對安全與寧靜感。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A slow, peaceful camera tracking shot inside the spacious, sunlit cabin of a silver TOYOTA bZ4X. A Taiwanese mother and her young child are smiling and sleeping peacefully in the comfortable rear seats. Warm golden sunset light pours through the windows. The background outside the window shows the clean, well-lit entrance of the Hsuehshan Tunnel. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+車室內慢速且寧靜的追焦鏡頭，展示銀色 TOYOTA bZ4X 寬敞且陽光充盈的座艙內部。一對台灣母子在舒適的後座座椅上帶著微笑安穩沉睡。溫暖的金色夕陽餘暉透過車窗灑落。車窗外背景為採光良好、乾淨的雪山隧道入口。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

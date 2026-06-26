@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 21 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 21
+• 時間長度: 8 秒 (160 - 168秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 基於領先的開源 LLM、FastAPI 後端與和泰大數據，這是一套兼具技術先進性與商用落地的系統。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：數據流高速流動的低頻沙沙聲，服務器輕微的運轉聲。背景音樂：電子合成器音色加入，呈現硬核且高科技的先進感與系統穩定感。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A clean, modern system architecture diagram on a bright light-gray grid background. Highly detailed logos of FastAPI, Llama-3, Azure OpenAI, and Milvus are connected by bright green and blue flowing data streams pulsing and flowing along the connection lines. Modern clean tech studio lighting. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+在明亮的淺灰色網格背景上，展示一幅簡潔現代的系統架構圖。FastAPI、Llama-3、Azure OpenAI 與 Milvus 標誌清晰，亮綠色與藍色的動態數據流線條在連接線路上流暢脈動與流動，展現強大穩定的高科技感。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

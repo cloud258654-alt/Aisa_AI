@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 05 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 05
+• 時間長度: 8 秒 (32 - 40秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 這是一套結合數據智慧與溫暖共情的一站式決策系統，完美部署於官網與 LINE。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：科技介面滑動的輕微「嗖」聲（Swoosh）與發光提示音。背景音樂：轉為富有科技律動感、節奏明快的電子暖調音樂。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A smooth camera push-in showing a person holding a modern tablet in a sun-drenched, cozy living room. The screen displays a beautiful, bright glassmorphic dashboard UI with green and gold cost comparison charts animating and sliders adjusting. Soft natural light and warm dust motes floating in the background. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+鏡頭平滑向內推近，展示一個人在灑滿陽光、溫馨的客廳中拿著現代平板電腦。螢幕上顯示著精美的毛玻璃 UI 介面，綠色與金色的成本對比圖表正在動態生成，滑桿平滑移動。背景有柔和的自然光與飄動的溫暖微光。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 14 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 14
+• 時間長度: 8 秒 (104 - 112秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 面對電池疑慮，我們提供 8 年 16 萬公里超長保固，源自豐田 25 年電池零事故的安全底蘊。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：沉穩、安全的機械結構運轉聲。背景音樂：低音大提琴與銅管樂加入，節奏沉穩扎實，給人無比的安全感與信任感。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A smooth 3D rotating camera shot of a clean, bright transparent cutaway of the TOYOTA bZ4X chassis on a high-tech white studio background. The heavily protected battery pack module under the floor is highlighted with a glowing golden '8 Years Warranty' stamp. Professional bright studio lighting with clean, soft shadows. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+3D 平滑旋轉鏡頭，展示在高科技白色工作室背景下，TOYOTA bZ4X 底盤的乾淨明亮透明透視圖。車底下受到重重高強度鋼樑防護的電池模組亮起，上方蓋有發光的金色「8年保固」印章。專業明亮的棚內採光與柔和陰影。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 03 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 03
+• 時間長度: 8 秒 (16 - 24秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 面對未知的電池壽命、昂貴的保險，以及五年後折舊變廢鐵的傳聞，讓您遲遲不敢下手？ 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：室內安靜的環境音，手機輕微的通知提示音。背景音樂：節奏微弱放慢，營造思索與擔憂的氛圍。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A slow camera zoom out from a smartphone screen lying on a clean, sunlit wooden desk in a bright Taiwanese apartment. The screen displays a news article about electric vehicle battery degradation. Warm morning sunlight floods the desk, casting soft organic shadows. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+鏡頭緩慢向後拉遠，起點為放在台灣明亮公寓木質書桌上的智慧型手機螢幕。螢幕顯示著關於電動車電池衰退的新聞報導。明亮的晨光灑滿書桌，投射出柔和自然的陰影。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

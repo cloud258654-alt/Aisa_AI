@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 18 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 18
+• 時間長度: 8 秒 (136 - 144秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 抵達實體展間時，業務掃描條碼，您的用車習慣與關切焦點已瞬間同步至業務平板。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：平板相機掃描條碼的嗶聲（Beep），數據瞬間同步的科幻「嗖」聲。背景音樂：快節奏的電子暖音，表現高效、無縫接軌的尊榮服務。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A slow dolly shot in a bright, sun-drenched Toyota showroom. A friendly professional sales consultant in a smart suit smiles warmly as he uses a tablet to scan the QR Code on a customer's smartphone. Stream of natural sunlight enters through the floor-to-ceiling glass windows, illuminating the interaction. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+慢速推軌鏡頭，在陽光灑落、無比明亮的 Toyota 汽車展間中。一位身穿西裝、笑容溫暖的專業銷售顧問，用平板電腦掃描顧客手機上的 QR Code。自然陽光透過大片玻璃窗照亮溫馨的互動畫面。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

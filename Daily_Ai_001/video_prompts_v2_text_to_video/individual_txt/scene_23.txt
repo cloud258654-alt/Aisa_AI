@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 23 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 23
+• 時間長度: 6 秒 (174 - 180秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 用 AI 賦能轉型，用共情引領未來。我們是 Team Nexus，謝謝大家。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：海浪聲漸弱，轉為純淨的自然風聲。背景音樂：音樂逐漸收尾，轉為溫暖、悠揚且餘音繞樑的鋼琴和弦，留下無比溫馨與深刻的質感餘韻。隨後掌聲漸起。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A slow camera pull back on a clean, minimalist light-gray background. An elegant 'TOYOTA EV LifePilot' logo is displayed in the center, with the text '和泰 2026 AI 黑客松 | AI Team Nexus' below, bathed in a warm, hopeful sunlit glow. Soft golden particles rise and fade away. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+鏡頭緩慢向後拉遠，背景為簡潔優雅的淺灰色。中央浮現精緻的「TOYOTA EV LifePilot」標誌，下方為文字「和泰 2026 AI 黑客松 | AI Team Nexus 敬呈」，整體畫面沐浴在溫暖且充滿希望的陽光柔光中。柔和的金色粒子升騰並消逝。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

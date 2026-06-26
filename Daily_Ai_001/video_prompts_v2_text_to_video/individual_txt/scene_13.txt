@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 13 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 13
+• 時間長度: 8 秒 (96 - 104秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 AI 顧問會瞬間洞察您的情緒，識別您的購車角色，給予最懂您的共情解答。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：公園中的鳥鳴聲與微風吹拂落葉聲，手機訊息傳送的輕快音效。背景音樂：溫暖、親切的木琴與鋼琴合奏，營造被理解與陪伴的溫馨感。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A close-up tracking shot of a person holding a smartphone outdoors in a beautiful, sunlit green park in Taiwan. The screen displays a clean LINE chat window showing a warm conversational response from TOYOTA AI. A bright golden badge reading 'AI 購車領航員: 滿分爸爸' glows softly on the interface under the sun. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+特寫追焦鏡頭，一個人在台灣美麗、陽光普照的綠色公園中拿著手機。螢幕上顯示著簡潔的 LINE 對話視窗，TOYOTA AI 顧問回覆了溫馨的文字。介面上亮起「AI 購車領航員: 滿分爸爸」的明亮金色發光標籤，在陽光下熠熠生輝。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

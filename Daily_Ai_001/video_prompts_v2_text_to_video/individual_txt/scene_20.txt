@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 20 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 20
+• 時間長度: 8 秒 (152 - 160秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 我們已規劃好三階段路線圖，未來將輕鬆擴充至 PHEV 及 TOYOTA 全車系電動車款。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：科技圖表動態展開的平滑風聲，節點點亮的發光音效。背景音樂：音樂變得宏大、開闊，鼓點加入，展現對未來的堅定信念與規劃力。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A smooth horizontal camera scroll along a clean, bright digital timeline graphic on a light gray grid background. Three phases: 'Phase 1 MVP', 'Phase 2 O2O', and 'Phase 3 Scale Up to PHEV' are displayed, with green and gold glowing nodes pulse and illuminating sequentially under bright, clean lighting. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+鏡頭沿著時間軸平滑地橫向滾動，背景為乾淨明亮的淺灰色網格。展示三階段時程：Phase 1 MVP、Phase 2 O2O、Phase 3 Scale Up，綠色與金色的發光節點依次亮起霓虹脈衝，整體採光明快簡潔。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================

@@ -1,0 +1,25 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 16 文字直接生影片 (T2V) 專用提示詞包
+========================================================================
+
+【分鏡基本資訊】
+• 分鏡編號: 圖片/影片 16
+• 時間長度: 8 秒 (120 - 128秒)
+• 旁白配音 (繁中語音內容):
+  👉 「 結合和泰產險專屬新能源車險，與長期的稅金全免優勢，幫您把每一步成本降到最低。 」
+
+• 語音與音效指引 (Audio & VO Cues):
+  環境音：都市商務區明快的氣氛，微風吹動玻璃大樓旁樹木的聲音。背景音樂：輕快、具有前進感的都市商務風格音樂。
+
+------------------------------------------------------------------------
+🎬 【Text-to-Video (T2V) 影片生成提示詞】 - 用於 Runway Gen-3 / Sora / Kling / Vids
+------------------------------------------------------------------------
+👉 英文版提示詞 (已融合動作、台灣實景、極光銀實車與陽光基調，推薦直接複製使用):
+
+A smooth camera focus shift starting from a modern glass-walled office building displaying the 'Hotai Insurance' logo under a clear blue sky, panning down to a smartphone held in the foreground. The screen displays a clean, bright digital EV insurance policy document illuminated beautifully by natural warm sunlight. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
+
+👉 中文版對照提示詞 (適用於支援中文的影片生成工具，如 快手可靈 Kling / Vidu / 海螺 AI):
+
+平滑變焦移焦鏡頭，起點為藍天白雲下一棟印有「和泰產險」標誌的現代玻璃大樓，隨後將焦點轉移至前景手中的智慧型手機。螢幕上顯示著簡潔明亮的新能源車險電子保單，畫面沐浴在溫暖的陽光中。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
+
+========================================================================
