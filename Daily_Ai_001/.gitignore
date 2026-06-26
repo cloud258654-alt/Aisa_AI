@@ -1,0 +1,9 @@
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Local system generation
+.system_generated/
+.DS_Store
+Thumbs.db
