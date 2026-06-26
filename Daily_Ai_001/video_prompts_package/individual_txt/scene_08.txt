@@ -1,0 +1,28 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 08 影片生成專用資料
+========================================================================
+
+【基本資訊】
+• 對應圖片檔名/編號: scene_08.png
+• 時間長度: 8 秒 (56 - 64秒)
+• 旁白配音 (繁中): 針對台灣真實路況，AI 一日生活模擬器將為您量身打造無憂的行駛能耗預估。
+
+------------------------------------------------------------------------
+【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
+------------------------------------------------------------------------
+👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
+A beautiful 3D digital topographic map of Taiwan, showing a glowing green route line winding through mountains from Taipei to Yilan, high-tech interface overlay. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+
+👉 中文版 (供參考/可用於支援中文的繪圖軟體):
+一幅精美的台灣 3D 數位地形圖，顯示一條綠色發光的路線從台北蜿蜒穿過山嶺抵達宜蘭，疊加高科技數據介面。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+
+------------------------------------------------------------------------
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+------------------------------------------------------------------------
+👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
+3D camera fly-through following the green route line across the mountains.
+
+👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
+3D 相機穿梭運鏡，跟隨綠色發光的路線飛越山脈。
+
+========================================================================

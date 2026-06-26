@@ -1,0 +1,28 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 23 影片生成專用資料
+========================================================================
+
+【基本資訊】
+• 對應圖片檔名/編號: scene_23.png
+• 時間長度: 6 秒 (174 - 180秒)
+• 旁白配音 (繁中): 用 AI 賦能轉型，用共情引領未來。我們是 Team Nexus，謝謝大家。
+
+------------------------------------------------------------------------
+【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
+------------------------------------------------------------------------
+👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
+A minimalist dark background with a glowing "TOYOTA EV LifePilot" logo in the center, and text "和泰 2026 AI 黑客松 | AI Team Nexus" below. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+
+👉 中文版 (供參考/可用於支援中文的繪圖軟體):
+極簡的暗色調背景，中央浮現發光的「TOYOTA EV LifePilot」標誌，下方印有文字「和泰 2026 AI 黑客松 | AI Team Nexus 敬呈」。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+
+------------------------------------------------------------------------
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+------------------------------------------------------------------------
+👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
+Slow camera pull back, subtle blue particles rising and fading away, creating a lasting premium impression.
+
+👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
+鏡頭緩慢向後拉遠，微弱的發光藍色粒子在背景升騰並逐漸消逝，留下深刻的質感餘韻。
+
+========================================================================

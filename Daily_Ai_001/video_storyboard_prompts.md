@@ -1,0 +1,291 @@
+# 🎬 TOYOTA EV LifePilot：3分鐘宣傳片「以圖生影」中英文雙語 Prompts 資料庫
+
+本文件提供 3 分鐘宣傳片（共 23 段，每段 8 秒以內）的完整分鏡設計。每個分鏡均包含對應的**圖片檔案編號**、**繁中旁白**、以及**中英文雙語對照的 AI 繪圖與運鏡指令**。
+
+*   **統一視覺風格基調 (Style Base)**: 
+    *   *English*: `Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.`
+    *   *中文對照*: `極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。`
+
+---
+
+## 🏔️ 階段一：痛點喚醒與共鳴 (0 - 32秒 | 第 1-4 幕)
+
+### 🎥 分鏡 01 (對應圖片：`scene_01.png`)
+*   **時間長度**：8 秒 (0 - 8秒)
+*   **旁白配音**：在油價高漲的時代，每次踩下油門，您是否也在心疼燃油車那無底洞般的油錢與稅金？
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A stressed Taiwanese driver looking at a glowing neon gas station sign in rainy Taipei at dusk, showing high fuel prices. Depressive cold blue color tone, cinematic composition. Style Base.`
+    *   *中文對照*: `一位面露壓抑與壓力的台灣司機，在黃昏下雨的台北街頭，看著加油站看板上跳動的高油價霓虹燈。抑鬱的冷藍色調，電影感構圖。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow camera zoom in on the driver's anxious expression, soft rain falling on the windshield, shallow depth of field.`
+    *   *中文對照*: `鏡頭緩慢向司機焦慮的表情拉近，雨滴輕柔落在擋風玻璃上，呈現淺景深效果。`
+
+---
+
+### 🎥 分鏡 02 (對應圖片：`scene_02.png`)
+*   **時間長度**：8 秒 (8 - 16秒)
+*   **旁白配音**：想換電動車，卻因為大樓無法安裝充電樁，或是對續航力感到焦慮而裹足不前？
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `An empty concrete parking spot in a typical Taiwanese apartment basement garage. A disappointed man standing next to the blank wall, gesturing with worry. Style Base.`
+    *   *中文對照*: `一個典型的台灣公寓地下室停車場中空無一物的車位。一位失望的男子站在空白的牆壁旁，面露擔憂地比著手勢。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow horizontal pan showing the empty parking space, soft warm fluorescent lights flickering slightly.`
+    *   *中文對照*: `鏡頭緩慢橫向平移展示空車位，上方溫暖的日光燈輕微閃爍。`
+
+---
+
+### 🎥 分鏡 03 (對應圖片：`scene_03.png`)
+*   **時間長度**：8 秒 (16 - 24秒)
+*   **旁白配音**：面對未知的電池壽命、昂貴的保險，以及五年後折舊變廢鐵的傳聞，讓您遲遲不敢下手？
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A smartphone screen displaying blurred Taiwanese news articles about electric car battery degradation and high insurance rates, dark atmospheric background, digital noise. Style Base.`
+    *   *中文對照*: `智慧型手機螢幕上顯示著模糊的台灣新聞報導，標題涉及電動車電池衰退與高昂保費，暗色調背景，帶有數位雜訊。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Subtle camera tilt and digital glitch transition effect, focusing on the text on the screen.`
+    *   *中文對照*: `鏡頭輕微傾斜，並帶有數位故障（Glitch）轉場效果，聚焦於螢幕上的文字。`
+
+---
+
+### 🎥 分鏡 04 (對應圖片：`scene_04.png`)
+*   **時間長度**：8 秒 (24 - 32秒)
+*   **旁白配音**：現在，這一切焦慮都將被終結。歡迎來到 TOYOTA EV LifePilot，您的純電生活領航員。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A sleek black TOYOTA bZ4X electric SUV driving elegantly on a wet Taipei city street at night, iconic dual-C LED headlights glowing brightly, displaying a green-bordered Taiwan EV license plate "EAL-8888". Style Base.`
+    *   *中文對照*: `一輛帥氣的黑色 TOYOTA bZ4X 純電 SUV 在夜間潮濕的台北街道上優雅行駛，標誌性的雙 C 型 LED 頭燈明亮閃爍，懸掛著綠色邊框的台灣電動車專用車牌「EAL-8888」。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Cinematic low-angle tracking shot, the car driving smoothly towards the camera, water splashing from the tires.`
+    *   *中文對照*: `電影級低角度跟車追焦鏡頭，車輛平穩朝相機開來，輪胎濺起細微水花。`
+
+---
+
+## 🏔️ 階段二：EV LifePilot 核心功能展示 (32 - 96秒 | 第 5-12 幕)
+
+### 🎥 分鏡 05 (對應圖片：`scene_05.png`)
+*   **時間長度**：8 秒 (32 - 40秒)
+*   **旁白配音**：這是一套結合數據智慧與溫暖共情的一站式決策系統，完美部署於官網與 LINE。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A premium glassmorphism dashboard UI displayed on a high-tech screen, featuring glowing interactive cost comparison charts and an AI chatbot window with purple highlights. Style Base.`
+    *   *中文對照*: `高科技螢幕上顯示著精美的毛玻璃（Glassmorphism）儀表板 UI，包含發光的互動式成本對比圖表與帶有紫色高光的 AI 聊天室視窗。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Smooth slider animation on the UI, subtle neon particle glow drifting across the screen.`
+    *   *中文對照*: `UI 介面上滑桿平滑移動的動畫，微弱的霓虹粒子光芒在螢幕上飄散。`
+
+---
+
+### 🎥 分鏡 06 (對應圖片：`scene_06.png`)
+*   **時間長度**：8 秒 (40 - 48秒)
+*   **旁白配音**：只需輸入您的日常用車習慣，AI 便會啟動和泰 CDP 機器學習模型為您精算。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `Close-up of a hand sliding a digital mileage slider on a glowing touchscreen interface, showing numbers dynamically changing. Style Base.`
+    *   *中文對照*: `特寫一隻手指在發光的觸控螢幕上滑動里程滑桿，螢幕上的數字動態改變。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Focus pull from the hand to the screen, showing the digital graph bars adjusting smoothly.`
+    *   *中文對照*: `平滑推焦，將焦點從手指移到螢幕上，長條圖動態調整。`
+
+---
+
+### 🎥 分鏡 07 (對應圖片：`scene_07.png`)
+*   **時間長度**：8 秒 (48 - 56秒)
+*   **旁白配音**：精算省下的油資與定保費，直接幫您賺回一趟全家的歐洲雙人豪華旅遊基金！
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A split-screen graphic: left side shows a glowing golden text "Save NT$ 320,000 in 5 Years", right side shows a blurred elegant double exposure of a happy family and Eiffel Tower. Style Base.`
+    *   *中文對照*: `分割畫面設計：左側顯示發光的金色文字「5年省下 NT$ 320,000」，右側是模糊且優雅的雙重曝光，顯示幸福家庭與艾菲爾鐵塔。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow zoom out, golden particles rising up, creating a celebratory and rewarding feel.`
+    *   *中文對照*: `緩慢向後拉遠鏡頭，金色粒子向上升騰，創造慶祝與獲得豐厚回報的氛圍。`
+
+---
+
+### 🎥 分鏡 08 (對應圖片：`scene_08.png`)
+*   **時間長度**：8 秒 (56 - 64秒)
+*   **旁白配音**：針對台灣真實路況，AI 一日生活模擬器將為您量身打造無憂的行駛能耗預估。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A beautiful 3D digital topographic map of Taiwan, showing a glowing green route line winding through mountains from Taipei to Yilan, high-tech interface overlay. Style Base.`
+    *   *中文對照*: `一幅精美的台灣 3D 數位地形圖，顯示一條綠色發光的路線從台北蜿蜒穿過山嶺抵達宜蘭，疊加高科技數據介面。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `3D camera fly-through following the green route line across the mountains.`
+    *   *中文對照*: `3D 相機穿梭運鏡，跟隨綠色發光的路線飛越山脈。`
+
+---
+
+### 🎥 分鏡 09 (對應圖片：`scene_09.png`)
+*   **時間長度**：8 秒 (64 - 72秒)
+*   **旁白配音**：在擁擠的雪隧塞車時，車內是毫無引擎震動的靜音城堡，冷氣清新，不再吸入任何廢氣。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `Cozy warm interior of TOYOTA bZ4X back seats, a mother and a child sleeping peacefully, soft ambient lighting. Outside the window is a blurred traffic jam in the Hsuehshan Tunnel with red tail lights. Style Base.`
+    *   *中文對照*: `TOYOTA bZ4X 後座溫馨明亮的車內座艙，媽媽與孩子安穩熟睡，車室氛圍燈柔和。車窗外是雪山隧道內塞車的紅色尾燈，背景模糊。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow drift inside the cabin, showing absolute silence and comfort contrasting with the traffic outside.`
+    *   *中文對照*: `車室內慢速平移，呈現出極致的安靜與舒適，與窗外擁堵的交通形成強烈對比。`
+
+---
+
+### 🎥 分鏡 10 (對應圖片：`scene_10.png`)
+*   **時間長度**：8 秒 (72 - 80秒)
+*   **旁白配音**：下坡行駛時，按下中控台動能回收按鍵，回充系統啟動，甚至能讓您「越開電越多」，完美消除里程焦慮。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `Close-up of a driver's hand pressing the "Regeneration Boost" physical button next to the rotary shifter on the bZ4X center console. Style Base.`
+    *   *中文對照*: `特寫司機的手指按下 bZ4X 中控台旋鈕排檔座旁的「Regeneration Boost (動能回收加強)」實體按鍵。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `The finger presses the button, and a green glow animates around the button, transition to energy flow graphics.`
+    *   *中文對照*: `手指按壓按鍵，按鍵周圍亮起綠色動態光環，隨即轉換為電能回充流動的視覺特效。`
+
+---
+
+### 🎥 分鏡 11 (對應圖片：`scene_11.png`)
+*   **時間長度**：8 秒 (80 - 88秒)
+*   **旁白配音**：長途出遊時，AI 推薦最順路的快充節奏。喝一杯咖啡的時間，電量已悄悄補足。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A clean modern U-POWER charging station in Taiwan, a professional driver plugging a CCS1 charging cable into the front-left port of a black bZ4X. Style Base.`
+    *   *中文對照*: `台灣一個乾淨現代的 U-POWER 超高速充電站，一位專業司機正將 CCS1 充電槍插入黑色 bZ4X 的左前葉子板充電孔中。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow tracking shot of the driver plugging in the charger, daytime bright lighting.`
+    *   *中文對照*: `慢速跟隨鏡頭，捕捉司機插入充電槍的動作，白日明亮溫暖的光線。`
+
+---
+
+### 🎥 分鏡 12 (對應圖片：`scene_12.png`)
+*   **時間長度**：8 秒 (88 - 96秒)
+*   **旁白配音**：CCS1 雙槍快充最大支援 150kW，半小時內補足 80% 電量，出遊行程毫無延誤。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `The 12.3-inch Toyota Drive+ Link screen inside the bZ4X displaying a charging progress bar at 80%, with a high-tech charging animation. Style Base.`
+    *   *中文對照*: `bZ4X 車內搭載的 12.3 吋 Toyota Drive+ Link 大螢幕，顯示著 80% 的充電進度條，並帶有科技感的充電動能動畫。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Camera pushes in slowly on the screen, showing the charging percentage count up smoothly.`
+    *   *中文對照*: `鏡頭緩慢向螢幕推近，顯示充電百分比流暢地向上遞增。`
+
+---
+
+## 🏔️ 階段三：共情 AI 顧問與 O2O 體驗 (96 - 152秒 | 第 13-19 幕)
+
+### 🎥 分鏡 13 (對應圖片：`scene_13.png`)
+*   **時間長度**：8 秒 (96 - 104秒)
+*   **旁白配音**：AI 顧問會瞬間洞察您的情緒，識別您的購車角色，給予最懂您的共情解答。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A smartphone displaying a LINE chat window with a warm conversational response from TOYOTA AI, showing a glowing purple badge "AI 購車領航員: 守護家人的滿分爸爸". Style Base.`
+    *   *中文對照*: `智慧型手機螢幕上顯示著 LINE 對話視窗，TOYOTA AI 顧問回覆了溫暖的文字，對話框上方亮起紫色發光標籤「AI 購車領航員: 滿分爸爸」。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Text typing animation on the screen, smooth scroll up.`
+    *   *中文對照*: `螢幕上文字逐字打出的打字動畫，伴隨畫面平滑向上滾動。`
+
+---
+
+### 🎥 分鏡 14 (對應圖片：`scene_14.png`)
+*   **時間長度**：8 秒 (104 - 112秒)
+*   **旁白配音**：面對電池疑慮，我們提供 8 年 16 萬公里超長保固，源自豐田 25 年電池零事故的安全底蘊。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A high-tech 3D transparent cutaway of the TOYOTA bZ4X chassis, highlighting the heavily protected under-floor battery pack structure with a golden stamp "8 Years Warranty". Style Base.`
+    *   *中文對照*: `TOYOTA bZ4X 底盤的高科技 3D 透明透視圖，突出顯示車底下受到重重鋼樑保護的電池模組結構，上方蓋有金色的「8年保固」印章。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `3D rotation of the chassis, showing the steel protection beams around the battery module.`
+    *   *中文對照*: `底盤進行 3D 環繞旋轉，展示圍繞電池模組的高剛性鋼防護樑。`
+
+---
+
+### 🎥 分鏡 15 (對應圖片：`scene_15.png`)
+*   **時間長度**：8 秒 (112 - 120秒)
+*   **旁白配音**：因為掛著 TOYOTA 廠徽，結合和泰官方二手中古車托底機制，這台車就是電車界的保值金字招牌。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A bright professional Toyota Certified Pre-Owned showroom in Taiwan, clean cars reflecting sunlight, with a prominent Hotai Motor logo. Style Base.`
+    *   *中文對照*: `台灣一個明亮且專業的 Toyota 認證中古車展間，乾淨的車輛折射著陽光，後方有顯眼的和泰汽車標誌。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow cinematic pan across the premium showroom, warm and trustworthy lighting.`
+    *   *中文對照*: `鏡頭以電影級速度緩慢橫向掃過高品質展間，呈現溫暖且值得信賴的光影。`
+
+---
+
+### 🎥 分鏡 16 (對應圖片：`scene_16.png`)
+*   **時間長度**：8 秒 (120 - 128秒)
+*   **旁白配音**：結合和泰產險專屬新能源車險，與長期的稅金全免優勢，幫您把每一步成本降到最低。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A modern office building with the "Hotai Insurance" logo, a smartphone in the foreground showing a digital EV insurance policy document. Style Base.`
+    *   *中文對照*: `一棟印有「和泰產險」標誌的現代辦公大樓，前景是一支智慧型手機，螢幕上顯示著電子新能源車險保單。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Focus shift from the building to the smartphone screen.`
+    *   *中文對照*: `變焦運鏡，將視覺焦點從遠處的大樓，平滑轉移到前景的手機保單螢幕上。`
+
+---
+
+### 🎥 分鏡 17 (對應圖片：`scene_17.png`)
+*   **時間長度**：8 秒 (128 - 136秒)
+*   **旁白配音**：滿意您的模擬方案嗎？一鍵生成您的 EV Pilot Pass，開啟您的專屬純電體驗。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A luxury virtual ticket named "EV Pilot Pass" on a smartphone screen, glowing with blue and violet neon borders, displaying a QR code and customer profile details. Style Base.`
+    *   *中文對照*: `智慧型手機螢幕上顯示一張名為「EV Pilot Pass」的奢華虛擬票券，散發著電光藍與紫色的霓虹發光邊框，上面顯示著一個 QR Code 與客製化的車主資訊。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Subtle tilt of the smartphone showing the holographic neon reflections on the virtual pass.`
+    *   *中文對照*: `手機輕微傾斜，展現出虛擬票券表面細緻的全像（Holographic）霓虹反光。`
+
+---
+
+### 🎥 分鏡 18 (對應圖片：`scene_18.png`)
+*   **時間長度**：8 秒 (136 - 144秒)
+*   **旁白配音**：抵達實體展間時，業務掃描條碼，您的用車習慣與關切焦點已瞬間同步至業務平板。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A polite professional TOYOTA sales consultant in a suit, smiling and scanning the QR Code on a customer's phone using a tablet in a bright showroom. Style Base.`
+    *   *中文對照*: `一位身穿西裝、專業禮貌的 TOYOTA 銷售顧問，在明亮的展間中面帶微笑，用平板電腦掃描顧客手機上的體驗券 QR Code。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow dolly shot, the tablet screen flashes green indicating a successful scan and synchronizing data.`
+    *   *中文對照*: `慢速推軌鏡頭，業務的平板螢幕閃過綠光，顯示掃描成功並開始同步數據的動畫。`
+
+---
+
+### 🎥 分鏡 19 (對應圖片：`scene_19.png`)
+*   **時間長度**：8 秒 (144 - 152秒)
+*   **旁白配音**：免去多餘的贅述，業務將針對您最在乎的後座舒適與安全性，提供最客製化的精準解說。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `Inside the bZ4X, the consultant pointing to the spacious rear legroom and panoramic moonroof, a happy family looking delighted. Style Base.`
+    *   *中文對照*: `bZ4X 車廂內部，業務指向極為寬敞的後座膝部空間與全景天窗，一旁坐在後座的幸福家庭流露出驚喜與開心的笑容。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow zoom out showing the happy family enjoying the spacious back seats under the moonroof.`
+    *   *中文對照*: `鏡頭緩慢向後拉遠，呈現出全家人在寬敞天窗下享受舒適後座空間的溫馨全景。`
+
+---
+
+## 🏔️ 階段四：願景、技術架構與奪冠總結 (152 - 180秒 | 第 20-23 幕)
+
+### 🎥 分鏡 20 (對應圖片：`scene_20.png`)
+*   **時間長度**：8 秒 (152 - 160秒)
+*   **旁白配音**：我們已規劃好三階段路線圖，未來將輕鬆擴充至 PHEV 及 TOYOTA 全車系電動車款。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A high-tech digital timeline showing three phases: Phase 1 MVP, Phase 2 O2O integration, Phase 3 Scale Up to PHEV and Lexus, with futuristic glowing nodes. Style Base.`
+    *   *中文對照*: `高科技數位時間軸，展示三階段實施時程：Phase 1 MVP、Phase 2 O2O 整合、Phase 3 擴充至 PHEV 與 Lexus 車系，帶有未來感的光影節點。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Smooth horizontal scroll along the timeline, highlighting each phase with a neon pulse.`
+    *   *中文對照*: `鏡頭沿著時間軸平滑地橫向滾動，每個時程節點亮起霓虹脈衝光芒。`
+
+---
+
+### 🎥 分鏡 21 (對應圖片：`scene_21.png`)
+*   **時間長度**：8 秒 (160 - 168秒)
+*   **旁白配音**：基於領先的開源 LLM、FastAPI 後端與和泰大數據，這是一套兼具技術先進性與商用落地的系統。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A clean system architecture diagram with glowing logos of FastAPI, Llama-3, Azure OpenAI, and Milvus, connected by glowing data streams on a dark grid. Style Base.`
+    *   *中文對照*: `精美的系統架構圖，印有發光的 FastAPI、Llama-3、Azure OpenAI 與 Milvus 標誌，在黑色網格背景下由發光的數據流線條連接。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Data streams pulsing and flowing along the connection lines, creating a powerful tech feel.`
+    *   *中文對照*: `數據流沿著連接線路脈動與流動，展現強大的硬核技術運作感。`
+
+---
+
+### 🎥 分鏡 22 (對應圖片：`scene_22.png`)
+*   **時間長度**：6 秒 (168 - 174秒)
+*   **旁白配音**：買下 TOYOTA bZ4X，不只是一次精明的消費，更是全家人美好純電生活的開始。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A happy family waving from the windows of a black TOYOTA bZ4X driving smoothly along a beautiful sunny Taiwanese coastal highway, ocean breeze blowing. Style Base.`
+    *   *中文對照*: `陽光明媚的台灣海岸公路旁，全家人開心地從行駛中的黑色 bZ4X 車窗探出頭揮手，海風吹拂，波光粼粼。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Cinematic drone tracking shot following the car along the beautiful coast, bright and uplifting colors.`
+    *   *中文對照*: `電影級空拍機追焦鏡頭，跟隨車輛沿著美麗的海岸公路前行，色彩明亮且充滿朝氣。`
+
+---
+
+### 🎥 分鏡 23 (對應圖片：`scene_23.png`)
+*   **時間長度**：6 秒 (174 - 180秒)
+*   **旁白配音**：用 AI 賦能轉型，用共情引領未來。我們是 Team Nexus，謝謝大家。
+*   **圖片生成提示詞 (Image Prompt)**：
+    *   *English*: `A minimalist dark background with a glowing "TOYOTA EV LifePilot" logo in the center, and text "和泰 2026 AI 黑客松 | AI Team Nexus" below. Style Base.`
+    *   *中文對照*: `極簡的暗色調背景，中央浮現發光的「TOYOTA EV LifePilot」標誌，下方印有文字「和泰 2026 AI 黑客松 | AI Team Nexus 敬呈」。`
+*   **鏡頭運動提示詞 (Motion Prompt)**：
+    *   *English*: `Slow camera pull back, subtle blue particles rising and fading away, creating a lasting premium impression.`
+    *   *中文對照*: `鏡頭緩慢向後拉遠，微弱的發光藍色粒子在背景升騰並逐漸消逝，留下深刻的質感餘韻。`

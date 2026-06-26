@@ -1,0 +1,28 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 03 影片生成專用資料
+========================================================================
+
+【基本資訊】
+• 對應圖片檔名/編號: scene_03.png
+• 時間長度: 8 秒 (16 - 24秒)
+• 旁白配音 (繁中): 面對未知的電池壽命、昂貴的保險，以及五年後折舊變廢鐵的傳聞，讓您遲遲不敢下手？
+
+------------------------------------------------------------------------
+【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
+------------------------------------------------------------------------
+👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
+A smartphone screen displaying blurred Taiwanese news articles about electric car battery degradation and high insurance rates, dark atmospheric background, digital noise. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+
+👉 中文版 (供參考/可用於支援中文的繪圖軟體):
+智慧型手機螢幕上顯示著模糊的台灣新聞報導，標題涉及電動車電池衰退與高昂保費，暗色調背景，帶有數位雜訊。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+
+------------------------------------------------------------------------
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+------------------------------------------------------------------------
+👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
+Subtle camera tilt and digital glitch transition effect, focusing on the text on the screen.
+
+👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
+鏡頭輕微傾斜，並帶有數位故障（Glitch）轉場效果，聚焦於螢幕上的文字。
+
+========================================================================

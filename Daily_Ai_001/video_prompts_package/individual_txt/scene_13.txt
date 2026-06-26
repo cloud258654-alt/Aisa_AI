@@ -1,0 +1,28 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 13 影片生成專用資料
+========================================================================
+
+【基本資訊】
+• 對應圖片檔名/編號: scene_13.png
+• 時間長度: 8 秒 (96 - 104秒)
+• 旁白配音 (繁中): AI 顧問會瞬間洞察您的情緒，識別您的購車角色，給予最懂您的共情解答。
+
+------------------------------------------------------------------------
+【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
+------------------------------------------------------------------------
+👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
+A smartphone displaying a LINE chat window with a warm conversational response from TOYOTA AI, showing a glowing purple badge "AI 購車領航員: 守護家人的滿分爸爸". Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+
+👉 中文版 (供參考/可用於支援中文的繪圖軟體):
+智慧型手機螢幕上顯示著 LINE 對話視窗，TOYOTA AI 顧問回覆了溫暖的文字，對話框上方亮起紫色發光標籤「AI 購車領航員: 滿分爸爸」。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+
+------------------------------------------------------------------------
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+------------------------------------------------------------------------
+👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
+Text typing animation on the screen, smooth scroll up.
+
+👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
+螢幕上文字逐字打出的打字動畫，伴隨畫面平滑向上滾動。
+
+========================================================================

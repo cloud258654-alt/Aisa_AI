@@ -1,0 +1,28 @@
+========================================================================
+🎥 TOYOTA EV LifePilot - 分鏡 12 影片生成專用資料
+========================================================================
+
+【基本資訊】
+• 對應圖片檔名/編號: scene_12.png
+• 時間長度: 8 秒 (88 - 96秒)
+• 旁白配音 (繁中): CCS1 雙槍快充最大支援 150kW，半小時內補足 80% 電量，出遊行程毫無延誤。
+
+------------------------------------------------------------------------
+【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
+------------------------------------------------------------------------
+👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
+The 12.3-inch Toyota Drive+ Link screen inside the bZ4X displaying a charging progress bar at 80%, with a high-tech charging animation. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+
+👉 中文版 (供參考/可用於支援中文的繪圖軟體):
+bZ4X 車內搭載的 12.3 吋 Toyota Drive+ Link 大螢幕，顯示著 80% 的充電進度條，並帶有科技感的充電動能動畫。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+
+------------------------------------------------------------------------
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+------------------------------------------------------------------------
+👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
+Camera pushes in slowly on the screen, showing the charging percentage count up smoothly.
+
+👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
+鏡頭緩慢向螢幕推近，顯示充電百分比流暢地向上遞增。
+
+========================================================================
