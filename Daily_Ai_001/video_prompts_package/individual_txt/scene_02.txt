@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 02 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 02 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-An empty concrete parking spot in a typical Taiwanese apartment basement garage. A disappointed man standing next to the blank wall, gesturing with worry. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+A bright, sunlit modern residential community outdoor parking area in Taiwan. A man standing under leafy green trees in the warm afternoon sunlight, looking at a clean brick wall where a charging pile could be installed, gesturing thoughtfully. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-一個典型的台灣公寓地下室停車場中空無一物的車位。一位失望的男子站在空白的牆壁旁，面露擔憂地比著手勢。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+台灣一個明亮、灑滿陽光的現代住宅社區室外停車場。一位男子站在綠意盎然的樹木下，沐浴在溫暖的午後陽光中，看著一面可以安裝充電樁的乾淨磚牆，若有所思地比著手勢。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Slow horizontal pan showing the empty parking space, soft warm fluorescent lights flickering slightly.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Slow horizontal tracking shot showing the sunny parking space and green leaves swaying in the breeze.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-鏡頭緩慢橫向平移展示空車位，上方溫暖的日光燈輕微閃爍。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+慢速水平追焦鏡頭，展示晴朗的車位與在微風中搖曳的綠葉。
 
 ========================================================================

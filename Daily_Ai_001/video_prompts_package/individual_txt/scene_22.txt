@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 22 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 22 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-A happy family waving from the windows of a black TOYOTA bZ4X driving smoothly along a beautiful sunny Taiwanese coastal highway, ocean breeze blowing. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+A happy Taiwanese family waving and smiling from the windows of a platinum silver TOYOTA bZ4X driving smoothly along a breathtaking, sun-drenched Taiwanese coastal highway. Sparkly blue ocean, clear sky, brilliant sunlight, and gentle sea breeze. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-陽光明媚的台灣海岸公路旁，全家人開心地從行駛中的黑色 bZ4X 車窗探出頭揮手，海風吹拂，波光粼粼。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+在陽光明媚、風光旖旎的台灣海岸公路上，全家人開心地從行駛中的極光銀 TOYOTA bZ4X 車窗探出頭揮手。波光粼粼的藍色海洋、清澈的晴空、燦爛的陽光與溫柔的海風。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Cinematic drone tracking shot following the car along the beautiful coast, bright and uplifting colors.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Cinematic drone tracking shot following the silver car along the beautiful coast under brilliant sunshine.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-電影級空拍機追焦鏡頭，跟隨車輛沿著美麗的海岸公路前行，色彩明亮且充滿朝氣。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+電影級空拍機追焦鏡頭，在燦爛陽光下跟隨銀色車輛沿著美麗的海岸公路前行。
 
 ========================================================================

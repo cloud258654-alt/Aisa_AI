@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 04 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 04 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-A sleek black TOYOTA bZ4X electric SUV driving elegantly on a wet Taipei city street at night, iconic dual-C LED headlights glowing brightly, displaying a green-bordered Taiwan EV license plate "EAL-8888". Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+A stunning platinum silver TOYOTA bZ4X electric SUV driving elegantly past the iconic Taipei 101 building under a clear blue sky with fluffy white clouds. Vibrant green trees lining the street, bright morning sun reflecting beautifully on the car's metallic silver body. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-一輛帥氣的黑色 TOYOTA bZ4X 純電 SUV 在夜間潮濕的台北街道上優雅行駛，標誌性的雙 C 型 LED 頭燈明亮閃爍，懸掛著綠色邊框的台灣電動車專用車牌「EAL-8888」。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+一輛極具質感的極光銀 TOYOTA bZ4X 純電 SUV，在藍天白雲下優雅地駛過標誌性的台北 101 大樓。街道兩旁綠樹成蔭，明亮的晨光完美反射在車身金屬銀色的烤漆上。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Cinematic low-angle tracking shot, the car driving smoothly towards the camera, water splashing from the tires.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Low-angle tracking shot, the silver car driving smoothly forward, Taipei 101 standing tall in the sunlit background.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-電影級低角度跟車追焦鏡頭，車輛平穩朝相機開來，輪胎濺起細微水花。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+低角度跟車追焦鏡頭，銀色車輛平穩向前行駛，台北 101 大樓在陽光明媚的背景中高聳立。
 
 ========================================================================

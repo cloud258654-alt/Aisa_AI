@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 09 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 09 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-Cozy warm interior of TOYOTA bZ4X back seats, a mother and a child sleeping peacefully, soft ambient lighting. Outside the window is a blurred traffic jam in the Hsuehshan Tunnel with red tail lights. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+Inside the spacious cabin of a silver TOYOTA bZ4X, warm golden sunset light pouring through the windows, a Taiwanese mother and child smiling and resting peacefully in the comfortable seats. The background outside shows a clean, well-lit Hsuehshan Tunnel entrance with natural light. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-TOYOTA bZ4X 後座溫馨明亮的車內座艙，媽媽與孩子安穩熟睡，車室氛圍燈柔和。車窗外是雪山隧道內塞車的紅色尾燈，背景模糊。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+在銀色 TOYOTA bZ4X 寬敞的車室座艙內，溫暖的金黃色夕陽餘暉透過車窗灑落，一對台灣母子在舒適的座椅上微笑安穩休息。窗外背景顯示乾淨、採光良好的雪山隧道入口與自然光線。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Slow drift inside the cabin, showing absolute silence and comfort contrasting with the traffic outside.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Slow tracking shot inside the sunlit car cabin, focusing on the peaceful smiles of the mother and child.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-車室內慢速平移，呈現出極致的安靜與舒適，與窗外擁堵的交通形成強烈對比。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+車室內慢速平移鏡頭，聚焦於母子溫馨祥和的笑容，車內充盈著溫暖的陽光。
 
 ========================================================================

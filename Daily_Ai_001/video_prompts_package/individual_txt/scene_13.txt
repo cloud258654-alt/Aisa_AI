@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 13 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 13 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-A smartphone displaying a LINE chat window with a warm conversational response from TOYOTA AI, showing a glowing purple badge "AI 購車領航員: 守護家人的滿分爸爸". Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+A smartphone held in a hand outdoors on a sunny day in a green park. The screen displays a clean LINE chat window with a warm conversational response from TOYOTA AI, featuring a bright golden badge "AI 購車領航員: 守護家人的滿分爸爸". Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-智慧型手機螢幕上顯示著 LINE 對話視窗，TOYOTA AI 顧問回覆了溫暖的文字，對話框上方亮起紫色發光標籤「AI 購車領航員: 滿分爸爸」。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+在陽光明媚的綠色公園中，一隻手拿著智慧型手機。螢幕上顯示著簡潔的 LINE 對話視窗，TOYOTA AI 顧問回覆了溫暖的文字，上方帶有明亮的金色標籤「AI 購車領航員: 滿分爸爸」。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Text typing animation on the screen, smooth scroll up.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Subtle tilt of the phone showing the sunlight glinting off the glass screen, text typing smoothly.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-螢幕上文字逐字打出的打字動畫，伴隨畫面平滑向上滾動。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+手機輕微傾斜，展現陽光在玻璃螢幕上的折射，文字平滑地逐字打出。
 
 ========================================================================

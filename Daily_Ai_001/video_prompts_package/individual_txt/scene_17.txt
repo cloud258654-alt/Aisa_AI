@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 17 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 17 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-A luxury virtual ticket named "EV Pilot Pass" on a smartphone screen, glowing with blue and violet neon borders, displaying a QR code and customer profile details. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+A luxury virtual ticket named "EV Pilot Pass" on a smartphone screen, glowing with bright green and sky blue borders, displaying a QR code, set against a bright, sunny background of a modern city park. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-智慧型手機螢幕上顯示一張名為「EV Pilot Pass」的奢華虛擬票券，散發著電光藍與紫色的霓虹發光邊框，上面顯示著一個 QR Code 與客製化的車主資訊。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+智慧型手機螢幕上顯示一張名為「EV Pilot Pass」的奢華虛擬票券，散發著明亮綠色與天藍色的光芒邊框，上面顯示著一個 QR Code，背景是陽光明媚的現代城市公園。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Subtle tilt of the smartphone showing the holographic neon reflections on the virtual pass.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Subtle tilt of the smartphone showing the holographic reflection on the pass under natural sunlight.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-手機輕微傾斜，展現出虛擬票券表面細緻的全像（Holographic）霓虹反光。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+手機輕微傾斜，展現出虛擬票券在自然陽光下細緻的全像光芒反射。
 
 ========================================================================

@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 01 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 01 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-A stressed Taiwanese driver looking at a glowing neon gas station sign in rainy Taipei at dusk, showing high fuel prices. Depressive cold blue color tone, cinematic composition. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+A Taiwanese driver standing next to a traditional gas car under bright afternoon sunlight, holding a fuel pump nozzle and looking at the rising price digits on a clean, sunlit gas station screen. Warm sunny atmosphere, shallow depth of field. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-一位面露壓抑與壓力的台灣司機，在黃昏下雨的台北街頭，看著加油站看板上跳動的高油價霓虹燈。抑鬱的冷藍色調，電影感構圖。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+一位台灣司機在明亮的午後陽光下站在傳統燃油車旁，手握加油槍，看著明亮、灑滿陽光的加油站螢幕上不斷上升的油價數字。溫暖晴朗的氛圍，淺景深。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Slow camera zoom in on the driver's anxious expression, soft rain falling on the windshield, shallow depth of field.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Slow camera pan from the driver's reflective face to the sunlit fuel price screen, warm sun flare drifting across.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-鏡頭緩慢向司機焦慮的表情拉近，雨滴輕柔落在擋風玻璃上，呈現淺景深效果。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+鏡頭緩慢從司機若有所思的臉龐平移至陽光照耀的油價螢幕，溫暖的太陽光暈在畫面上飄過。
 
 ========================================================================

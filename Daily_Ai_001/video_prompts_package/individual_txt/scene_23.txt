@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 23 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 23 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-A minimalist dark background with a glowing "TOYOTA EV LifePilot" logo in the center, and text "和泰 2026 AI 黑客松 | AI Team Nexus" below. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+A clean, minimalist light-gray background with an elegant "TOYOTA EV LifePilot" logo in the center, and text "和泰 2026 AI 黑客松 | AI Team Nexus" below, bathed in a warm, hopeful sunlit glow. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-極簡的暗色調背景，中央浮現發光的「TOYOTA EV LifePilot」標誌，下方印有文字「和泰 2026 AI 黑客松 | AI Team Nexus 敬呈」。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+簡潔優雅的淺灰色背景，中央浮現精緻的「TOYOTA EV LifePilot」標誌，下方印有文字「和泰 2026 AI 黑客松 | AI Team Nexus 敬呈」，整體畫面沐浴在溫暖且充滿希望的陽光柔光中。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Slow camera pull back, subtle blue particles rising and fading away, creating a lasting premium impression.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Slow camera pull back, soft golden particles rising and fading away in the warm sunlight, leaving a lasting hopeful impression.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-鏡頭緩慢向後拉遠，微弱的發光藍色粒子在背景升騰並逐漸消逝，留下深刻的質感餘韻。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+鏡頭緩慢向後拉遠，柔和的金色粒子在溫暖的陽光中上升並消逝，留下溫馨且充滿希望的餘韻。
 
 ========================================================================

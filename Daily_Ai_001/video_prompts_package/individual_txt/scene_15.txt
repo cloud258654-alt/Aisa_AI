@@ -1,5 +1,5 @@
 ========================================================================
-🎥 TOYOTA EV LifePilot - 分鏡 15 影片生成專用資料
+🎥 TOYOTA EV LifePilot - 分鏡 15 影片生成專用資料 (陽光希望版)
 ========================================================================
 
 【基本資訊】
@@ -10,19 +10,19 @@
 ------------------------------------------------------------------------
 【步驟一：圖片生成提示詞 (Image Prompt)】- 用於 Midjourney / SD / DALL-E 3
 ------------------------------------------------------------------------
-👉 英文版 (已融合統一視覺風格基調，推薦直接複製使用):
-A bright professional Toyota Certified Pre-Owned showroom in Taiwan, clean cars reflecting sunlight, with a prominent Hotai Motor logo. Sleek cinematic lighting, premium dark tech theme, electric blue and emerald green neon highlights, hyper-realistic, professional color grading, shot on 35mm anamorphic lens.
+👉 英文版 (已融入陽光希望風格基調與極光銀實車，推薦直接複製使用):
+A spacious, ultra-modern Toyota Certified Pre-Owned showroom in Taiwan, flooded with bright natural sunlight from floor-to-ceiling windows. Clean silver cars reflecting brilliant sunlight, with a prominent Hotai Motor logo on the sunlit wall. Bright cinematic sunlight, optimistic warm color tone, vibrant natural colors, beautiful lens flare, hyper-realistic, professional color grading, shot on 35mm anamorphic lens, hopeful and uplifting atmosphere.
 
 👉 中文版 (供參考/可用於支援中文的繪圖軟體):
-台灣一個明亮且專業的 Toyota 認證中古車展間，乾淨的車輛折射著陽光，後方有顯眼的和泰汽車標誌。。極具質感的電影級光影、高階暗色科技主題、電光藍與翡翠綠的霓虹高光、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝。
+台灣一個寬敞、極現代化的 Toyota 認證中古車展間，大片落地窗引入充足且明亮的自然陽光。乾淨的銀色車輛折射著燦爛的陽光，採光牆上有醒目的和泰汽車標誌。。明亮溫暖的電影級陽光、樂觀溫馨的暖色調、鮮活自然的色彩、優美的逆光光暈、極致寫實、專業色彩分級、35mm 變形鏡頭拍攝、充滿希望與朝氣的氛圍。
 
 ------------------------------------------------------------------------
-【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Luma
+【步驟二：鏡頭運動提示詞 (Motion/Video Prompt)】- 用於 Runway / Kling / Vidu
 ------------------------------------------------------------------------
-👉 英文版 (推薦用於 Runway Gen-2/Gen-3, Luma, Sora):
-Slow cinematic pan across the premium showroom, warm and trustworthy lighting.
+👉 英文版 (推薦用於 Runway Gen-3, Luma, Sora):
+Slow cinematic pan across the sun-drenched premium showroom, bright and trustworthy atmosphere.
 
-👉 中文版 (推薦用於 快手可靈 Kling, 貝塞拉 Vidu, 海螺 AI):
-鏡頭以電影級速度緩慢橫向掃過高品質展間，呈現溫暖且值得信賴的光影。
+👉 中文版 (推薦用於 快手可靈 Kling, Vidu, 海螺 AI):
+鏡頭以電影級速度緩慢橫向掃過陽光普照的高級展間，呈現明亮且值得信賴的氛圍。
 
 ========================================================================
