@@ -1,83 +1,242 @@
-# Sentinel AI - Enterprise Customer Experience Intelligence Platform (ECXIP)
+# Sentinel AI — Enterprise Customer Experience Intelligence Platform (ECXIP)
 
-## 📌 專案簡介
-本專案為 **Sentinel AI 顧客體驗智慧平台 (ECXIP) Phase 1 MVP**。
-專案核心目標是建立高質感的單頁式決策儀表板 (SPA)，整合品牌聲量、顧客旅程摩擦診斷、即時輿情串流分析以及 AI 決策支援系統，展示如何利用 AI 自動追蹤、分析並提供品牌改善決策。
+**AI-Powered Platform for Voice of Customer, Customer Experience, Brand Intelligence & Reputation Management**
 
 ---
 
-## 🔗 Live Demo
-- **Opencode 預覽連接埠**：[http://localhost:25248](http://localhost:25248)
-- **預設 Python 伺服器**：[http://localhost:8000](http://localhost:8000)
+## Project Overview
+
+Sentinel AI ECXIP is an enterprise-grade platform that transforms how organizations understand, measure, and improve their customer experience. By integrating AI agent technology with multi-channel voice analytics, the platform provides continuous monitoring, deep analysis, and actionable recommendations.
+
+The platform answers questions traditional monitoring tools cannot:
+- Why did this happen?
+- Which locations need immediate attention?
+- What processes are causing customer churn?
+- What should we do next?
+- Has the issue been resolved?
+- Will a brand crisis occur in the near future?
 
 ---
 
-## 🚀 已完成功能說明
+## Phase 2 Architecture Highlights
 
-### 1. 品牌數據監控看板 (Brand Cockpit)
-- **Brand Health Score (品牌健康度)**、**Store Health Index (門市健康指數)**、**CSAT (顧客滿意度)**、**Crisis Resolution Rate (危機解決率)**。
-- 整合 **Reputation Risk Score (商譽風險指標)**，風險等級會根據輿情事件動態更新（Green 低風險 ➔ Amber 中風險 ➔ Crimson 臨界危機）。
+- **9 AI Specialized Agents** coordinated by an AgentOrchestrator for crisis response, daily briefs, and weekly reports
+- **AI Router** with 5-tier model selection optimizing for cost, latency, and quality
+- **24 Database Tables** across 7 bounded domains (Organization, VOC, CX, Brand, Workflow, Knowledge, Competitor)
+- **50+ API Endpoints** across 11 route modules with full Pydantic validation
+- **Real-time WebSocket** voice streaming and alert notifications
+- **Celery Task System** with 4 dedicated queues and 7 scheduled beat tasks
+- **Docker Multi-Service** deployment with health checks and persistent volumes
 
-### 2. 輿情聲量即時串流 (Voice Stream)
-- 模擬即時滾動的顧客評論串流，管道包含：`Google Reviews`、`Threads`、`Facebook`、`Instagram`、`PTT`、`Dcard`。
-- 每一則評論皆包含 AI 即時解析標籤：情感分析（Sentiment）、細粒度情緒（Emotion）、旅程觸點分類（Topic）、所屬分店與風險評估。
-- 支援「暫停/啟動串流」、「清除串流」與「處理輿情」彈窗互動。
+## Phase 3: Enterprise Intelligence Platform (New!)
 
-### 3. 顧客體驗旅程診斷 (Customer Journey Map)
-- 視覺化顧客旅程（Search 搜尋 ➔ Book 預約 ➔ Wait 候位 ➔ Service 服務 ➔ Pay 結帳 ➔ Review 評論）。
-- 動態顯示旅程節點指標與摩擦警示（如信義旗艦店的候位與服務節點出現異常警報）。
-- 支援下拉選單篩選分店，儀表板指標與旅程圖表會即時連動切換。
+### 5 New Intelligence Engines
 
-### 4. AI 品牌經理決策終端 (AI Brand Manager Terminal)
-- **指令模擬**：提供三組預設品牌危機事件（Threads 食安謠言、Google 排隊糾紛、PTT 服務投訴）觸發按鈕。
-- 點擊後會在虛擬終端機中打印 AI 分析日誌，並產生專屬決策模組：
-  - **Root Cause (原因解析)**：交叉分析社群與內部 POS 數據的根本原因。
-  - **Operational SOP (改善流程)**：生成門市的待辦勾選清單，當清單全部勾選完成後，系統指標會自動修復。
-  - **PR Statement (公關回應)**：自動生成公關回應範本，支援「一鍵複製」與「發布模擬」。
-  - **Legal & Training (法務與培訓)**：提供法務避險建議與分店員工再培訓重點。
+- **Operational Intelligence Engine** — Real-time operational data correlation, 30-min refresh cycle identifying hidden relationships between wait times, staffing levels, and NPS/CX metrics
+- **Predictive Intelligence Engine** — 7-day multi-factor forecasting for brand health, risk scores, and negative sentiment volumes using historical pattern analysis and confidence-weighted projections
+- **Store Intelligence Engine** — Per-store daily intelligence calculation with 14-day trend analysis, voice volume correlation, and automated health scoring with color-coded risk categorization
+- **Learning Memory Engine** — AI pattern discovery across historical cases with similarity matching (80-94%), success rate tracking for past solutions, and "what worked before" knowledge graph
+- **Executive Intelligence Center** — Enhanced morning brief with AI COO analysis, operational correlations, 7-day predictions, strategic recommendations with confidence scoring, and real-time metrics snapshot across all 7 domains
 
-### 5. AI 語意分析沙盒 (NLP Sandbox)
-- 互動式 NLP 遊樂場，使用者可輸入任何評論文字（或點選「填入示範負評」），點擊分析後將播放掃描動畫並顯示：
-  - 情感分析（Sentiment Badge）
-  - 情緒分析（Emotion）
-  - 旅程痛點定位（Touchpoint）
-  - 系統風險權重（Risk Index）
-  - 自動生成對應的 PR 回覆草稿與門市營運 SOP 改善建議。
+### Enhanced Executive Dashboard
+
+- **Executive Briefing Center** — Greeting header, key metrics row, "Today's Biggest Problem" highlight card, affected stores list, AI COO recommendations with confidence bars, store ranking mini-table (top 5), and 7-day risk forecast sparklines
+- **Store Ranking Table** — Full store ranking with health score color bars, risk level tags, trend arrows, critical issues count, filterable tabs (All/Critical/Improving/Declining), and click-to-expand store detail panel
+- **7-Day Prediction Center** — Four forecast panels (Brand Health, Risk Score, Negative Volume, Confidence) with ASCII/div bar charts, "What would happen if..." simulation input with AI-generated impact projections
+- **AI Learning Memory Panel** — Historical similar cases with similarity matching, success rate tracking for past strategies, AI-discovered pattern insights, and "Store New Case" form for continuous learning
+
+### 6 New Celery Scheduled Tasks
+
+| Task | Schedule | Queue | Description |
+|------|----------|-------|-------------|
+| daily_store_intelligence_calculation | Daily 3 AM | analysis | Calculate StoreDailyIntelligence for all stores |
+| daily_executive_brief_generation | Daily 6 AM | analysis | Generate morning brief for all organizations |
+| hourly_risk_forecast | Hourly at :00 | analysis | Update risk predictions every hour |
+| daily_learning_pattern_update | Daily 4 AM | analysis | Discover new learning patterns |
+| operational_data_correlation_job | Every 30 min | analysis | Update operational correlations |
+| weekly_prediction_model_training | Mon 2 AM | analysis | Train/retrain prediction models |
+
+### 5 New API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/executive/morning-brief` | GET | Enhanced morning brief with AI COO analysis, operational correlations, 7-day predictions |
+| `/api/v1/executive/key-risks` | GET | Key business risks with severity, impact, financial exposure, and mitigation |
+| `/api/v1/executive/opportunities` | GET | Business improvement opportunities with ROI estimates |
+| `/api/v1/executive/ai-coo-summary` | GET | AI COO strategic recommendations with domain summaries |
+| `/api/v1/executive/metrics-snapshot` | GET | Real-time snapshot of all metrics across 7 domains |
+
+### 4 New Frontend Components
+
+| Component | File | Description |
+|-----------|------|-------------|
+| MorningBrief (Enhanced) | `executive/morningBrief.js` | Executive briefing center with all new features |
+| StoreRanking | `executive/storeRanking.js` | Full store ranking table with tabs and detail panel |
+| PredictionPanel | `executive/predictionPanel.js` | 7-day forecast panels and simulation engine |
+| LearningPanel | `executive/learningPanel.js` | Historical cases, success patterns, and learning form |
 
 ---
 
-## 📂 專案檔案結構
-```bash
-d:/Ai study/Aisa_AI/Daily_Ai_002_商譽雷達/
-├── 01_Project_Overview.md  # 專案願景與規劃說明文件
-├── README.md               # 本接手與部署說明文件 (Handover Doc)
-├── index.html              # 儀表板架構 (含語意標籤、SVG 圖示與彈窗模組)
-├── index.css               # 視覺系統 (玻璃擬態、霓虹燈校準、響應式排版與動畫特效)
-└── app.js                  # 核心邏輯 (串流引擎、動態指標換算、模擬分析器與交互事件)
+## Quick Start
+
+### Docker (Recommended)
+```powershell
+# Clone and navigate
+Set-Location "D:\Ai study\Aisa_AI\Daily_Ai_002_商譽雷達"
+
+# Configure environment
+Copy-Item backend\.env.example backend\.env
+# Edit backend\.env and set SECRET_KEY, API keys
+
+# Start all services
+docker compose -f docker\docker-compose.yml up -d
+```
+
+Access at **http://localhost** — Dashboard, Docs, and API.
+
+### Local Development
+```powershell
+# Start infrastructure
+docker compose -f docker\docker-compose.yml up -d postgres redis
+
+# Setup Python
+Set-Location backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# Run migrations
+alembic upgrade head
+
+# Start dev server
+uvicorn main:app --reload --port 8000
 ```
 
 ---
 
-## 💻 本地啟動與運行方式
-本專案採用純前端架構，無須複雜的建置工具即可快速運行：
-1. **使用 Python 啟動伺服器**：
-   在專案根目錄下執行以下指令：
-   ```powershell
-   python -m http.server 8000
-   ```
-2. **在瀏覽器查看**：
-   開啟瀏覽器並造訪 [http://localhost:8000](http://localhost:8000)。
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Vanilla JS, CSS3 (Apple Frosted Glass UI) |
+| Backend | FastAPI (Python 3.12) |
+| Database | PostgreSQL 16 |
+| Cache/Queue | Redis 7 |
+| Async Tasks | Celery 5.4 |
+| AI | OpenAI / Google Gemini |
+| Proxy | Nginx 1.27 |
+| Deployment | Docker + Docker Compose |
+| Migrations | Alembic |
+| Auth | JWT + OAuth2 (python-jose, passlib) |
 
 ---
 
-## 🛠️ 接手開發建議 (Phase 2 路線圖)
-後續接手夥伴（Opencode）可優先朝以下方向擴展：
-1. **實接真實 API**：
-   - 將 `app.js` 的 `reviewBank` 串接後端網路爬蟲 API（例如透過 Python FastAPI 爬取 Google Map / Threads / PTT 輿情）。
-2. **大語言模型 (LLM) 整合**：
-   - 沙盒分析（`btn-sandbox-analyze`）目前使用規則判斷，後續可串接 Gemini API，利用 Prompt 進行真實的 JSON 語意情感分析及 PR 生成。
-3. **數據持久化與報表**：
-   - 整合資料庫（如 PostgreSQL / Supabase）儲存歷史輿情與 SOP 執行紀錄。
-   - 引入 Chart.js 將 Cockpit Metrics 繪製成歷史趨勢折線圖。
-4. **多語系支援**：
-   - 目前語系為繁體中文，可進一步擴增英文與其他亞洲語系。
+## Project Structure
+
+```
+├── index.html                  # SPA dashboard (Frosted Glass UI)
+├── index.css                   # Global styles
+├── app.js                      # Core frontend logic
+│
+├── backend/                    # FastAPI application
+│   ├── main.py                 # Entry point, WebSocket manager
+│   ├── core/                   # Config, database, Redis, security
+│   ├── models/                 # 24 SQLAlchemy ORM models
+│   ├── schemas/                # Pydantic request/response schemas
+│   ├── api/v1/                 # 11 API route modules
+│   ├── services/               # Business logic + 9 AI agents
+│   ├── tasks/                  # Celery async task definitions
+│   └── alembic/                # Database migrations
+│
+├── docker/                     # Docker Compose + Dockerfiles
+├── docs/                       # Full documentation
+│   ├── architecture.md
+│   ├── api/api-reference.md
+│   ├── database_schema.md
+│   ├── ai-agents.md
+│   ├── deployment.md
+│   └── diagrams/
+│
+├── CHANGELOG.md
+├── ROADMAP.md
+└── README.md
+```
+
+---
+
+## API Documentation
+
+Interactive API docs available at runtime:
+
+- **Swagger UI:** http://localhost/docs
+- **ReDoc:** http://localhost/redoc
+
+Static reference: [docs/api/api-reference.md](docs/api/api-reference.md)
+
+**Base URL:** `/api/v1` | **Auth:** Bearer JWT
+
+| Module | Endpoints | Description |
+|--------|-----------|-------------|
+| Auth | 7 | Login, refresh, user CRUD, role management |
+| VOC | 6 | Voice ingest, list, stats, trends, delete |
+| CX | 6 | Journeys, touchpoints, diagnostics, insights |
+| Brand Health | 6 | Current, history, stores, alerts CRUD |
+| Root Cause | 5 | Analysis CRUD, summary, store comparison |
+| Executive | 4 | Morning brief, today summary, rankings, risk |
+| Sandbox | 1 | NLP analysis pipeline |
+| Workflow | 6 | Cases CRUD, comments, attachments, stats |
+| Knowledge | 6 | Articles CRUD, semantic search |
+| Trends | 4 | Overview, topics, emotions, predictions |
+| Competitors | 5 | CRUD, metrics, benchmark, SWOT |
+
+---
+
+## Development Guide
+
+### Prerequisites
+- Python 3.12+
+- Docker 24.0+
+- PostgreSQL 16
+- Redis 7
+
+### First-Time Setup
+```powershell
+# Install dependencies
+Set-Location backend
+pip install -r requirements.txt
+
+# Create database
+createdb sentinel_ecxip
+
+# Run migrations
+alembic upgrade head
+
+# Start Celery worker (separate terminal)
+celery -A tasks.celery_app worker --loglevel=info
+```
+
+### Code Quality
+- All API endpoints use Pydantic v2 schemas for validation
+- Services follow Clean Architecture with dependency injection
+- AI agents extend `BaseAgent` with consistent interface
+- Celery tasks are idempotent with soft time limits
+
+### Adding Features
+1. Define model in `backend/models/`
+2. Create schema in `backend/schemas/`
+3. Implement service in `backend/services/`
+4. Add router in `backend/api/v1/`
+5. Register route in `backend/api/v1/router.py`
+6. Generate migration: `alembic revision --autogenerate -m "description"`
+
+### Running Tests
+```powershell
+# API health check
+Invoke-WebRequest http://localhost:8000/api/v1/health
+```
+
+---
+
+## License
+
+Proprietary — All rights reserved.

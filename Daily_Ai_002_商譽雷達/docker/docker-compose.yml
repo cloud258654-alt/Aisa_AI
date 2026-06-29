@@ -1,0 +1,180 @@
+version: "3.9"
+
+x-common-backend: &common-backend
+  build:
+    context: ..
+    dockerfile: docker/Dockerfile.backend
+  env_file:
+    - ../backend/.env
+  networks:
+    - sentinel_network
+  restart: unless-stopped
+
+x-healthcheck-postgres: &healthcheck-postgres
+  test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+  interval: 10s
+  timeout: 5s
+  retries: 5
+  start_period: 30s
+
+x-healthcheck-redis: &healthcheck-redis
+  test: ["CMD", "redis-cli", "ping"]
+  interval: 10s
+  timeout: 5s
+  retries: 5
+  start_period: 10s
+
+x-healthcheck-backend: &healthcheck-backend
+  test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')\""]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sentinel_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-sentinel_ecxip}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sentinel_network
+    restart: unless-stopped
+    healthcheck:
+      <<: *healthcheck-postgres
+
+  redis:
+    image: redis:7-alpine
+    container_name: sentinel_redis
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - sentinel_network
+    restart: unless-stopped
+    healthcheck:
+      <<: *healthcheck-redis
+
+  backend:
+    <<: *common-backend
+    container_name: sentinel_backend
+    command: >
+      uvicorn main:app
+      --host 0.0.0.0
+      --port 8000
+      --workers 4
+      --log-level info
+      --proxy-headers
+      --forwarded-allow-ips '*'
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../backend:/app
+      - backend_uploads:/app/uploads
+    healthcheck:
+      <<: *healthcheck-backend
+
+  celery_worker:
+    <<: *common-backend
+    container_name: sentinel_celery_worker
+    command: >
+      celery -A tasks.celery_app worker
+      --loglevel=info
+      --concurrency=4
+      --queues=ingestion,analysis,notifications,reports
+      --max-tasks-per-child=200
+      --prefetch-multiplier=1
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ../backend:/app
+      - backend_uploads:/app/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A tasks.celery_app inspect ping -d celery@$$HOSTNAME 2>/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  celery_beat:
+    <<: *common-backend
+    container_name: sentinel_celery_beat
+    command: >
+      celery -A tasks.celery_app beat
+      --loglevel=info
+      --schedule=/tmp/celerybeat-schedule
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../backend:/app
+      - celery_beat_data:/tmp
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: sentinel_frontend
+    ports:
+      - "26117:80"
+    networks:
+      - sentinel_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: sentinel_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    networks:
+      - sentinel_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  sentinel_network:
+    name: sentinel_network
+    driver: bridge
+
+volumes:
+  postgres_data:
+    name: sentinel_postgres_data
+  redis_data:
+    name: sentinel_redis_data
+  backend_uploads:
+    name: sentinel_backend_uploads
+  celery_beat_data:
+    name: sentinel_celery_beat_data
