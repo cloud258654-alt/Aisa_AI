@@ -6,6 +6,12 @@
 
 ---
 
+## 🔗 Live Demo
+- **Opencode 預覽連接埠**：[http://localhost:25248](http://localhost:25248)
+- **預設 Python 伺服器**：[http://localhost:8000](http://localhost:8000)
+
+---
+
 ## 🚀 已完成功能說明
 
 ### 1. 品牌數據監控看板 (Brand Cockpit)
