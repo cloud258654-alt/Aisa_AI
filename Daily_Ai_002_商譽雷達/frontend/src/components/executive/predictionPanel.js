@@ -10,6 +10,10 @@ var PredictionPanelComponent = (function () {
   }
 
   function loadPredictions() {
+    if (typeof StateRenderer !== 'undefined') {
+      StateRenderer.showLoading('prediction-chart', I18n.t('predictions.loadingPredictions'));
+    }
+
     if (typeof ApiService !== 'undefined') {
       ApiService.executive.getMorningBrief().then(function (data) {
         predictionData = data.predictions_7day || data.predictions || [];
@@ -40,7 +44,14 @@ var PredictionPanelComponent = (function () {
   }
 
   function renderPredictions(data) {
-    if (!data || data.length === 0) { return; }
+    if (typeof StateRenderer !== 'undefined') { StateRenderer.clearState('prediction-chart'); }
+
+    if (!data || data.length === 0) {
+      if (typeof StateRenderer !== 'undefined') {
+        StateRenderer.showEmpty('prediction-chart', I18n.t('predictions.noPredictionData'));
+      }
+      return;
+    }
 
     var chartEl = document.getElementById('prediction-chart');
     var riskEl = document.getElementById('prediction-risk-chart');
@@ -57,7 +68,7 @@ var PredictionPanelComponent = (function () {
     var max = 100;
     var min = 85;
     var range = max - min;
-    var html = '<div class="fc-chart-header"><span>Brand Health Trend</span><span class="fc-trend-tag positive">Projected +1.7</span></div><div class="fc-bar-chart">';
+    var html = '<div class="fc-chart-header"><span>' + I18n.t('predictions.brandHealthTrend') + '</span><span class="fc-trend-tag positive">' + I18n.t('predictions.projected') + ' +1.7</span></div><div class="fc-bar-chart">';
 
     data.forEach(function (p, i) {
       var h = Math.round(((p.brand_health - min) / range) * 100);
@@ -76,7 +87,7 @@ var PredictionPanelComponent = (function () {
 
   function renderRiskChart(container, data) {
     var max = 20;
-    var html = '<div class="fc-chart-header"><span>Risk Score Trend</span><span class="fc-trend-tag positive">Declining</span></div><div class="fc-bar-chart">';
+    var html = '<div class="fc-chart-header"><span>' + I18n.t('predictions.riskScoreTrend') + '</span><span class="fc-trend-tag positive">' + I18n.t('predictions.declining') + '</span></div><div class="fc-bar-chart">';
 
     data.forEach(function (p, i) {
       var h = Math.round((p.risk_score / max) * 100);
@@ -94,7 +105,7 @@ var PredictionPanelComponent = (function () {
 
   function renderNegVolChart(container, data) {
     var max = 35;
-    var html = '<div class="fc-chart-header"><span>Negative Sentiment Volume</span><span class="fc-trend-tag positive">Shrinking</span></div><div class="fc-bar-chart">';
+    var html = '<div class="fc-chart-header"><span>' + I18n.t('predictions.negativeVolume') + '</span><span class="fc-trend-tag positive">' + I18n.t('predictions.shrinking') + '</span></div><div class="fc-bar-chart">';
 
     data.forEach(function (p, i) {
       var vol = p.negative_volume;
@@ -112,7 +123,15 @@ var PredictionPanelComponent = (function () {
 
   function renderConfidence(container, data) {
     var html = '<div class="fc-confidence-list">';
-    var labels = ['Very High', 'High', 'Good', 'Moderate', 'Moderate', 'Fair', 'Fair'];
+    var labels = [
+      I18n.t('predictions.veryHigh'),
+      I18n.t('predictions.high'),
+      I18n.t('predictions.good'),
+      I18n.t('predictions.moderate'),
+      I18n.t('predictions.moderate'),
+      I18n.t('predictions.fair'),
+      I18n.t('predictions.fair')
+    ];
 
     data.forEach(function (p, i) {
       var confPct = Math.round((p.confidence || 0.5) * 100);
@@ -121,7 +140,7 @@ var PredictionPanelComponent = (function () {
         '<span class="fc-conf-day">' + day + '</span>' +
         '<div class="fc-conf-bar-wrap"><div class="fc-conf-bar" style="width:' + confPct + '%"></div></div>' +
         '<span class="fc-conf-val">' + confPct + '%</span>' +
-        '<span class="fc-conf-label">' + (labels[i] || 'N/A') + '</span>' +
+        '<span class="fc-conf-label">' + (labels[i] || I18n.t('predictions.na')) + '</span>' +
       '</div>';
     });
 
@@ -147,15 +166,15 @@ var PredictionPanelComponent = (function () {
           '<div class="sim-card">' +
           '  <div class="sim-card-header">' +
           '    <span class="sim-scenario">Simulation: "' + scenario + '"</span>' +
-          '    <span class="badge premium-badge">AI PREDICTION</span>' +
+          '    <span class="badge premium-badge">' + I18n.t('predictions.aiPrediction') + '</span>' +
           '  </div>' +
           '  <div class="sim-results-grid">' +
-          '    <div class="sim-result-box"><span class="sim-label">Brand Health Impact</span><span class="sim-val positive">+3.2 points</span></div>' +
-          '    <div class="sim-result-box"><span class="sim-label">Risk Score Change</span><span class="sim-val positive">-5.8 points</span></div>' +
-          '    <div class="sim-result-box"><span class="sim-label">NPS Projection</span><span class="sim-val positive">+6.5</span></div>' +
-          '    <div class="sim-result-box"><span class="sim-label">Wait Time Reduction</span><span class="sim-val positive">-3.5 min avg</span></div>' +
+          '    <div class="sim-result-box"><span class="sim-label">' + I18n.t('predictions.brandHealthImpact') + '</span><span class="sim-val positive">+3.2 ' + I18n.t('common.points') + '</span></div>' +
+          '    <div class="sim-result-box"><span class="sim-label">' + I18n.t('predictions.riskScoreChange') + '</span><span class="sim-val positive">-5.8 ' + I18n.t('common.points') + '</span></div>' +
+          '    <div class="sim-result-box"><span class="sim-label">' + I18n.t('predictions.npsProjection') + '</span><span class="sim-val positive">+6.5</span></div>' +
+          '    <div class="sim-result-box"><span class="sim-label">' + I18n.t('predictions.waitTimeReduction') + '</span><span class="sim-val positive">-3.5 ' + I18n.t('common.minAvg') + '</span></div>' +
           '  </div>' +
-          '  <div class="sim-narrative">Based on historical correlation patterns, reallocating peak staff would reduce wait time friction at Eastside Plaza and Westside Mall by an estimated 35%, improving their respective NPS by 5-8 points within 14 days. The net effect on overall brand health is projected at +3.2 points over 30 days with 78% confidence.</div>' +
+          '  <div class="sim-narrative">' + I18n.t('predictions.simNarrative') + '</div>' +
           '</div>';
       }
     });

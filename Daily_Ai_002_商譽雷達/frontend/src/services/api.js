@@ -259,6 +259,12 @@ var ApiService = (function () {
     if (method === 'POST' && path.indexOf('/workflow/cases') === 0) {
       return { id: 'case_' + Date.now(), status: 'created' };
     }
+    if (path.indexOf('/system/health') === 0) {
+      return { system: 'healthy', database: 'healthy', redis: 'healthy', ai_engine: 'healthy', queue: 'healthy', uptime: '14d 6h 32m', version: '3.0.0', timestamp: new Date().toISOString() };
+    }
+    if (path.indexOf('/system/status') === 0) {
+      return { status: 'operational', cpu: 34.2, memory: 62.8, disk: 45.1, active_users: 12, requests_per_minute: 847, last_incident: null };
+    }
     return { data: null };
   }
 
@@ -313,6 +319,10 @@ var ApiService = (function () {
     competitors: {
       list: function () { return request('GET', '/competitors'); },
       getBenchmark: function () { return request('GET', '/competitors/benchmark'); }
+    },
+    system: {
+      getHealth: function () { return request('GET', '/system/health'); },
+      getStatus: function () { return request('GET', '/system/status'); }
     }
   };
 

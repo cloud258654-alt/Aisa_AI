@@ -150,15 +150,15 @@ var AiTerminal = (function () {
       var text = textEl.textContent.trim();
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function () {
-          btn.textContent = '已複製！';
-          setTimeout(function () { btn.textContent = '複製聲明'; }, 2000);
+          btn.textContent = I18n.t('ai.copied');
+          setTimeout(function () { btn.textContent = I18n.t('ai.copyStatement'); }, 2000);
         }).catch(function () {
           fallbackCopy(text, btn);
         });
       } else {
         fallbackCopy(text, btn);
       }
-      printTerminalLog('[SYSTEM]', '公關聲明內容已成功複製至剪貼簿。', 'success-msg');
+      printTerminalLog('[SYSTEM]', I18n.t('ai.copyLog'), 'success-msg');
     }
   }
 
@@ -171,18 +171,18 @@ var AiTerminal = (function () {
     textarea.select();
     try { document.execCommand('copy'); } catch (e) {}
     document.body.removeChild(textarea);
-    btn.textContent = '已複製！';
-    setTimeout(function () { btn.textContent = '複製聲明'; }, 2000);
+    btn.textContent = I18n.t('ai.copied');
+    setTimeout(function () { btn.textContent = I18n.t('ai.copyStatement'); }, 2000);
   }
 
   function handlePublishPR(btn) {
     var channelType = btn.getAttribute('data-type');
     btn.disabled = true;
-    btn.textContent = '張貼中...';
+    btn.textContent = I18n.t('ai.publishing');
 
     setTimeout(function () {
-      btn.textContent = '發布成功 ✓';
-      printTerminalLog('[AI AGENT]', '公關應變聲明已成功串接發布至 ' + channelType + '。事件追蹤中。', 'success-msg');
+      btn.textContent = I18n.t('ai.published');
+      printTerminalLog('[AI AGENT]', I18n.t('ai.publishSuccessLog') + channelType + I18n.t('ai.eventTracking'), 'success-msg');
 
       var s = DashboardStore.getState();
       var newRes = Math.min(100, s.resolutionRate + 4.0);
@@ -196,10 +196,10 @@ var AiTerminal = (function () {
     var total = checkboxes.length;
     var checked = document.querySelectorAll('.sop-checklist input[type="checkbox"]:checked').length;
 
-    printTerminalLog('[SYSTEM]', 'SOP 執行進度更新：' + checked + '/' + total + '。', 'system-msg');
+    printTerminalLog('[SYSTEM]', I18n.t('ai.sopProgress') + checked + '/' + total + '\u3002', 'system-msg');
 
     if (checked === total) {
-      printTerminalLog('[AI AGENT]', '所有建議改善 SOP 已全數被執行與確認。品牌健康度開始回升。', 'success-msg');
+      printTerminalLog('[AI AGENT]', I18n.t('ai.sopAllDone'), 'success-msg');
       var s = DashboardStore.getState();
       var newBrand = Math.min(100, s.brandScore + 3.0);
       var newRisk = Math.max(5, s.riskScore - 20);

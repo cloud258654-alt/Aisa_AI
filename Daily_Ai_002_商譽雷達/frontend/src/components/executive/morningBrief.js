@@ -12,6 +12,11 @@ var MorningBriefComponent = (function () {
   function loadMorningBrief() {
     DashboardStore.setLoading(true);
 
+    var summaryEl = document.getElementById('brief-summary');
+    if (summaryEl && typeof StateRenderer !== 'undefined') {
+      StateRenderer.showLoading('brief-summary', I18n.t('executive.loading'));
+    }
+
     if (typeof ApiService !== 'undefined') {
       ApiService.executive.getMorningBrief().then(function (data) {
         briefData = data;
@@ -94,17 +99,24 @@ var MorningBriefComponent = (function () {
 
     var now = new Date();
     var hour = now.getHours();
-    var greeting = hour < 12 ? '早安' : hour < 18 ? '午安' : '晚安';
+    var greetingKey = hour < 12 ? 'executive.greetingMorning' : hour < 18 ? 'executive.greetingAfternoon' : 'executive.greetingEvening';
+    var greeting = I18n.t(greetingKey);
 
     if (greetingEl) {
-      greetingEl.textContent = greeting + '，Brand Manager';
+      greetingEl.textContent = greeting + I18n.t('executive.greetingSuffix');
     }
 
     if (dateEl) { dateEl.textContent = data.date; }
     if (summaryEl) { summaryEl.textContent = data.summary; }
+    if (typeof StateRenderer !== 'undefined') { StateRenderer.clearState('brief-summary'); }
 
     if (riskBadgeEl) {
-      var riskLabels = { low: '低風險', medium: '中等風險', high: '高風險', critical: '危急' };
+      var riskLabels = {
+        low: I18n.t('executive.riskLow'),
+        medium: I18n.t('executive.riskMedium'),
+        high: I18n.t('executive.riskHigh'),
+        critical: I18n.t('executive.riskCritical')
+      };
       var riskLabel = riskLabels[data.riskLevel] || data.riskLevel;
       riskBadgeEl.textContent = riskLabel;
       riskBadgeEl.className = 'brief-risk-badge ' + (data.riskLevel || 'low');
@@ -113,9 +125,9 @@ var MorningBriefComponent = (function () {
     if (metricsRowEl && data.key_metrics) {
       var m = data.key_metrics;
       metricsRowEl.innerHTML =
-        '<div class="eb-metric-item"><span class="eb-metric-label">Brand Health</span><span class="eb-metric-val positive">' + (m.brand_health_score || '--') + '</span></div>' +
-        '<div class="eb-metric-item"><span class="eb-metric-label">Store Health</span><span class="eb-metric-val positive">' + (m.store_health_index || '--') + '%</span></div>' +
-        '<div class="eb-metric-item"><span class="eb-metric-label">Risk Score</span><span class="eb-metric-val ' + ((m.risk_score || 0) > 50 ? 'danger' : 'positive') + '">' + (m.risk_score || '--') + '</span></div>' +
+        '<div class="eb-metric-item"><span class="eb-metric-label">' + I18n.t('dashboard.brandHealthLabel') + '</span><span class="eb-metric-val positive">' + (m.brand_health_score || '--') + '</span></div>' +
+        '<div class="eb-metric-item"><span class="eb-metric-label">' + I18n.t('dashboard.storeHealthLabel') + '</span><span class="eb-metric-val positive">' + (m.store_health_index || '--') + '%</span></div>' +
+        '<div class="eb-metric-item"><span class="eb-metric-label">' + I18n.t('dashboard.riskScore') + '</span><span class="eb-metric-val ' + ((m.risk_score || 0) > 50 ? 'danger' : 'positive') + '">' + (m.risk_score || '--') + '</span></div>' +
         '<div class="eb-metric-item"><span class="eb-metric-label">VOC Volume</span><span class="eb-metric-val">' + (m.total_voices_today || '--') + '</span></div>';
     }
 
@@ -124,27 +136,28 @@ var MorningBriefComponent = (function () {
       problemCardEl.innerHTML =
         '<div class="eb-problem-header">' +
         '  <span class="eb-problem-icon">' + (p.severity === 'critical' ? '\u26A0\uFE0F' : '\u2757') + '</span>' +
-        '  <span class="eb-problem-title">Today\'s Biggest Problem: ' + p.title + '</span>' +
+        '  <span class="eb-problem-title">' + I18n.t('executive.biggestProblemTitle') + ': ' + p.title + '</span>' +
         '  <span class="eb-severity-tag ' + p.severity + '">' + p.severity.toUpperCase() + '</span>' +
         '</div>' +
         '<p class="eb-problem-desc">' + p.description + '</p>' +
         '<div class="eb-problem-stores">' +
-        '  <span class="eb-problem-label">Affected Stores:</span>' +
+        '  <span class="eb-problem-label">' + I18n.t('executive.affectedStores') + ':</span>' +
         '  ' + p.affectedStores.map(function (s) { return '<span class="eb-store-tag">' + s + '</span>'; }).join('') +
         '</div>' +
         '<div class="eb-problem-rec">' +
-        '  <span class="eb-problem-label">AI Recommendation:</span> ' + p.recommendation +
+        '  <span class="eb-problem-label">' + I18n.t('executive.aiRecommendation') + ':</span> ' + p.recommendation +
         '</div>';
     }
 
     if (cooRecsEl && data.aiCooRecs) {
-      cooRecsEl.innerHTML = data.aiCooRecs.map(function (r, i) {
+      cooRecsEl.innerHTML = '<h4 class="eb-section-title">' + I18n.t('executive.aiCooRecs') + '</h4>' +
+        data.aiCooRecs.map(function (r, i) {
         var confPct = Math.round((r.confidence || 0) * 100);
         return '<div class="eb-coo-item">' +
           '<span class="eb-coo-num">' + (i + 1) + '</span>' +
           '<div class="eb-coo-content">' +
           '  <span class="eb-coo-action">' + r.action + '</span>' +
-          '  <span class="eb-coo-impact">預期成果: ' + r.impact + '</span>' +
+          '  <span class="eb-coo-impact">' + r.impact + '</span>' +
           '  <div class="eb-coo-confidence"><div class="eb-conf-bar" style="width:' + confPct + '%"></div><span>' + confPct + '%</span></div>' +
           '</div>' +
         '</div>';
@@ -169,7 +182,7 @@ var MorningBriefComponent = (function () {
     if (sparklineEl && data.predictions) {
       var maxHealth = 100;
       var sparkHtml = '<div class="eb-sparkline-container">' +
-        '<span class="eb-sparkline-label">7-Day Brand Health Forecast</span>' +
+        '<span class="eb-sparkline-label">' + I18n.t('executive.brandHealthForecast') + '</span>' +
         '<div class="eb-sparkline-bars">';
       data.predictions.forEach(function (p) {
         var h = Math.round((p.health / maxHealth) * 60);

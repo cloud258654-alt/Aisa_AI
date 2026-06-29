@@ -17,6 +17,7 @@ from backend.api.v1.operational import router as operational_router
 from backend.api.v1.predictions import router as predictions_router
 from backend.api.v1.store_intelligence import router as store_intelligence_router
 from backend.api.v1.learning import router as learning_router
+from backend.api.v1.system import router as system_router
 
 api_v1_router = APIRouter()
 
@@ -35,3 +36,4 @@ api_v1_router.include_router(operational_router, prefix="/operational", tags=["O
 api_v1_router.include_router(predictions_router, prefix="/predictions", tags=["Predictive Intelligence"])
 api_v1_router.include_router(store_intelligence_router, prefix="/store-intelligence", tags=["Store Intelligence"])
 api_v1_router.include_router(learning_router, prefix="/learning", tags=["Learning Intelligence"])
+api_v1_router.include_router(system_router, prefix="/system", tags=["System Health"])

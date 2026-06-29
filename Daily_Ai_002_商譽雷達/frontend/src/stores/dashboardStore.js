@@ -14,7 +14,10 @@ var DashboardStore = (function () {
     sandboxResults: null,
     storeRankings: [],
     predictions: [],
-    learningCases: null
+    learningCases: null,
+    locale: 'zh-TW',
+    demoMode: true,
+    systemHealth: null
   };
 
   var listeners = [];
@@ -88,6 +91,18 @@ var DashboardStore = (function () {
     setState({ sandboxResults: results });
   }
 
+  function setLocale(locale) {
+    setState({ locale: locale });
+  }
+
+  function setDemoMode(mode) {
+    setState({ demoMode: mode });
+  }
+
+  function setSystemHealth(health) {
+    setState({ systemHealth: health });
+  }
+
   return {
     getState: getState,
     setState: setState,
@@ -101,6 +116,9 @@ var DashboardStore = (function () {
     setLoading: setLoading,
     setConnectionStatus: setConnectionStatus,
     setStreamRunning: setStreamRunning,
-    setSandboxResults: setSandboxResults
+    setSandboxResults: setSandboxResults,
+    setLocale: setLocale,
+    setDemoMode: setDemoMode,
+    setSystemHealth: setSystemHealth
   };
 })();

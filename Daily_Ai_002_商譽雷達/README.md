@@ -1,242 +1,184 @@
 # Sentinel AI — Enterprise Customer Experience Intelligence Platform (ECXIP)
 
-**AI-Powered Platform for Voice of Customer, Customer Experience, Brand Intelligence & Reputation Management**
+> **一句話介紹：** Sentinel ECXIP 是一套整合 VOC、CX、Brand Intelligence、AI Agent、Operational Intelligence 與 Executive Decision Support 的企業級 AI 平台。
+
+> **In a Sentence:** Sentinel ECXIP is an enterprise AI platform that unifies Voice of Customer, Customer Experience, Brand Intelligence, 14 AI agents, Operational Intelligence, and Executive Decision Support into a single command center.
 
 ---
 
-## Project Overview
+## 🎯 Portfolio Summary
 
-Sentinel AI ECXIP is an enterprise-grade platform that transforms how organizations understand, measure, and improve their customer experience. By integrating AI agent technology with multi-channel voice analytics, the platform provides continuous monitoring, deep analysis, and actionable recommendations.
+Sentinel ECXIP is an enterprise-grade AI platform that transforms how organizations understand, measure, and improve their customer experience. By integrating 14 AI agents with multi-channel voice analytics across 6 bounded domains, the platform provides continuous monitoring, deep root cause analysis, predictive intelligence, and actionable executive recommendations.
 
-The platform answers questions traditional monitoring tools cannot:
-- Why did this happen?
-- Which locations need immediate attention?
-- What processes are causing customer churn?
-- What should we do next?
-- Has the issue been resolved?
-- Will a brand crisis occur in the near future?
+Built with an Enterprise SaaS architecture from day one, the platform features multi-tenant support, Docker-based deployment, comprehensive i18n (zh-TW + en-US), and a polished Apple Frosted Glass UI.
 
 ---
 
-## Phase 2 Architecture Highlights
+## ✨ Key Features
 
-- **9 AI Specialized Agents** coordinated by an AgentOrchestrator for crisis response, daily briefs, and weekly reports
-- **AI Router** with 5-tier model selection optimizing for cost, latency, and quality
-- **24 Database Tables** across 7 bounded domains (Organization, VOC, CX, Brand, Workflow, Knowledge, Competitor)
-- **50+ API Endpoints** across 11 route modules with full Pydantic validation
-- **Real-time WebSocket** voice streaming and alert notifications
-- **Celery Task System** with 4 dedicated queues and 7 scheduled beat tasks
-- **Docker Multi-Service** deployment with health checks and persistent volumes
-
-## Phase 3: Enterprise Intelligence Platform (New!)
-
-### 5 New Intelligence Engines
-
-- **Operational Intelligence Engine** — Real-time operational data correlation, 30-min refresh cycle identifying hidden relationships between wait times, staffing levels, and NPS/CX metrics
-- **Predictive Intelligence Engine** — 7-day multi-factor forecasting for brand health, risk scores, and negative sentiment volumes using historical pattern analysis and confidence-weighted projections
-- **Store Intelligence Engine** — Per-store daily intelligence calculation with 14-day trend analysis, voice volume correlation, and automated health scoring with color-coded risk categorization
-- **Learning Memory Engine** — AI pattern discovery across historical cases with similarity matching (80-94%), success rate tracking for past solutions, and "what worked before" knowledge graph
-- **Executive Intelligence Center** — Enhanced morning brief with AI COO analysis, operational correlations, 7-day predictions, strategic recommendations with confidence scoring, and real-time metrics snapshot across all 7 domains
-
-### Enhanced Executive Dashboard
-
-- **Executive Briefing Center** — Greeting header, key metrics row, "Today's Biggest Problem" highlight card, affected stores list, AI COO recommendations with confidence bars, store ranking mini-table (top 5), and 7-day risk forecast sparklines
-- **Store Ranking Table** — Full store ranking with health score color bars, risk level tags, trend arrows, critical issues count, filterable tabs (All/Critical/Improving/Declining), and click-to-expand store detail panel
-- **7-Day Prediction Center** — Four forecast panels (Brand Health, Risk Score, Negative Volume, Confidence) with ASCII/div bar charts, "What would happen if..." simulation input with AI-generated impact projections
-- **AI Learning Memory Panel** — Historical similar cases with similarity matching, success rate tracking for past strategies, AI-discovered pattern insights, and "Store New Case" form for continuous learning
-
-### 6 New Celery Scheduled Tasks
-
-| Task | Schedule | Queue | Description |
-|------|----------|-------|-------------|
-| daily_store_intelligence_calculation | Daily 3 AM | analysis | Calculate StoreDailyIntelligence for all stores |
-| daily_executive_brief_generation | Daily 6 AM | analysis | Generate morning brief for all organizations |
-| hourly_risk_forecast | Hourly at :00 | analysis | Update risk predictions every hour |
-| daily_learning_pattern_update | Daily 4 AM | analysis | Discover new learning patterns |
-| operational_data_correlation_job | Every 30 min | analysis | Update operational correlations |
-| weekly_prediction_model_training | Mon 2 AM | analysis | Train/retrain prediction models |
-
-### 5 New API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/executive/morning-brief` | GET | Enhanced morning brief with AI COO analysis, operational correlations, 7-day predictions |
-| `/api/v1/executive/key-risks` | GET | Key business risks with severity, impact, financial exposure, and mitigation |
-| `/api/v1/executive/opportunities` | GET | Business improvement opportunities with ROI estimates |
-| `/api/v1/executive/ai-coo-summary` | GET | AI COO strategic recommendations with domain summaries |
-| `/api/v1/executive/metrics-snapshot` | GET | Real-time snapshot of all metrics across 7 domains |
-
-### 4 New Frontend Components
-
-| Component | File | Description |
-|-----------|------|-------------|
-| MorningBrief (Enhanced) | `executive/morningBrief.js` | Executive briefing center with all new features |
-| StoreRanking | `executive/storeRanking.js` | Full store ranking table with tabs and detail panel |
-| PredictionPanel | `executive/predictionPanel.js` | 7-day forecast panels and simulation engine |
-| LearningPanel | `executive/learningPanel.js` | Historical cases, success patterns, and learning form |
+| Module | Description |
+|--------|-------------|
+| 🏠 Executive Briefing | AI COO morning brief with daily summary, risks, store ranking, and predictions |
+| 📊 Brand Cockpit | Real-time brand health, store health, CSAT, crisis resolution, and reputation risk |
+| 🎤 Voice of Customer | Multi-channel voice stream (Google, Threads, Facebook, Instagram, Dcard, PTT) |
+| 🗺️ Customer Journey | Touchpoint diagnostic map with friction detection and AI root cause analysis |
+| 🧠 AI Brand Manager | Crisis simulation, SOP generation, PR statement drafting, legal advisory |
+| 🔬 NLP Sandbox | Real-time text analysis with sentiment, emotion, touchpoint, and risk scoring |
+| 📈 Predictive Intelligence | 7-day brand health, risk, and sentiment forecasting with what-if simulation |
+| 🏪 Store Intelligence | Per-store daily health scoring, ranking, and trend analysis |
+| 📚 Learning Memory | Historical case matching, pattern discovery, and resolution recommendation |
+| ⚙️ Operational Intelligence | POS, traffic, and staffing data correlation with VOC events |
+| 🌐 i18n | Full Traditional Chinese (zh-TW) and English (en-US) support, instant switching |
+| 🔒 Enterprise Ready | JWT auth, role-based access, rate limiting, multi-tenant architecture |
 
 ---
 
-## Quick Start
-
-### Docker (Recommended)
-```powershell
-# Clone and navigate
-Set-Location "D:\Ai study\Aisa_AI\Daily_Ai_002_商譽雷達"
-
-# Configure environment
-Copy-Item backend\.env.example backend\.env
-# Edit backend\.env and set SECRET_KEY, API keys
-
-# Start all services
-docker compose -f docker\docker-compose.yml up -d
-```
-
-Access at **http://localhost** — Dashboard, Docs, and API.
-
-### Local Development
-```powershell
-# Start infrastructure
-docker compose -f docker\docker-compose.yml up -d postgres redis
-
-# Setup Python
-Set-Location backend
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-
-# Run migrations
-alembic upgrade head
-
-# Start dev server
-uvicorn main:app --reload --port 8000
-```
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Frontend | Vanilla JS, CSS3 (Apple Frosted Glass UI) |
-| Backend | FastAPI (Python 3.12) |
-| Database | PostgreSQL 16 |
-| Cache/Queue | Redis 7 |
-| Async Tasks | Celery 5.4 |
-| AI | OpenAI / Google Gemini |
-| Proxy | Nginx 1.27 |
-| Deployment | Docker + Docker Compose |
-| Migrations | Alembic |
-| Auth | JWT + OAuth2 (python-jose, passlib) |
-
----
-
-## Project Structure
+## 🏗️ Architecture
 
 ```
-├── index.html                  # SPA dashboard (Frosted Glass UI)
-├── index.css                   # Global styles
-├── app.js                      # Core frontend logic
-│
-├── backend/                    # FastAPI application
-│   ├── main.py                 # Entry point, WebSocket manager
-│   ├── core/                   # Config, database, Redis, security
-│   ├── models/                 # 24 SQLAlchemy ORM models
-│   ├── schemas/                # Pydantic request/response schemas
-│   ├── api/v1/                 # 11 API route modules
-│   ├── services/               # Business logic + 9 AI agents
-│   ├── tasks/                  # Celery async task definitions
-│   └── alembic/                # Database migrations
-│
-├── docker/                     # Docker Compose + Dockerfiles
-├── docs/                       # Full documentation
-│   ├── architecture.md
-│   ├── api/api-reference.md
-│   ├── database_schema.md
-│   ├── ai-agents.md
-│   ├── deployment.md
-│   └── diagrams/
-│
-├── CHANGELOG.md
-├── ROADMAP.md
-└── README.md
+Frontend (Vanilla JS SPA)
+    ↓
+Nginx Reverse Proxy
+    ↓
+FastAPI Backend (REST + WebSocket)
+    ↓
+┌──────────┬──────────┬──────────┬──────────┐
+│ VOC      │ CX       │ Brand    │ Workflow │
+│ Service  │ Service  │ Health   │ Service  │
+├──────────┼──────────┼──────────┼──────────┤
+│ 14 AI Agents + Orchestrator + AI Router    │
+├──────────┼──────────┼──────────┼──────────┤
+│ PostgreSQL │  Redis  │ Celery   │ WebSocket│
+└──────────┴──────────┴──────────┴──────────┘
 ```
 
----
-
-## API Documentation
-
-Interactive API docs available at runtime:
-
-- **Swagger UI:** http://localhost/docs
-- **ReDoc:** http://localhost/redoc
-
-Static reference: [docs/api/api-reference.md](docs/api/api-reference.md)
-
-**Base URL:** `/api/v1` | **Auth:** Bearer JWT
-
-| Module | Endpoints | Description |
-|--------|-----------|-------------|
-| Auth | 7 | Login, refresh, user CRUD, role management |
-| VOC | 6 | Voice ingest, list, stats, trends, delete |
-| CX | 6 | Journeys, touchpoints, diagnostics, insights |
-| Brand Health | 6 | Current, history, stores, alerts CRUD |
-| Root Cause | 5 | Analysis CRUD, summary, store comparison |
-| Executive | 4 | Morning brief, today summary, rankings, risk |
-| Sandbox | 1 | NLP analysis pipeline |
-| Workflow | 6 | Cases CRUD, comments, attachments, stats |
-| Knowledge | 6 | Articles CRUD, semantic search |
-| Trends | 4 | Overview, topics, emotions, predictions |
-| Competitors | 5 | CRUD, metrics, benchmark, SWOT |
+**Tech Stack:** FastAPI · PostgreSQL 16 · Redis 7 · Celery · Docker · Vanilla JS · CSS3 Glassmorphism
 
 ---
 
-## Development Guide
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.12+
-- Docker 24.0+
-- PostgreSQL 16
-- Redis 7
+- Docker Desktop
+- Python 3.12+ (for local dev)
 
-### First-Time Setup
-```powershell
-# Install dependencies
-Set-Location backend
-pip install -r requirements.txt
-
-# Create database
-createdb sentinel_ecxip
-
-# Run migrations
-alembic upgrade head
-
-# Start Celery worker (separate terminal)
-celery -A tasks.celery_app worker --loglevel=info
+### Docker (Recommended)
+```bash
+cd docker
+docker compose up -d
 ```
 
-### Code Quality
-- All API endpoints use Pydantic v2 schemas for validation
-- Services follow Clean Architecture with dependency injection
-- AI agents extend `BaseAgent` with consistent interface
-- Celery tasks are idempotent with soft time limits
+### Local Development
+```bash
+# Backend
+cd backend
+pip install -r requirements.txt
+python main.py
+# → http://localhost:8000
 
-### Adding Features
-1. Define model in `backend/models/`
-2. Create schema in `backend/schemas/`
-3. Implement service in `backend/services/`
-4. Add router in `backend/api/v1/`
-5. Register route in `backend/api/v1/router.py`
-6. Generate migration: `alembic revision --autogenerate -m "description"`
+# Frontend
+cd frontend
+python -m http.server 26117
+# → http://localhost:26117
 
-### Running Tests
-```powershell
-# API health check
-Invoke-WebRequest http://localhost:8000/api/v1/health
+# Generate Demo Data (optional)
+cd backend
+python scripts/seed_demo_data.py
+```
+
+### Demo Credentials
+- **Email:** admin@sentinel.ai
+- **Password:** demo123
+
+### API Documentation
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+### Demo Mode
+The platform runs in **Demo Mode** by default — all data is simulated. Set `DEMO_MODE=false` in `.env` to connect real services.
+
+---
+
+## 📁 Project Structure
+
+```
+Daily_Ai_002_商譽雷達/
+├── frontend/          # Vanilla JS SPA (Apple Frosted Glass UI)
+│   ├── i18n/          # zh-TW + en-US translations (260+ keys)
+│   └── src/           # Components, services, stores, styles
+├── backend/           # FastAPI application
+│   ├── api/v1/        # 15 route modules (60+ endpoints)
+│   ├── models/        # 31 SQLAlchemy ORM models (7 domains)
+│   ├── schemas/       # Pydantic v2 validation schemas
+│   ├── services/      # 17 business services
+│   │   └── agents/    # 14 AI agents + orchestrator
+│   ├── tasks/         # Celery async tasks (12 scheduled)
+│   └── scripts/       # Demo data seeder
+├── docker/            # Docker Compose (7 services)
+└── docs/              # Architecture, API, DB schema, guides
 ```
 
 ---
 
-## License
+## 🤖 AI Agent Architecture
 
-Proprietary — All rights reserved.
+14 specialized AI agents coordinated by an AgentOrchestrator:
+
+| Agent | Role |
+|-------|------|
+| RiskAgent | Early warning detection, crisis escalation |
+| VOCAgent | Voice sentiment, emotion, topic analysis |
+| CXAgent | Customer journey friction detection |
+| PRAgent | PR response generation (Chinese/English) |
+| LegalAgent | Legal risk assessment, compliance |
+| KnowledgeAgent | SOP/case knowledge retrieval |
+| ExecutiveAgent | Executive summary generation |
+| TrendAgent | Trend analysis and anomaly detection |
+| CompetitorAgent | Competitive intelligence, SWOT |
+| OperationalAgent | Operational data correlation |
+| PredictionAgent | 7-day multi-factor forecasting |
+| StoreIntelligenceAgent | Per-store health analysis |
+| LearningAgent | Historical pattern matching |
+| AICOOAgent | COO-level strategic recommendations |
+
+---
+
+## 📚 Documentation
+
+| Document | Path |
+|----------|------|
+| Architecture | `docs/architecture.md` |
+| API Reference | `docs/api/api-reference.md` |
+| Database Schema | `docs/database_schema.md` |
+| AI Agents | `docs/ai-agents.md` |
+| I18n Guide | `docs/I18N_GUIDE.md` |
+| Frontend Architecture | `docs/FRONTEND_ARCHITECTURE.md` |
+| Deployment | `docs/deployment.md` |
+| Security Checklist | `docs/SECURITY_CHECKLIST.md` |
+| Testing Checklist | `docs/TESTING_CHECKLIST.md` |
+| Demo Script | `docs/DEMO_SCRIPT.md` |
+| Release Notes | `RELEASE_NOTES_v1.0.0.md` |
+| Changelog | `CHANGELOG.md` |
+| Roadmap | `ROADMAP.md` |
+
+---
+
+## 🗺️ Roadmap
+
+- ✅ **Phase 1:** MVP — Brand monitoring & AI analysis
+- ✅ **Phase 2:** Enterprise SaaS — Microservices, AI agents, Docker
+- ✅ **Phase 3:** Intelligence Platform — 5 new engines, 5 new agents
+- ✅ **Phase 3.1:** i18n — Chinese/English UI, language switcher
+- ✅ **v1.0.0:** Enterprise MVP Release Candidate
+
+---
+
+## 📄 License
+
+Proprietary. All rights reserved.
+
+---
+
+**Version:** 1.0.0  
+**Status:** Enterprise MVP Release Candidate  
+**Last Updated:** 2026-06-29

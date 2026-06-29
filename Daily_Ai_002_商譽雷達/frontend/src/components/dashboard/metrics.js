@@ -23,13 +23,13 @@ var MetricsComponent = (function () {
 
     if (riskEl) {
       if (risk < 30) {
-        riskEl.textContent = 'Low (' + risk + ')';
+        riskEl.textContent = I18n.t('dashboard.riskLow') + ' (' + risk + ')';
         riskEl.className = 'metric-value text-green';
       } else if (risk < 70) {
-        riskEl.textContent = 'Medium (' + risk + ')';
+        riskEl.textContent = I18n.t('dashboard.riskMedium') + ' (' + risk + ')';
         riskEl.className = 'metric-value text-amber';
       } else {
-        riskEl.textContent = 'CRITICAL (' + risk + ')';
+        riskEl.textContent = I18n.t('dashboard.riskCritical') + ' (' + risk + ')';
         riskEl.className = 'metric-value text-rose';
       }
     }
@@ -57,7 +57,7 @@ var MetricsComponent = (function () {
     var fullStars = Math.floor(csat);
     var stars = '';
     for (var i = 0; i < 5; i++) {
-      stars += (i < fullStars) ? '★' : '☆';
+      stars += (i < fullStars) ? '\u2605' : '\u2606';
     }
     starsEl.textContent = stars;
   }

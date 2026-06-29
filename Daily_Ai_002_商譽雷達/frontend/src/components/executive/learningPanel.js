@@ -10,6 +10,10 @@ var LearningPanelComponent = (function () {
   }
 
   function loadLearningData() {
+    if (typeof StateRenderer !== 'undefined') {
+      StateRenderer.showLoading('learning-similar-cases', I18n.t('learning.loadingCases'));
+    }
+
     setTimeout(function () {
       learningData = {
         similarCases: [
@@ -75,40 +79,42 @@ var LearningPanelComponent = (function () {
     var patternInsightsEl = document.getElementById('learning-patterns');
 
     if (similarCasesEl && data.similarCases) {
-      similarCasesEl.innerHTML = data.similarCases.map(function (c) {
+      if (typeof StateRenderer !== 'undefined') { StateRenderer.clearState('learning-similar-cases'); }
+      similarCasesEl.innerHTML = '<h4 class="lp-subtitle">' + I18n.t('learning.similarCases') + '</h4>' +
+        data.similarCases.map(function (c) {
         return '<div class="similar-case-card">' +
           '<div class="sc-card-header">' +
           '  <span class="sc-title">' + c.title + '</span>' +
-          '  <span class="sc-similarity ' + (c.similarity >= 90 ? 'high' : c.similarity >= 75 ? 'medium' : 'low') + '">' + c.similarity + '% match</span>' +
+          '  <span class="sc-similarity ' + (c.similarity >= 90 ? 'high' : c.similarity >= 75 ? 'medium' : 'low') + '">' + c.similarity + '% ' + I18n.t('learning.match') + '</span>' +
           '</div>' +
           '<div class="sc-card-meta">' +
           '  <span class="sc-date">' + c.date + '</span>' +
-          '  <span class="sc-outcome ' + (c.success ? 'success' : 'failed') + '">' + (c.success ? 'Resolved Successfully' : 'Unresolved') + '</span>' +
+          '  <span class="sc-outcome ' + (c.success ? 'success' : 'failed') + '">' + (c.success ? I18n.t('learning.resolvedSuccessfully') : I18n.t('learning.unresolved')) + '</span>' +
           '</div>' +
           '<div class="sc-card-body">' +
-          '  <p><strong>Approach:</strong> ' + c.resolution + '</p>' +
-          '  <p><strong>Outcome:</strong> ' + c.outcome + '</p>' +
+          '  <p><strong>' + I18n.t('learning.approach') + ':</strong> ' + c.resolution + '</p>' +
+          '  <p><strong>' + I18n.t('learning.outcome') + ':</strong> ' + c.outcome + '</p>' +
           '</div>' +
         '</div>';
       }).join('');
     }
 
     if (whatWorkedEl && data.whatWorked) {
-      whatWorkedEl.innerHTML = '<h4 class="lp-subtitle">What Worked Before</h4>' +
+      whatWorkedEl.innerHTML = '<h4 class="lp-subtitle">' + I18n.t('learning.whatWorked') + '</h4>' +
         data.whatWorked.map(function (w) {
           return '<div class="ww-item">' +
             '<div class="ww-header">' +
             '  <span class="ww-strategy">' + w.strategy + '</span>' +
-            '  <span class="ww-rate">' + w.successRate + '% success</span>' +
+            '  <span class="ww-rate">' + w.successRate + '% ' + I18n.t('learning.success') + '</span>' +
             '</div>' +
             '<div class="ww-bar-wrap"><div class="ww-bar" style="width:' + w.successRate + '%"></div></div>' +
-            '<span class="ww-meta">' + w.cases + ' past cases | Average recovery: ' + w.avgRecovery + '</span>' +
+            '<span class="ww-meta">' + w.cases + ' ' + I18n.t('learning.pastCases') + ' | ' + I18n.t('learning.averageRecovery') + ': ' + w.avgRecovery + '</span>' +
           '</div>';
         }).join('');
     }
 
     if (patternInsightsEl && data.patternInsights) {
-      patternInsightsEl.innerHTML = '<h4 class="lp-subtitle">AI-Discovered Patterns</h4>' +
+      patternInsightsEl.innerHTML = '<h4 class="lp-subtitle">' + I18n.t('learning.patterns') + '</h4>' +
         data.patternInsights.map(function (p) {
           return '<div class="lp-insight-item">' +
             '<span class="lp-insight-bullet">\u2022</span>' +
@@ -140,7 +146,7 @@ var LearningPanelComponent = (function () {
         var store = storeInput ? storeInput.value.trim() : '';
 
         if (!title || !desc) {
-          alert('Please fill in the case title and description.');
+          alert(I18n.t('learning.pleaseFillIn'));
           return;
         }
 
@@ -151,8 +157,8 @@ var LearningPanelComponent = (function () {
           form.appendChild(similarEl);
         }
         similarEl.innerHTML = '<div class="sim-card" style="margin-top:12px;">' +
-          '  <div class="sim-card-header"><span class="sim-scenario">Case Stored: "' + title + '"</span></div>' +
-          '  <div class="sim-narrative">AI is analyzing the case pattern... Found 2 similar historical cases. Pattern matching confidence: 88%. The AI Learning Engine will incorporate this case into the next pattern update cycle.</div>' +
+          '  <div class="sim-card-header"><span class="sim-scenario">' + I18n.t('learning.caseStored') + ': "' + title + '"</span></div>' +
+          '  <div class="sim-narrative">' + I18n.t('learning.aiAnalyzingPattern') + '</div>' +
           '</div>';
 
         titleInput.value = '';

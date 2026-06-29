@@ -34,6 +34,16 @@ class ErrorResponse(BaseModel):
     errors: Optional[List[dict]] = None
 
 
+class ErrorDetail(BaseModel):
+    code: str
+    message: str
+
+
+class ApiError(BaseModel):
+    success: bool = False
+    error: ErrorDetail
+
+
 class SuccessResponse(BaseModel):
     message: str
     data: Optional[Any] = None

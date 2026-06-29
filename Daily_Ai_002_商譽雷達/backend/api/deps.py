@@ -1,16 +1,20 @@
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Type
 
-from fastapi import Depends, HTTPException, Query, status
+from fastapi import Depends, HTTPException, Query, Request, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
 from core.redis import get_redis
 from core.security import oauth2_scheme, verify_access_token
 from backend.services.auth import AuthService
+
+logger = logging.getLogger(__name__)
 
 
 async def get_current_user(
@@ -109,6 +113,26 @@ def pagination_params(
 ) -> Dict[str, int]:
     """Common pagination dependency returning page and page_size."""
     return {"page": page, "page_size": page_size}
+
+
+async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    logger.error(
+        "Unhandled exception on %s %s: %s",
+        request.method,
+        request.url.path,
+        str(exc),
+        exc_info=True,
+    )
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "success": False,
+            "error": {
+                "code": "internal_server_error",
+                "message": "An unexpected error occurred. Please try again later.",
+            },
+        },
+    )
 
 
 def common_query_params(

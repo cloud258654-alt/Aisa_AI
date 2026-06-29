@@ -5,10 +5,12 @@ import os
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Dict, List
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
+
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from core.config import settings
 from core.database import check_db_connection, dispose_engine
@@ -106,8 +108,18 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["X-Request-ID", "X-RateLimit-Remaining", "X-RateLimit-Reset"],
+    expose_headers=["X-Request-ID", "X-RateLimit-Remaining", "X-RateLimit-Reset", "X-Demo-Mode"],
 )
+
+
+class DemoModeMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response: Response = await call_next(request)
+        response.headers["X-Demo-Mode"] = "true" if settings.DEMO_MODE else "false"
+        return response
+
+
+app.add_middleware(DemoModeMiddleware)
 
 
 @app.get(f"{settings.API_V1_PREFIX}/health", tags=["health"])

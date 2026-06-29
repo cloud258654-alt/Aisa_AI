@@ -23,8 +23,14 @@ var VoiceStreamComponent = (function () {
     var card = document.createElement('div');
     card.className = 'voice-item';
 
-    var riskBadge = data.risk === 'high' ? '<span class="v-badge risk-high">High Risk Alert</span>' : '';
+    var riskBadge = data.risk === 'high' ? '<span class="v-badge risk-high">' + I18n.t('voc.highRiskAlert') + '</span>' : '';
     var sentimentClass = data.sentiment;
+
+    var sentimentLabels = {
+      negative: I18n.t('voc.sentimentNegative'),
+      positive: I18n.t('voc.sentimentPositive'),
+      neutral: I18n.t('voc.sentimentNeutral')
+    };
 
     card.innerHTML =
       '<div class="voice-meta">' +
@@ -32,17 +38,17 @@ var VoiceStreamComponent = (function () {
           '<span class="channel-dot ' + data.channel + '"></span>' +
           '<span>' + data.channelName + ' (@' + data.author + ')</span>' +
         '</div>' +
-        '<span class="voice-time">剛剛</span>' +
+        '<span class="voice-time">' + I18n.t('voc.justNow') + '</span>' +
       '</div>' +
       '<p class="voice-body">' + data.text + '</p>' +
       '<div class="voice-tags">' +
-        '<span class="v-badge ' + sentimentClass + '">' + data.sentiment.toUpperCase() + '</span>' +
+        '<span class="v-badge ' + sentimentClass + '">' + (sentimentLabels[data.sentiment] || data.sentiment.toUpperCase()) + '</span>' +
         '<span class="v-badge topic">' + data.topic + '</span>' +
         '<span class="v-badge store">' + data.store + '</span>' +
         riskBadge +
       '</div>' +
       '<div class="voice-actions">' +
-        '<button class="btn-sm btn-sm-primary btn-process-review">處理輿情</button>' +
+        '<button class="btn-sm btn-sm-primary btn-process-review">' + I18n.t('voc.processReview') + '</button>' +
       '</div>';
 
     if (isPrepend) {
@@ -109,6 +115,9 @@ var VoiceStreamComponent = (function () {
   function clearStream() {
     if (streamContainer) { streamContainer.innerHTML = ''; }
     DashboardStore.clearStream();
+    if (typeof StateRenderer !== 'undefined') {
+      StateRenderer.showEmpty('stream-feed-container', I18n.t('voc.streamCleared'));
+    }
   }
 
   function bindControls() {
@@ -159,7 +168,7 @@ var VoiceStreamComponent = (function () {
           MetricsComponent.updateDashboardMetrics(s.brandScore, s.storeHealth, s.csat, newRes, newRisk);
 
           if (typeof AiTerminal !== 'undefined' && AiTerminal.printTerminalLog) {
-            AiTerminal.printTerminalLog('[SYSTEM]', '輿情處理指令已發出。操作類型：' + el.textContent + '。品牌指標已重新校準。', 'success-msg');
+            AiTerminal.printTerminalLog('[SYSTEM]', I18n.t('ai.dispatchLog') + el.textContent + I18n.t('ai.recalibrated'), 'success-msg');
           }
         });
       }

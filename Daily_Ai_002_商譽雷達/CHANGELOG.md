@@ -2,147 +2,130 @@
 
 All notable changes to Sentinel AI ECXIP will be documented in this file.
 
+**Status: Enterprise MVP v1.0.0 — Feature Freeze**
+
 ---
 
-## [3.0.0] — 2026-06-29
+## [1.0.0] — 2026-06-29 (Enterprise MVP Release Candidate)
 
-### Phase 3 Enterprise Intelligence Platform
+### Final Polish
 
-#### Added
+- **System Health Check Center** — Health endpoint with DB/Redis status, version reporting, and Docker health checks
+- **Demo Mode / Production Mode** — Configurable via `DEMO_MODE` env var; simulated data in demo, real services in production
+- **Sample Data Seeder** — `scripts/seed_demo_data.py` populates all 7 domains with realistic demo data
+- **Portfolio-Ready README** — Complete project overview with architecture diagram, feature table, quick start, and documentation index
+- **Release Notes** — `RELEASE_NOTES_v1.0.0.md` with what's included, known limitations, and next roadmap
+- **Security Checklist** — `docs/SECURITY_CHECKLIST.md` covering JWT, bcrypt, CORS, rate limiting, SQL injection, XSS, CSRF, secrets management, WebSocket security, multi-tenant isolation, and audit logging
+- **Testing Checklist** — `docs/TESTING_CHECKLIST.md` with 190 manual test cases across frontend, API, Docker, i18n, WebSocket, error states, empty states, loading states, browser compatibility, and mobile responsiveness
+- **Demo Script** — `docs/DEMO_SCRIPT.md` with 5-minute walkthrough, timed segments, talking points, and troubleshooting guide
+- **Version Freeze** — `PROJECT_VERSION = "1.0.0"` set in `backend/core/config.py`; feature freeze marker in CHANGELOG
+
+---
+
+## [3.1.0] — 2026-06-29 (Phase 3.1 i18n)
+
+### Added
+
+- **i18n Internationalization Framework** (`frontend/i18n/`)
+  - `i18n/index.js` — I18n engine with `t()` function, dot-notation key lookup, `{{param}}` interpolation, localStorage persistence, and locale change events
+  - `i18n/zh-TW.js` — 260+ Traditional Chinese translation keys
+  - `i18n/en-US.js` — 260+ English translation keys
+  - `i18n/I18N_GUIDE.md` — Complete internationalization guide with best practices
+
+- **Language Switcher** — Toggle button in header (繁中 / EN), instant UI update, localStorage persistence
+
+- **data-i18n Attribute System**
+  - 124 `data-i18n` attributes in index.html for static text
+  - 6 `data-i18n-placeholder` attributes for input placeholders
+  - 4 `data-i18n-title` attributes for tooltip text
+  - Automatic fallback: HTML content serves as default text if i18n fails
+
+- **Component i18n Integration** — All components updated to use `I18n.t()` for dynamic text across all 8 pages
+
+- **Documentation**
+  - `docs/I18N_GUIDE.md` — How to add languages, add keys, switch languages, fallback rules
+  - `docs/FRONTEND_ARCHITECTURE.md` — Frontend architecture with i18n integration
+
+---
+
+## [3.0.0] — 2026-06-29 (Phase 3 Enterprise Intelligence)
+
+### Added
 
 - **5 New Intelligence Engines:**
-  - Operational Intelligence Engine — Real-time operational data correlation (30-min refresh), identifying hidden relationships between wait times, staffing, and NPS/CX
-  - Predictive Intelligence Engine — 7-day multi-factor forecasting for brand health, risk scores, and negative sentiment volumes with confidence-weighted projections
-  - Store Intelligence Engine — Per-store daily intelligence calculation with 14-day trend analysis, voice volume correlation, and automated health scoring
-  - Learning Memory Engine — AI pattern discovery across historical cases with similarity matching (80-94%), success rate tracking, and "what worked before" knowledge graph
-  - Executive Intelligence Center — Enhanced morning brief with AI COO analysis, operational correlations, 7-day predictions, and strategic recommendations
+  - Operational Intelligence Engine — Real-time operational data correlation (30-min refresh)
+  - Predictive Intelligence Engine — 7-day multi-factor forecasting with confidence-weighted projections
+  - Store Intelligence Engine — Per-store daily intelligence calculation with 14-day trend analysis
+  - Learning Memory Engine — AI pattern discovery with similarity matching (80-94%)
+  - Executive Intelligence Center — Enhanced morning brief with AI COO analysis
 
-- **Enhanced Executive Dashboard with 4 Components:**
-  - Executive Briefing Center (`morningBrief.js` enhanced) — Greeting header with date, key metrics row, "Today's Biggest Problem" card, AI COO recommendations with confidence bars, store ranking mini-table (top 5), 7-day risk forecast sparklines
-  - Store Ranking Table (`storeRanking.js` new) — Full ranking with health score color bars, risk level tags, trend arrows, filterable tabs (All/Critical/Improving/Declining), click-to-expand store detail panel
-  - 7-Day Prediction Center (`predictionPanel.js` new) — Four forecast panels with div bar charts, "What would happen if..." simulation input with AI impact projections
-  - AI Learning Memory Panel (`learningPanel.js` new) — Historical similar cases with similarity matching, success rate tracking, AI-discovered patterns, "Store New Case" form
+- **4 Enhanced/New Frontend Components:**
+  - Executive Briefing Center (enhanced) — Greeting, key metrics, biggest problem card, AI COO recommendations, store ranking mini-table, risk forecast sparklines
+  - Store Ranking Table (new) — Full ranking with health color bars, risk tags, filterable tabs, expandable detail panel
+  - 7-Day Prediction Center (new) — Four forecast panels with div bar charts, what-if simulation engine
+  - AI Learning Memory Panel (new) — Historical cases, similarity matching, success tracking, pattern discovery
 
 - **6 New Celery Scheduled Tasks:**
-  - `daily_store_intelligence_calculation` — Daily at 3 AM, calculates StoreDailyIntelligence for all stores
-  - `daily_executive_brief_generation` — Daily at 6 AM, generates morning brief for all organizations
-  - `hourly_risk_forecast` — Every hour at :00, updates risk predictions
-  - `daily_learning_pattern_update` — Daily at 4 AM, discovers new learning patterns
-  - `operational_data_correlation_job` — Every 30 minutes, updates operational correlations
-  - `weekly_prediction_model_training` — Weekly Monday 2 AM, trains/retrains prediction models
+  - `daily_store_intelligence_calculation` — Daily 3 AM
+  - `daily_executive_brief_generation` — Daily 6 AM
+  - `hourly_risk_forecast` — Hourly at :00
+  - `daily_learning_pattern_update` — Daily 4 AM
+  - `operational_data_correlation_job` — Every 30 minutes
+  - `weekly_prediction_model_training` — Weekly Monday 2 AM
 
-- **5 New API Endpoints:**
-  - `GET /api/v1/executive/morning-brief` — Enhanced with AI COO analysis, operational correlations, 7-day predictions
-  - `GET /api/v1/executive/key-risks` — Key business risks with severity, impact, financial exposure, and mitigation
-  - `GET /api/v1/executive/opportunities` — Business improvement opportunities with ROI estimates
-  - `GET /api/v1/executive/ai-coo-summary` — AI COO strategic recommendations with domain summaries
-  - `GET /api/v1/executive/metrics-snapshot` — Real-time snapshot of all metrics across 7 domains
+- **5 New API Endpoints:** Key risks, opportunities, AI COO summary, metrics snapshot, enhanced morning brief
 
-- **New Schemas:**
-  - `KeyRiskItem`, `KeyRisksResponse` — Risk assessment models
-  - `OpportunityItem`, `OpportunitiesResponse` — Opportunity detection models
-  - `AICOOSummaryItem`, `AICOOSummaryResponse` — AI COO summary models
-  - `MetricsSnapshotResponse` — Cross-domain metrics snapshot model
-  - Updated `MorningBriefResponse` with `ai_coo_analysis`, `operational_correlations`, `predictions_7day`
-  - Updated `ExecutiveRecommendation` with `expected_outcome` and `confidence`
-  - Updated `StoreRankingItem` with `critical_issues`
+- **New Schemas:** KeyRiskItem, OpportunityItem, AICOOSummaryItem, MetricsSnapshotResponse, updated MorningBriefResponse, ExecutiveRecommendation, StoreRankingItem
 
-- **CSS Additions:**
-  - 500+ lines of new glassmorphism styles for executive brief, store ranking, prediction charts, and learning panel
-  - Full responsive design with breakpoints at 1400px, 1200px, and 768px for all new sections
+- **CSS Additions:** 500+ lines of glassmorphism styles for all new sections with responsive breakpoints at 1400px, 1200px, 768px
 
-- **Documentation:**
-  - Updated `README.md` with Phase 3 section describing 5 new intelligence engines and enhanced dashboard
-  - Updated `CHANGELOG.md` with v3.0.0 entry
-  - Updated `ROADMAP.md` with Phase 3 completion markers
-  - Updated `docs/architecture.md` with Phase 3 modules in architecture diagram
-  - Created `docs/PHASE3_ENTERPRISE_INTELLIGENCE.md` with complete Phase 3 documentation
+### Changed
 
-#### Changed
-
-- **Frontend Navigation** — Reorganized with 8 nav items including new Store Ranking, Predictions, and Learning sections
-- **API Service** — Added 4 new executive API methods (`getKeyRisks`, `getOpportunities`, `getAICooSummary`, `getMetricsSnapshot`)
-- **Dashboard Store** — Added `storeRankings`, `predictions`, `learningCases` state fields
-- **Celery App** — Added 6 new beat schedule entries and `phase3_tasks` module to imports, routes, and includes
+- Frontend navigation reorganized to 8 items
+- API service added 4 new executive methods
+- Dashboard store added storeRankings, predictions, learningCases state
+- Celery app added 6 new beat schedule entries
 
 ---
 
-## [2.0.0] — 2026-06-29
+## [2.0.0] — 2026-06-29 (Phase 2 Enterprise SaaS)
 
-### Phase 2 Enterprise Refactoring
+### Added
 
-#### Added
+- **Enterprise Backend** — FastAPI + PostgreSQL 16 + Redis 7 + Celery
+- **11 API route modules** with 50+ endpoints across Auth, VOC, CX, Brand Health, Root Cause, Executive, Sandbox, Workflow, Knowledge, Trends, Competitors
+- **9 AI Specialized Agents** with orchestrator: RiskAgent, VOCAgent, CXAgent, PRAgent, LegalAgent, KnowledgeAgent, ExecutiveAgent, TrendAgent, CompetitorAgent
+- **AI Router** — 5-tier model selection (FLASH, PRO, GPT, REASONING, DEEP_RESEARCH) with cost optimization
+- **Agent Orchestrator** — 10 predefined pipelines (crisis_response, daily_brief, weekly_report, etc.)
+- **24 Database models** across 7 domains: Organization (7), VOC (3), CX (3), Brand (3), Workflow (3), Knowledge (2), Competitor (3)
+- **Pydantic v2 schemas** with full validation for all request/response models
+- **Docker Compose** — 7 services (backend, celery_worker, celery_beat, frontend, nginx, postgres, redis)
+- **Celery Task System** — 4 queues (ingestion, analysis, notifications, reports) with 7 beat scheduled tasks
+- **WebSocket** — Real-time voice streaming and alert notifications
+- **Brand Health Engine** — Daily recalculation of brand/store health scores
+- **Root Cause Engine** — 5-Why analysis, Pareto charts, cross-store comparison
+- **Executive Dashboard** — AI-generated morning brief, store rankings, risk summary
+- **Trend Intelligence** — Multi-period overview, emotion time-series, predictive forecasting
+- **Competitor Intelligence** — Metrics comparison, benchmarking, SWOT analysis
+- **Knowledge Base (RAG)** — Versioned articles and semantic search
+- **Enterprise Workflow** — Case management, timeline audit trail, file attachments
+- **Notification Service** — Multi-channel alert dispatch
+- **Alembic migrations** — Version-controlled schema management
 
-- **Enterprise Backend** (FastAPI + PostgreSQL + Redis + Celery)
-- **11 API modules** with 50+ endpoints:
-  - Auth (login, refresh, user/role management)
-  - VOC (voice ingestion, stats, trends)
-  - CX (journeys, touchpoints, diagnostics)
-  - Brand Health (current, history, alerts)
-  - Root Cause (analysis, summary, store comparison)
-  - Executive (morning brief, today summary, rankings, risk)
-  - NLP Sandbox (text analysis pipeline)
-  - Workflow (case management, comments, attachments)
-  - Knowledge Base (articles, semantic search)
-  - Trend Intelligence (overview, topics, emotions, predictions)
-  - Competitor Intelligence (tracking, metrics, benchmark, SWOT)
-- **9 AI specialized agents** with orchestrator:
-  - RiskAgent — Brand risk detection, scoring, escalation
-  - VOCAgent — Voice of Customer deep analysis
-  - CXAgent — Customer Experience analysis
-  - PRAgent — PR response generation
-  - LegalAgent — Legal compliance advisory
-  - KnowledgeAgent — Knowledge extraction & RAG
-  - ExecutiveAgent — Executive summary compilation
-  - TrendAgent — Trend analysis & forecasting
-  - CompetitorAgent — Competitive intelligence
-- **AI Router** for 5-tier model selection (FLASH, PRO, GPT, REASONING, DEEP_RESEARCH) with cost optimization
-- **Agent Orchestrator** with 10 predefined pipelines (crisis_response, daily_brief, weekly_report, etc.)
-- **24 database models** across 7 domains:
-  - Organization (7 tables): Organization, Department, Region, Store, User, Role, UserRole
-  - VOC (3 tables): VoiceSource, VoiceAnalysis, VoiceTag
-  - CX (3 tables): CXJourney, TouchPoint, CXInsight
-  - Brand (3 tables): BrandHealth, StoreHealth, BrandAlert
-  - Workflow (3 tables): Case, CaseTimeline, CaseAttachment
-  - Knowledge (2 tables): KnowledgeBase, KnowledgeVersion
-  - Competitor (3 tables): Competitor, CompetitorMetric, CompetitorSWOT
-- **Pydantic schemas** with full validation for all request/response models
-- **Docker multi-service deployment** with 7 containers (backend, celery_worker, celery_beat, frontend, nginx, postgres, redis)
-- **Celery async task system** with 4 dedicated queues:
-  - ingestion — Social media crawler tasks (every 15 min)
-  - analysis — AI analysis, brand health, risk alerts, daily brief, weekly report
-  - notifications — Email and push dispatch
-  - reports — Scheduled report generation
-- **7 Celery beat scheduled tasks**: recurring crawl, voice analysis, risk alerts, daily brand health, daily brief, weekly report, data cleanup
-- **WebSocket real-time** voice streaming (`/ws/voice-stream/{channel}`) and alert notifications (`/ws/alerts/{user_id}`)
-- **Executive Dashboard** with AI-generated morning brief, store rankings, risk summary
-- **Trend Intelligence** with multi-period overview, emotion time-series, predictive forecasting
-- **Competitor Intelligence** with metrics comparison, benchmarking, SWOT analysis
-- **Knowledge Base (RAG)** system with versioned articles and semantic search
-- **Enterprise Workflow** with case management, timeline audit trail, file attachments
-- **Root Cause Engine** with 5-Why analysis, Pareto charts, cross-store comparison
-- **Brand Health Engine** with daily recalculation of brand/store health scores
-- **Notification Service** for multi-channel alert dispatch
-- **Alembic migrations** for version-controlled schema management
-- **Comprehensive documentation** (architecture, API reference, database schema, AI agents, deployment guide, roadmap)
+### Changed
 
-#### Changed
-
-- **Frontend restructured** from 3 monolithic files (`index.html` + `index.css` + `app.js`) to modular component architecture with API-driven data
-- **API-driven architecture** replacing hardcoded mock data in `app.js` with real REST/WebSocket backend
-- **Multi-tenant support** added at database level (Organization model scoping all tables)
-- **Build system** moved to Docker Compose for reproducible deployment
-- **README** updated with comprehensive Phase 2 architecture documentation
+- Frontend restructured from monolithic to modular component architecture with API-driven data
+- API-driven architecture replacing hardcoded mock data
+- Multi-tenant support added at database level (Organization model scoping)
+- Build system moved to Docker Compose for reproducible deployment
 
 ---
 
-## [1.1.0] — 2026-06-29
+## [1.1.0] — 2026-06-29 (Phase 1 MVP)
 
-### Phase 1 MVP
+### Added
 
-#### Added
-
-- **Apple Frosted Glass UI** — High-fidelity SPA with glass-morphism design system
+- **Apple Frosted Glass UI** — High-fidelity SPA with glassmorphism design system
 - **Brand Cockpit Dashboard** — Real-time brand health score, store health index, CSAT, crisis resolution rate, reputation risk score
 - **Voice Stream** — Simulated real-time customer review stream across 6 channels (Google Reviews, Threads, Facebook, Instagram, PTT, Dcard)
 - **Customer Journey Map** — Visualized 6-stage customer journey with friction detection and store-level filtering

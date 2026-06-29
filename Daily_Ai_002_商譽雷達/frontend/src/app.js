@@ -74,11 +74,11 @@
       }
       if (statusText) {
         if (state.connectionStatus === 'connected') {
-          statusText.textContent = 'AI Engine Live';
+          statusText.textContent = I18n.t('sidebar.engineStatus');
         } else if (state.connectionStatus === 'disconnected') {
-          statusText.textContent = 'Reconnecting...';
+          statusText.textContent = I18n.t('sidebar.reconnecting');
         } else {
-          statusText.textContent = 'Connection Error';
+          statusText.textContent = I18n.t('sidebar.connectionError');
         }
       }
     });
@@ -93,6 +93,64 @@
           storeFilter.value = state.selectedStore;
         }
       }
+    });
+  }
+
+  function applyTranslations() {
+    var elements = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < elements.length; i++) {
+      var key = elements[i].getAttribute('data-i18n');
+      var translation = I18n.t(key);
+      if (translation !== key) {
+        elements[i].textContent = translation;
+      }
+    }
+    var placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+    for (var j = 0; j < placeholders.length; j++) {
+      var pk = placeholders[j].getAttribute('data-i18n-placeholder');
+      placeholders[j].setAttribute('placeholder', I18n.t(pk));
+    }
+    var titleEls = document.querySelectorAll('[data-i18n-title]');
+    for (var k = 0; k < titleEls.length; k++) {
+      var tk = titleEls[k].getAttribute('data-i18n-title');
+      titleEls[k].setAttribute('title', I18n.t(tk));
+    }
+  }
+
+  function initI18n() {
+    I18n.init({
+      defaultLocale: 'zh-TW',
+      zhTW: typeof I18nZhTW !== 'undefined' ? I18nZhTW : {},
+      enUS: typeof I18nEnUS !== 'undefined' ? I18nEnUS : {}
+    });
+
+    if (typeof LanguageSwitcher !== 'undefined') {
+      LanguageSwitcher.init();
+    }
+
+    applyTranslations();
+
+    I18nEvents.on('localeChanged', function () {
+      applyTranslations();
+      if (typeof MorningBriefComponent !== 'undefined') {
+        MorningBriefComponent.loadMorningBrief();
+      }
+      if (typeof StoreRankingComponent !== 'undefined') {
+        StoreRankingComponent.loadStoreRankings();
+      }
+      if (typeof PredictionPanelComponent !== 'undefined') {
+        PredictionPanelComponent.loadPredictions();
+      }
+      if (typeof LearningPanelComponent !== 'undefined') {
+        if (typeof LearningPanelComponent.loadLearningData === 'function') {
+          LearningPanelComponent.loadLearningData();
+        }
+      }
+      var state = DashboardStore.getState();
+      MetricsComponent.updateDashboardMetrics(
+        state.brandScore, state.storeHealth, state.csat,
+        state.resolutionRate, state.riskScore
+      );
     });
   }
 
@@ -133,6 +191,7 @@
   }
 
   function initAll() {
+    initI18n();
     initSystemTime();
     initNavigation();
     initConnectionStatus();
@@ -144,6 +203,13 @@
     JourneyMapComponent.initJourneyMap();
     AiTerminal.initAITerminal();
     NlpSandbox.initSandbox();
+
+    if (typeof SystemHealthComponent !== 'undefined') {
+      SystemHealthComponent.init();
+    }
+    if (typeof DemoBannerComponent !== 'undefined') {
+      DemoBannerComponent.init();
+    }
 
     if (typeof MorningBriefComponent !== 'undefined') {
       MorningBriefComponent.initExecutiveDashboard();
@@ -160,6 +226,27 @@
 
     tryApiConnection();
     initWebSocket();
+
+    loadDemoData();
+  }
+
+  function loadDemoData() {
+    var state = DashboardStore.getState();
+    if (!state.demoMode) { return; }
+
+    if (typeof ApiService !== 'undefined' && ApiService.brand) {
+      ApiService.brand.getCurrent().then(function (data) {
+        if (data) {
+          MetricsComponent.updateDashboardMetrics(
+            data.brandScore || 92.4,
+            data.storeHealth || 98.1,
+            data.csat || 4.82,
+            data.resolutionRate || 94.5,
+            data.riskScore || 12
+          );
+        }
+      }).catch(function () {});
+    }
   }
 
   if (document.readyState === 'loading') {

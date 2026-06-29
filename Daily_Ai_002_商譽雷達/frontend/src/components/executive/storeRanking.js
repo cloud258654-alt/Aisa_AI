@@ -12,12 +12,24 @@ var StoreRankingComponent = (function () {
   }
 
   function loadStoreRankings() {
+    var tbody = document.getElementById('store-ranking-tbody');
+    if (tbody) { tbody.innerHTML = ''; }
+    if (typeof StateRenderer !== 'undefined') {
+      StateRenderer.showLoading('store-ranking-section', I18n.t('storeRanking.loading'));
+    }
+
     if (typeof ApiService !== 'undefined') {
       ApiService.executive.getStoreRanking().then(function (data) {
+        if (typeof StateRenderer !== 'undefined') { StateRenderer.clearState('store-ranking-section'); }
         allStores = data.rankings || [];
         renderTable(currentTab);
         DashboardStore.setState({ storeRankings: allStores });
       }).catch(function () {
+        if (typeof StateRenderer !== 'undefined') {
+          StateRenderer.showError('store-ranking-section', I18n.t('storeRanking.loadFailed'), function () {
+            loadStoreRankings();
+          });
+        }
         loadMockRankings();
       });
     } else {
@@ -60,9 +72,14 @@ var StoreRankingComponent = (function () {
     var stores = getFilteredStores();
 
     if (stores.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="loading-row">No stores match this filter</td></tr>';
+      if (typeof StateRenderer !== 'undefined') {
+        StateRenderer.showEmpty('store-ranking-tbody', I18n.t('storeRanking.noMatch'));
+      } else {
+        tbody.innerHTML = '<tr><td colspan="6" class="loading-row">' + I18n.t('storeRanking.noMatch') + '</td></tr>';
+      }
       return;
     }
+    if (typeof StateRenderer !== 'undefined') { StateRenderer.clearState('store-ranking-tbody'); }
 
     tbody.innerHTML = stores.map(function (store, i) {
       var rankNum = currentTab === 'all' ? store.rank : (i + 1);
@@ -131,17 +148,17 @@ var StoreRankingComponent = (function () {
       '<div class="sr-detail-header">' +
       '  <h3>' + store.store_name + '</h3>' +
       '  <span class="sr-risk-tag ' + (store.status || 'stable') + '">' + statusLabel + '</span>' +
-      '  <button class="btn-icon sr-detail-close" id="sr-detail-close">&times;</button>' +
+      '  <button class="btn-icon sr-detail-close" id="sr-detail-close">\u00D7</button>' +
       '</div>' +
       '<div class="sr-detail-grid">' +
-      '  <div class="sr-detail-item"><span class="sr-detail-label">Health Score</span><span class="sr-detail-val">' + store.score.toFixed(1) + '/100</span></div>' +
-      '  <div class="sr-detail-item"><span class="sr-detail-label">Trend</span><span class="sr-detail-val">' + (store.trend || 'stable') + '</span></div>' +
-      '  <div class="sr-detail-item"><span class="sr-detail-label">Critical Issues</span><span class="sr-detail-val">' + (store.critical_issues || 0) + '</span></div>' +
-      '  <div class="sr-detail-item"><span class="sr-detail-label">Active Alerts</span><span class="sr-detail-val">' + (store.alert_count || 0) + '</span></div>' +
+      '  <div class="sr-detail-item"><span class="sr-detail-label">' + I18n.t('storeRanking.detailHealthScore') + '</span><span class="sr-detail-val">' + store.score.toFixed(1) + '/100</span></div>' +
+      '  <div class="sr-detail-item"><span class="sr-detail-label">' + I18n.t('storeRanking.detailTrend') + '</span><span class="sr-detail-val">' + (store.trend || 'stable') + '</span></div>' +
+      '  <div class="sr-detail-item"><span class="sr-detail-label">' + I18n.t('storeRanking.detailCriticalIssues') + '</span><span class="sr-detail-val">' + (store.critical_issues || 0) + '</span></div>' +
+      '  <div class="sr-detail-item"><span class="sr-detail-label">' + I18n.t('storeRanking.detailActiveAlerts') + '</span><span class="sr-detail-val">' + (store.alert_count || 0) + '</span></div>' +
       '</div>' +
       '<div class="sr-detail-actions">' +
-      '  <button class="btn btn-sm-primary">View Full Report</button>' +
-      '  <button class="btn btn-secondary btn-sm">Assign Manager</button>' +
+      '  <button class="btn btn-sm-primary">' + I18n.t('storeRanking.viewFullReport') + '</button>' +
+      '  <button class="btn btn-secondary btn-sm">' + I18n.t('storeRanking.assignManager') + '</button>' +
       '</div>';
     detailEl.style.display = 'block';
 

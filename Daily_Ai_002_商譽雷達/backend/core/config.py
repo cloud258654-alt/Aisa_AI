@@ -29,6 +29,10 @@ class Settings(BaseSettings):
 
     ENVIRONMENT: str = "development"
 
+    DEMO_MODE: bool = True
+
+    VERSION: str = "1.0.0"
+
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://localhost:5173",
