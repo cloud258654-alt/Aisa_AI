@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel AI - Enterprise Customer Experience Intelligence Platform</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="logo-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <div class="brand-text">
+                    <h1>SENTINEL</h1>
+                    <span>ECXIP v3.0</span>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="nav-dashboard">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    <span>品牌決策總覽</span>
+                </a>
+                <a href="#journey" class="nav-item" id="nav-journey">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span>顧客旅程診斷</span>
+                </a>
+                <a href="#voc" class="nav-item" id="nav-voc">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>聲量即時串流</span>
+                </a>
+                <a href="#sandbox" class="nav-item" id="nav-sandbox">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    <span>AI 分析沙盒</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="connection-status">
+                    <span class="pulse-dot green"></span>
+                    <span>AI Engine Live</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Body -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="header-search">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" placeholder="搜尋門市、事件、輿情關鍵字..." disabled>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="active-store-selector">
+                        <span class="label">當前監控：</span>
+                        <select id="store-filter">
+                            <option value="all">全品牌門市 (總部)</option>
+                            <option value="xinyi">信義旗艦店</option>
+                            <option value="zhongxiao">忠孝 SOGO 店</option>
+                            <option value="banqiao">板橋大遠百店</option>
+                            <option value="taichung">台中公益店</option>
+                        </select>
+                    </div>
+                    <div class="system-time" id="system-time">2026-06-29 12:00:00</div>
+                    <div class="avatar-container">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32'><circle cx='16' cy='16' r='16' fill='%236366f1'/><text x='16' y='21' font-family='sans-serif' font-size='14' fill='white' text-anchor='middle'>BM</text></svg>" alt="Admin Avatar" class="user-avatar">
+                        <span class="user-role">Brand Manager</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Workspace -->
+            <div class="workspace-scroll-container">
+                <!-- Cockpit Metrics Grid -->
+                <section class="metrics-grid">
+                    <!-- Brand Score Card -->
+                    <div class="metric-card" id="card-brand-score">
+                        <div class="metric-info">
+                            <span class="metric-label">Brand Health Score</span>
+                            <h3 class="metric-value" id="val-brand-score">92.4</h3>
+                            <span class="metric-delta positive">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                1.2% 上週比
+                            </span>
+                        </div>
+                        <div class="metric-chart-circle">
+                            <svg viewBox="0 0 36 36" class="circular-chart indigo">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" id="circle-brand-score" stroke-dasharray="92.4, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Store Health Card -->
+                    <div class="metric-card" id="card-store-health">
+                        <div class="metric-info">
+                            <span class="metric-label">Store Health Index</span>
+                            <h3 class="metric-value" id="val-store-health">98.1%</h3>
+                            <span class="metric-delta positive">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                0.5% 昨日比
+                            </span>
+                        </div>
+                        <div class="metric-chart-circle">
+                            <svg viewBox="0 0 36 36" class="circular-chart emerald">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" id="circle-store-health" stroke-dasharray="98.1, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Customer CSAT Card -->
+                    <div class="metric-card" id="card-csat">
+                        <div class="metric-info">
+                            <span class="metric-label">Customer CSAT (Google Rating)</span>
+                            <h3 class="metric-value" id="val-csat">4.82 <span class="max-val">/ 5</span></h3>
+                            <span class="metric-stars">★★★★★</span>
+                        </div>
+                        <div class="metric-chart-circle">
+                            <svg viewBox="0 0 36 36" class="circular-chart violet">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" id="circle-csat" stroke-dasharray="96.4, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Crisis Resolution Rate Card -->
+                    <div class="metric-card" id="card-resolution">
+                        <div class="metric-info">
+                            <span class="metric-label">Crisis Resolution Rate</span>
+                            <h3 class="metric-value" id="val-resolution">94.5%</h3>
+                            <span class="metric-delta positive">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                2.3% 上月比
+                            </span>
+                        </div>
+                        <div class="metric-chart-circle">
+                            <svg viewBox="0 0 36 36" class="circular-chart amber">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" id="circle-resolution" stroke-dasharray="94.5, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Reputation Risk Indicator -->
+                    <div class="metric-card" id="card-risk">
+                        <div class="metric-info">
+                            <span class="metric-label">Reputation Risk Score</span>
+                            <h3 class="metric-value text-green" id="val-risk">Low (12)</h3>
+                            <span class="metric-subtext">即時監控無暴增負評</span>
+                        </div>
+                        <div class="risk-bar-container">
+                            <div class="risk-bar" id="risk-bar" style="width: 12%"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Core Operational Columns -->
+                <div class="content-columns">
+                    
+                    <!-- Left Column: Live Feed -->
+                    <div class="column-left card-panel">
+                        <div class="panel-header">
+                            <div class="panel-title-container">
+                                <h2>輿情聲量即時串流 (Voice Stream)</h2>
+                                <span class="badge live-badge">LIVE STREAMING</span>
+                            </div>
+                            <div class="stream-controls">
+                                <button class="btn-icon" id="btn-pause-stream" title="暫停/啟動串流">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                                </button>
+                                <button class="btn-icon" id="btn-clear-stream" title="清除視窗">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="stream-feed-container" id="stream-feed-container">
+                            <!-- Stream items will be injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Diagnostics & AI Commander -->
+                    <div class="column-right">
+                        
+                        <!-- Customer Journey Diagnostic Map -->
+                        <div class="card-panel diagnostic-panel" id="journey">
+                            <div class="panel-header">
+                                <h2>顧客體驗旅程診斷 (Customer Journey Map)</h2>
+                                <span class="section-desc">即時追蹤核心 Touch Point 滿意度與流失率</span>
+                            </div>
+                            <div class="journey-nodes-container">
+                                <!-- Nodes representing Customer Journey -->
+                                <div class="journey-node active" id="node-search">
+                                    <div class="node-icon">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                    </div>
+                                    <div class="node-meta">
+                                        <span class="node-title">搜尋探索</span>
+                                        <span class="node-score green" id="node-score-search">98%</span>
+                                    </div>
+                                </div>
+                                <div class="journey-arrow">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </div>
+
+                                <div class="journey-node active" id="node-book">
+                                    <div class="node-icon">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    </div>
+                                    <div class="node-meta">
+                                        <span class="node-title">線上預約</span>
+                                        <span class="node-score green" id="node-score-book">96%</span>
+                                    </div>
+                                </div>
+                                <div class="journey-arrow">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </div>
+
+                                <div class="journey-node warning" id="node-wait">
+                                    <div class="node-icon">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    </div>
+                                    <div class="node-meta">
+                                        <span class="node-title">候位到店</span>
+                                        <span class="node-score warning-text" id="node-score-wait">84%</span>
+                                    </div>
+                                    <div class="node-alert-ping"></div>
+                                </div>
+                                <div class="journey-arrow">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </div>
+
+                                <div class="journey-node error" id="node-service">
+                                    <div class="node-icon">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                                    </div>
+                                    <div class="node-meta">
+                                        <span class="node-title">服務體驗</span>
+                                        <span class="node-score error-text" id="node-score-service">79%</span>
+                                    </div>
+                                    <div class="node-alert-ping"></div>
+                                </div>
+                                <div class="journey-arrow">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </div>
+
+                                <div class="journey-node active" id="node-pay">
+                                    <div class="node-icon">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                                    </div>
+                                    <div class="node-meta">
+                                        <span class="node-title">付款收銀</span>
+                                        <span class="node-score green" id="node-score-pay">95%</span>
+                                    </div>
+                                </div>
+                                <div class="journey-arrow">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </div>
+
+                                <div class="journey-node active" id="node-review">
+                                    <div class="node-icon">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                    </div>
+                                    <div class="node-meta">
+                                        <span class="node-title">評論回饋</span>
+                                        <span class="node-score green" id="node-score-review">92%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Detailed analysis info -->
+                            <div class="journey-details" id="journey-details">
+                                <div class="diagnostic-card warning">
+                                    <div class="diag-header">
+                                        <span class="diag-title">候位到店摩擦 (等候時間過長)</span>
+                                        <span class="store-tag">信義旗艦店</span>
+                                    </div>
+                                    <p class="diag-desc">最近 48 小時有 18 則負評提及「排隊引導混亂、候位時間超過預期」。AI 偵測流程流失率上升 4.2%。</p>
+                                </div>
+                                <div class="diagnostic-card error">
+                                    <div class="diag-header">
+                                        <span class="diag-title">服務體驗摩擦 (出餐速度及服務態度)</span>
+                                        <span class="store-tag">信義旗艦店</span>
+                                    </div>
+                                    <p class="diag-desc">輿情中提及「出餐送錯、主餐冷掉、員工態度冷淡」之關鍵字密度暴增 320%。品牌健康度主要扣分項。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Brand Manager Commander Terminal -->
+                        <div class="card-panel ai-command-panel">
+                            <div class="panel-header">
+                                <div class="panel-title-container">
+                                    <h2>AI 專屬 Brand Manager (決策支援)</h2>
+                                    <span class="badge premium-badge">DECISION SUPPORT ENGINE</span>
+                                </div>
+                                <span class="section-desc">分析事件 Root Cause 並產生對應 SOP、PR 聲明與法務警示</span>
+                            </div>
+                            
+                            <div class="preset-triggers">
+                                <span class="trigger-label">模擬觸發品牌事件：</span>
+                                <button class="btn btn-primary-preset" id="trigger-crisis-threads">
+                                    <span class="channel-dot threads"></span>
+                                    Threads 食安疑慮謠言
+                                </button>
+                                <button class="btn btn-primary-preset" id="trigger-crisis-google">
+                                    <span class="channel-dot google"></span>
+                                    Google 負評爆發 (排隊糾紛)
+                                </button>
+                                <button class="btn btn-primary-preset" id="trigger-crisis-ptt">
+                                    <span class="channel-dot ptt"></span>
+                                    PTT 員工服務態度爆料
+                                </button>
+                            </div>
+
+                            <div class="terminal-container">
+                                <div class="terminal-header">
+                                    <div class="terminal-dots">
+                                        <span class="dot-red"></span>
+                                        <span class="dot-yellow"></span>
+                                        <span class="dot-green"></span>
+                                    </div>
+                                    <span class="terminal-title">SENTINEL DIGITAL BRAIN v3.0</span>
+                                </div>
+                                <div class="terminal-body" id="terminal-body">
+                                    <div class="terminal-row system-msg">
+                                        <span class="timestamp">[12:00:00]</span> [SYSTEM] Sentinel AI Agent Engine initialized. Ready to receive event analysis request...
+                                    </div>
+                                    <div class="terminal-row system-msg">
+                                        <span class="timestamp">[12:00:01]</span> [SYSTEM] Active monitoring 8 channels (Google, Threads, FB, IG, Dcard, PTT, News, Forum).
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AI Output Cards (Initially Hidden/Default prompt) -->
+                            <div class="decision-outputs" id="decision-outputs" style="display: none;">
+                                <div class="tab-container">
+                                    <button class="tab-btn active" data-tab="tab-root-cause">Root Cause (原因解析)</button>
+                                    <button class="tab-btn" data-tab="tab-sop">Operational SOP (改善流程)</button>
+                                    <button class="tab-btn" data-tab="tab-pr">PR Statement (公關回應)</button>
+                                    <button class="tab-btn" data-tab="tab-legal">Legal & Training (法務與培訓)</button>
+                                </div>
+                                <div class="tab-content-container">
+                                    <div class="tab-content active" id="tab-root-cause">
+                                        <!-- Root cause cards go here -->
+                                    </div>
+                                    <div class="tab-content" id="tab-sop">
+                                        <!-- SOP checklists go here -->
+                                    </div>
+                                    <div class="tab-content" id="tab-pr">
+                                        <!-- PR statements go here -->
+                                    </div>
+                                    <div class="tab-content" id="tab-legal">
+                                        <!-- Legal/training notes go here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sandbox Review Analyzer -->
+                        <div class="card-panel sandbox-panel" id="sandbox">
+                            <div class="panel-header">
+                                <h2>AI 語意分析沙盒 (Interactive NLP Sandbox)</h2>
+                                <span class="section-desc">手動輸入任何顧客評論，即時體驗 Sentinel 多維度語意分析管道</span>
+                            </div>
+                            <div class="sandbox-body">
+                                <div class="sandbox-input-group">
+                                    <textarea id="sandbox-input" placeholder="請在此輸入顧客評論、社群貼文或客訴文字... (例如：『昨天去信義店吃飯等了一個半小時，服務員態度極差，點的牛肉送上來還是冰的，真的很誇張！』)"></textarea>
+                                    <div class="sandbox-actions">
+                                        <button class="btn btn-secondary" id="btn-sandbox-example">填入示範負評</button>
+                                        <button class="btn btn-primary" id="btn-sandbox-analyze">
+                                            <span>執行 AI 深度分析</span>
+                                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" class="btn-arrow"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="sandbox-loading" id="sandbox-loading" style="display: none;">
+                                    <div class="scanner"></div>
+                                    <span class="loading-text">Sentinel NLP Pipeline Processing...</span>
+                                </div>
+
+                                <div class="sandbox-results" id="sandbox-results" style="display: none;">
+                                    <div class="results-grid">
+                                        <div class="result-box">
+                                            <span class="result-label">情感分析 Sentiment</span>
+                                            <div class="result-val sentiment-badge negative" id="sandbox-sentiment">Negative (94%)</div>
+                                        </div>
+                                        <div class="result-box">
+                                            <span class="result-label">細粒度情緒 Emotion</span>
+                                            <div class="result-val" id="sandbox-emotion">Anger 😠 / Frustration 😩</div>
+                                        </div>
+                                        <div class="result-box">
+                                            <span class="result-label">旅程痛點 Touchpoint</span>
+                                            <div class="result-val" id="sandbox-touchpoint">Wait (候位) & Service (體驗)</div>
+                                        </div>
+                                        <div class="result-box">
+                                            <span class="result-label">商譽風險等級 Risk</span>
+                                            <div class="result-val risk-text high" id="sandbox-risk">High Risk (78)</div>
+                                        </div>
+                                    </div>
+                                    <div class="sandbox-recommendation">
+                                        <h4>AI 自動生成改善建議與回覆</h4>
+                                        <div class="rec-block">
+                                            <h5>復原回覆建議 (PR Draft)</h5>
+                                            <p id="sandbox-pr-rec">您好，非常抱歉讓您在信義店有不愉快的用餐體驗。關於候位時間過長以及餐點溫度不符預期的情況，我們已立刻通報該店經理進行流程檢討。我們將加強同仁的訓練，並誠摯希望能聯絡您提供補償方案，謝謝您的指正。</p>
+                                        </div>
+                                        <div class="rec-block">
+                                            <h5>營運改善 SOP 建議 (Ops Suggestion)</h5>
+                                            <ul id="sandbox-ops-rec">
+                                                <li>信義店應立即啟動「尖峰時段出餐雙重覆核機制」，確保出餐溫度與正確率。</li>
+                                                <li>更新外場排隊引導機制，若預計等候超過 40 分鐘，主動提供熱茶與點單預選單。</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Modal for review actions -->
+    <div class="modal" id="action-modal" style="display: none;">
+        <div class="modal-content card-panel">
+            <div class="modal-header">
+                <h3>處理此則輿情</h3>
+                <button class="btn-close" id="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-review-text" id="modal-review-text"></p>
+                <div class="action-options">
+                    <button class="btn btn-action" id="modal-action-sop">指派改善 SOP 給門市</button>
+                    <button class="btn btn-action" id="modal-action-reply">使用 AI 產出回覆並張貼</button>
+                    <button class="btn btn-action" id="modal-action-pr">向上回報為品牌危機事件</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
