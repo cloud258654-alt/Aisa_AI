@@ -141,3 +141,41 @@ See `docs/KNOWN_RISKS.md` for full details.
 ## Release Candidate Status
 
 **v1.0.0-rc1** — Ready for demo and acceptance verification.
+
+## Live Demo
+
+> This project runs locally. No public hosted demo is available yet.
+> 本專案為本地執行，目前尚無公開部署版本。
+
+```text
+Backend  → http://127.0.0.1:8000
+Frontend → http://127.0.0.1:5173
+```
+
+### Quick Start / 快速啟動
+
+| Step | English | 中文 |
+|------|---------|------|
+| 1 | `.\scripts\start_backend.ps1` | 啟動後端 API |
+| 2 | `.\scripts\start_frontend.ps1` | 啟動前端畫面 |
+| 3 | Open `http://127.0.0.1:5173` | 開啟瀏覽器 |
+| 4 | `.\scripts\run_crawler.ps1 -pages 1` | 執行爬蟲抓資料 |
+
+### What You Can See / 功能預覽
+
+| Feature | English | 中文 |
+|---------|---------|------|
+| Statistics | Dashboard shows article & image counts | 儀表板顯示文章與圖片數量 |
+| Articles | Browse PTT joke articles in list view | 以列表瀏覽 PTT 笑話文章 |
+| Images | Grid view with image thumbnails | 網格檢視含圖片縮圖 |
+| Search | Search by title or author keyword | 依標題或作者關鍵字搜尋 |
+| Popular | Articles sorted by push count | 依推文數排序熱門文章 |
+| Detail | Click to view article detail + images | 點擊查看文章詳情與圖片 |
+| Modal | Click image for full-size preview | 點擊圖片開啟全尺寸預覽 |
+| PTT Link | One-click to open original article | 一鍵開啟 PTT 原文 |
+| Offline | Service worker + offline fallback page | 離線支援與離線提示頁面 |
+
+### Live Screenshots / 實際畫面
+
+> Screenshots to be added.
+> 截圖待補。
