@@ -1,0 +1,17 @@
+{
+  "name": "PTT Joke Meme PWA",
+  "short_name": "Joke Meme",
+  "description": "Browse PTT Joke board articles and meme images.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

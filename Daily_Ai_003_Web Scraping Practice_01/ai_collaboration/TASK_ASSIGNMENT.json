@@ -1,0 +1,106 @@
+{
+  "project": "PTT Joke Meme PWA",
+  "version": "0.1.0",
+  "tasks": [
+    {
+      "id": "PTT-001",
+      "name": "Requirement Document v1.0",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["T001"]
+    },
+    {
+      "id": "T001",
+      "name": "Project Skeleton",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": []
+    },
+    {
+      "id": "T002",
+      "name": "Backend — FastAPI app scaffold + health endpoint",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["T001"]
+    },
+    {
+      "id": "T003",
+      "name": "Database — SQLite schema + migration script",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["T001"]
+    },
+    {
+      "id": "T004",
+      "name": "Crawler — PTT Joke board crawler",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["T003"]
+    },
+    {
+      "id": "T005",
+      "name": "Frontend — PWA shell + manifest",
+      "assignee": "Gemini",
+      "status": "completed",
+      "dependencies": ["T001"]
+    },
+    {
+      "id": "T006",
+      "name": "Integration — Wire backend to frontend",
+      "assignee": "OpenCode, Gemini",
+      "status": "completed",
+      "dependencies": ["T002", "T005"]
+    },
+    {
+      "id": "S2-001",
+      "name": "System Design v1.0 — Database, Crawler, API",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["PTT-001"]
+    },
+    {
+      "id": "PTT-S3",
+      "name": "Backend Foundation v1.0",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["S2-001"]
+    },
+    {
+      "id": "PTT-S4",
+      "name": "PTT Crawler v1.0",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["PTT-S3"]
+    },
+    {
+      "id": "PTT-S5",
+      "name": "Backend API v1.0",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["PTT-S4"]
+    },
+    {
+      "id": "PTT-S6",
+      "title": "Frontend PWA RWD",
+      "name": "Frontend PWA RWD v1.0",
+      "owner": "Gemini",
+      "assignee": "Gemini",
+      "status": "completed",
+      "dependencies": ["PTT-S5"]
+    },
+    {
+      "id": "PTT-S7",
+      "name": "Integration Review v1.0",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["PTT-S6"]
+    },
+    {
+      "id": "PTT-S8",
+      "name": "Release Candidate v1.0.0-rc1",
+      "assignee": "OpenCode",
+      "status": "completed",
+      "dependencies": ["PTT-S7"]
+    }
+  ]
+}

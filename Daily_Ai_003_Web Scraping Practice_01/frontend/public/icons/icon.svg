@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="PTT Joke Meme icon">
+  <rect width="512" height="512" rx="96" fill="#111827"/>
+  <path fill="#f8fafc" d="M112 154c0-25 20-45 45-45h198c25 0 45 20 45 45v137c0 25-20 45-45 45H229l-76 67c-12 10-31 2-31-14v-58c-7-8-10-18-10-29V154z"/>
+  <path fill="#e6a23c" d="M166 194h180v34H166zm0 67h118v34H166z"/>
+  <circle cx="338" cy="276" r="18" fill="#237b63"/>
+</svg>
