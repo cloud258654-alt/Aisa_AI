@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#0f172a" stroke="url(#grad)" stroke-width="8" />
+  
+  <!-- Container body -->
+  <rect x="112" y="160" width="288" height="192" rx="16" fill="url(#grad)" />
+  
+  <!-- Verticle panels of shipping container -->
+  <line x1="160" y1="176" x2="160" y2="336" stroke="#0f172a" stroke-width="12" stroke-linecap="round" />
+  <line x1="208" y1="176" x2="208" y2="336" stroke="#0f172a" stroke-width="12" stroke-linecap="round" />
+  <line x1="256" y1="176" x2="256" y2="336" stroke="#0f172a" stroke-width="12" stroke-linecap="round" />
+  <line x1="304" y1="176" x2="304" y2="336" stroke="#0f172a" stroke-width="12" stroke-linecap="round" />
+  <line x1="352" y1="176" x2="352" y2="336" stroke="#0f172a" stroke-width="12" stroke-linecap="round" />
+  
+  <!-- Crane hook decoration above -->
+  <path d="M 224,96 L 256,128 L 288,96" fill="none" stroke="#6366f1" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="256" y1="48" x2="256" y2="128" stroke="#6366f1" stroke-width="8" stroke-dasharray="8,8" />
+</svg>
