@@ -1,0 +1,437 @@
+{
+  "name": "LINE Reviews Enriched - Client Registration + Business Recognition",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "line/events",
+        "responseMode": "onReceived",
+        "responseCode": 200,
+        "options": {
+          "rawBody": true,
+          "noResponseBody": true
+        }
+      },
+      "id": "1cf47642-2e67-4386-9dce-58bb4f981f46",
+      "name": "LINE Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1240,
+        0
+      ],
+      "webhookId": "bi-rmp-line-events"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst input = $input.first().json;\nconst headers = input.headers ?? {};\nconst signature =\n  headers['x-line-signature'] ??\n  headers['X-Line-Signature'];\nconst channelSecret = $env.LINE_CHANNEL_SECRET;\n\nif (!channelSecret) {\n  throw new Error('LINE_CHANNEL_SECRET is not configured');\n}\nif (!signature) {\n  throw new Error('Missing x-line-signature header');\n}\n\nconst rawBody =\n  typeof input.body === 'string'\n    ? input.body\n    : (\n        typeof input.rawBody === 'string'\n          ? input.rawBody\n          : JSON.stringify(input.body ?? {})\n      );\n\nconst expected = crypto\n  .createHmac('sha256', channelSecret)\n  .update(rawBody, 'utf8')\n  .digest('base64');\n\nconst signatureBuffer = Buffer.from(signature);\nconst expectedBuffer = Buffer.from(expected);\n\nif (\n  signatureBuffer.length !== expectedBuffer.length ||\n  !crypto.timingSafeEqual(signatureBuffer, expectedBuffer)\n) {\n  throw new Error('Invalid LINE webhook signature');\n}\n\nconst body =\n  typeof input.body === 'string'\n    ? JSON.parse(input.body)\n    : (input.body ?? {});\n\nconst events = Array.isArray(body.events) ? body.events : [];\n\nreturn events\n  .filter((event) => event.replyToken && event.source?.userId)\n  .map((event) => {\n    let messageText = '';\n\n    if (event.type === 'message') {\n      messageText =\n        event.message?.type === 'text'\n          ? (event.message.text ?? '')\n          : `[${event.message?.type ?? 'message'}]`;\n    } else if (event.type === 'postback') {\n      messageText = event.postback?.data ?? '[postback]';\n    } else {\n      messageText = `[${event.type ?? 'event'}]`;\n    }\n\n    return {\n      json: {\n        lineUserId: event.source.userId,\n        replyToken: event.replyToken,\n        messageText,\n        webhookEventId: event.webhookEventId ?? null,\n        isRedelivery:\n          event.deliveryContext?.isRedelivery ?? false\n      }\n    };\n  });"
+      },
+      "id": "783abf40-068f-4bf3-919e-1e6b8ecb36a1",
+      "name": "Verify Signature and Extract Events",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -980,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.BI_RMP_BACKEND_BASE_URL + '/api/line/client-recognition' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-BI-RMP-API-Key",
+              "value": "={{ $env.BI_RMP_INTERNAL_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ line_user_id: $json.lineUserId }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "97ffdb72-1e50-4b60-a1f4-5b0df1bcbba2",
+      "name": "Register LINE Client and Recognize Business",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -720,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const MAINTENANCE_MESSAGE = '系統目前正在維護中，工程師正在處理，請稍後再試。';\nconst event = $('Verify Signature and Extract Events').item.json;\nconst recognition = $json ?? {};\n\nconst hasRecognitionError = Boolean(\n  recognition.error ||\n  recognition.message?.error ||\n  (typeof recognition.statusCode === 'number' && recognition.statusCode >= 400)\n);\n\nif (hasRecognitionError) {\n  return [{\n    json: {\n      immediateReply: true,\n      businessFound: false,\n      replyToken: event.replyToken,\n      messages: [{ type: 'text', text: MAINTENANCE_MESSAGE }],\n      errorStage: 'client-recognition'\n    }\n  }];\n}\n\nconst businessFound = Boolean(\n  recognition.business_found &&\n  recognition.business_id &&\n  recognition.business_name\n);\n\nconst noticeMessages = businessFound\n  ? []\n  : [{\n      type: 'text',\n      text: `你的 LINE ID 是 ${event.lineUserId}。系統發現你尚未登記店家資料，請聯絡後台人員進行店家的註冊。`\n    }];\n\nreturn [{\n  json: {\n    immediateReply: false,\n    businessFound,\n    replyToken: event.replyToken,\n    lineUserId: event.lineUserId,\n    messageText: event.messageText,\n    webhookEventId: event.webhookEventId,\n    noticeMessages,\n    clientRecognition: {\n      client_registered: Boolean(recognition.client_registered ?? recognition.client_found),\n      client_created: Boolean(recognition.client_created),\n      client_found: Boolean(recognition.client_found),\n      client_id: recognition.client_id ?? null,\n      business_found: Boolean(recognition.business_found),\n      business_id: recognition.business_id ?? null,\n      business_name: recognition.business_name ?? null,\n      branch_name: recognition.branch_name ?? null\n    }\n  }\n}];"
+      },
+      "id": "556137a3-a6d5-4cd9-a891-e30837e84a33",
+      "name": "Route Client Business Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a5ed01db-7de9-4bf4-89e5-6d44f6c9ee4f",
+              "leftValue": "={{ $json.immediateReply }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "da4239a9-2291-47a7-8fe7-c262f744d891",
+      "name": "Should Reply Maintenance",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "48c6cb28-9f3a-4c9e-9cf9-8ef4b4b507d5",
+              "leftValue": "={{ $json.businessFound }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5c2f6568-b633-45f3-8f35-0e0334b645aa",
+      "name": "Business Found",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        60,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $json;\nconst recognition = item.clientRecognition ?? {};\nconst reportPayload = {\n  line_user_id: item.lineUserId,\n  message_text: item.messageText,\n  webhook_event_id: item.webhookEventId,\n  refresh: false\n};\n\nif (recognition.business_id) {\n  reportPayload.business_id = recognition.business_id;\n}\nif (recognition.business_name) {\n  reportPayload.business_name = recognition.business_name;\n}\n\nreturn [{\n  json: {\n    replyToken: item.replyToken,\n    noticeMessages: [],\n    clientRecognition: recognition,\n    reportMode: 'registered_client_business',\n    reportPayload\n  }\n}];"
+      },
+      "id": "9c7c2463-843a-4c56-bd86-f0d4ab02b781",
+      "name": "Use Registered Client Business",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $json;\nconst reportPayload = {\n  line_user_id: item.lineUserId,\n  message_text: item.messageText,\n  webhook_event_id: item.webhookEventId,\n  refresh: false\n};\n\nreturn [{\n  json: {\n    replyToken: item.replyToken,\n    noticeMessages: item.noticeMessages ?? [],\n    clientRecognition: item.clientRecognition ?? {},\n    reportMode: 'demo_business_fallback',\n    reportPayload\n  }\n}];"
+      },
+      "id": "0b60ff48-6907-4ce8-92d8-dc6035a8ee82",
+      "name": "Demo Business Fallback",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all();"
+      },
+      "id": "27361226-8102-42e3-af75-632cd0b48c96",
+      "name": "Prepare Report Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        580,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.BI_RMP_BACKEND_BASE_URL + '/api/line/reputation-summary' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-BI-RMP-API-Key",
+              "value": "={{ $env.BI_RMP_INTERNAL_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.reportPayload) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "901ed367-cd15-4153-8178-a6ecf9ca5042",
+      "name": "Get Global Reviews Enriched Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        840,
+        80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const MAINTENANCE_MESSAGE = '系統目前正在維護中，工程師正在處理，請稍後再試。';\nconst request = $('Prepare Report Request').item.json;\nconst backend = $json ?? {};\n\nconst hasReportError = Boolean(\n  backend.error ||\n  backend.message?.error ||\n  (typeof backend.statusCode === 'number' && backend.statusCode >= 400)\n);\n\nlet messages = backend.line_messages;\n\nif (hasReportError || !Array.isArray(messages) || messages.length === 0) {\n  messages = [{ type: 'text', text: MAINTENANCE_MESSAGE }];\n} else {\n  messages = [\n    ...(Array.isArray(request.noticeMessages) ? request.noticeMessages : []),\n    ...messages\n  ].slice(0, 5);\n}\n\nreturn [{\n  json: {\n    replyToken: request.replyToken,\n    messages\n  }\n}];"
+      },
+      "id": "3a7ef02d-451b-42cd-a8f7-c545dddfc078",
+      "name": "Prepare LINE Report Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/reply",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.LINE_CHANNEL_ACCESS_TOKEN }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ replyToken: $json.replyToken, messages: $json.messages }) }}",
+        "options": {}
+      },
+      "id": "f0701ef8-9ed4-47b8-a767-c45ab16b49e6",
+      "name": "Reply LINE User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CURRENT DELIVERY SCOPE\n\n1. Verify LINE signature and extract events.\n2. Register or update the LINE ID in `clients` through `/api/line/client-recognition`.\n3. Use the same backend response to recognize the first active `business` for that client.\n4. If a business is found, send the report request through `Use Registered Client Business`.\n5. If no business is found, prepend a LINE notice that includes the user's LINE ID, then continue through `Demo Business Fallback` to the temporary global `reviews_enriched` report.\n6. If backend/API calls fail, reply with a short maintenance message.\n\nCrawler refresh is intentionally skipped in this temporary delivery version.",
+        "height": 360,
+        "width": 460,
+        "color": 4
+      },
+      "id": "e68ee730-06d6-428f-a67c-baa498669462",
+      "name": "Temporary Delivery Scope Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "LINE Webhook": {
+      "main": [
+        [
+          {
+            "node": "Verify Signature and Extract Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Signature and Extract Events": {
+      "main": [
+        [
+          {
+            "node": "Register LINE Client and Recognize Business",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Register LINE Client and Recognize Business": {
+      "main": [
+        [
+          {
+            "node": "Route Client Business Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Client Business Result": {
+      "main": [
+        [
+          {
+            "node": "Should Reply Maintenance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Reply Maintenance": {
+      "main": [
+        [
+          {
+            "node": "Reply LINE User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Business Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Business Found": {
+      "main": [
+        [
+          {
+            "node": "Use Registered Client Business",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Demo Business Fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use Registered Client Business": {
+      "main": [
+        [
+          {
+            "node": "Prepare Report Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Demo Business Fallback": {
+      "main": [
+        [
+          {
+            "node": "Prepare Report Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Report Request": {
+      "main": [
+        [
+          {
+            "node": "Get Global Reviews Enriched Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Global Reviews Enriched Report": {
+      "main": [
+        [
+          {
+            "node": "Prepare LINE Report Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare LINE Report Reply": {
+      "main": [
+        [
+          {
+            "node": "Reply LINE User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Taipei",
+    "saveManualExecutions": true
+  },
+  "active": false,
+  "versionId": "6d45fb09-3b36-43bf-a19f-10734c7f9d28",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

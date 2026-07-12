@@ -1,0 +1,55 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:2.29.10
+    container_name: bi-rmp-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Taipei
+      GENERIC_TIMEZONE: Asia/Taipei
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      N8N_EDITOR_BASE_URL: http://localhost:5678/
+      N8N_PROXY_HOPS: 1
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      N8N_RUNNERS_ENABLED: "true"
+      DB_SQLITE_POOL_SIZE: 5
+
+      # 此 workflow 會在 Code/Expression 節點使用 $env
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+
+      # Verify Signature 節點使用 require('crypto')
+      NODE_FUNCTION_ALLOW_BUILTIN: crypto
+
+      # 僅限本機 HTTP 開發；正式環境必須改為 HTTPS/安全 Cookie
+      N8N_SECURE_COOKIE: "false"
+
+      LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET}
+      LINE_CHANNEL_ACCESS_TOKEN: ${LINE_CHANNEL_ACCESS_TOKEN}
+      BI_RMP_INTERNAL_API_KEY: ${BI_RMP_INTERNAL_API_KEY}
+      BI_RMP_BACKEND_BASE_URL: ${BI_RMP_BACKEND_BASE_URL}
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./workflows:/workflows:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # 開發測試用：產生臨時公開 HTTPS 網址，讓 LINE 可以呼叫本機 n8n。
+  # 啟動方式：docker compose --profile tunnel up -d
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: bi-rmp-cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://n8n:5678
+    depends_on:
+      - n8n
+    profiles:
+      - tunnel
+
+volumes:
+  n8n_data:
