@@ -79,3 +79,6 @@ sequenceDiagram
   - 若未登入，強制定向至 `/login` 頁面，Layout 與其餘業務頁面一律不予加載。
 - **按鈕權限防呆 (Disable Unallowed Actions)**：
   - 在前端 UI 中，依據使用者的 `role` 來顯示/隱藏或禁用特定按鈕。例如：若角色為 `staff`，則「合約管理」頁面的「建立租約」按鈕應為 disabled，並在滑鼠懸停時顯示「無此操作權限」。
+# Auth 現況（2026-07-14）
+
+Firebase Email/Password Auth 已實作，非規劃中功能。登入後讀取 `users/{uid}`；Profile 不存在、格式錯誤或 `status: disabled` 時一律拒絕進入。首位 admin 必須由 Firebase Console 人工建立 Auth 使用者和 Profile；前端角色控制僅改善 UX，Rules 才是安全邊界。

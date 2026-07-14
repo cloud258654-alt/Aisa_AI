@@ -28,7 +28,7 @@ export async function listRentals(): Promise<RentalRecord[]> {
 export async function createRental(
   rentalData: Omit<RentalRecord, 'rental_id' | 'created_at' | 'updated_at'>,
   createFirstMonthBill: boolean
-): Promise<RentalRecord> {
+): Promise<void> {
   const rentalId = generateLocalId('RENT');
   const nowStr = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   
@@ -85,7 +85,9 @@ export async function createRental(
           const dueDay = rental.payment_due_day;
           const targetDueDate = new Date(startDate.getFullYear(), startDate.getMonth(), dueDay);
           dueDateStr = format(targetDueDate, 'yyyy-MM-dd');
-        } catch (e) {}
+        } catch {
+          dueDateStr = rental.start_date;
+        }
 
         // Deposit (deposit_in)
         if (rental.deposit_amount > 0) {
@@ -159,10 +161,6 @@ export async function updateRental(
       updated_at: nowStr
     };
     await updateDoc(docRef, updatePayload);
-    return {
-      rental_id: id,
-      ...updatePayload
-    } as any;
   } catch (error) {
     console.error("Firestore updateRental failed:", error);
     throw error;

@@ -8,8 +8,12 @@ import { Customer } from '../types/customer';
 import { Container } from '../types/container';
 import { RentalRecord } from '../types/rentalRecord';
 import { format } from 'date-fns';
+import { useAuth } from '../hooks/useAuth';
+import { canEditLedgers } from '../utils/permissions';
 
 export default function CustomerLedgersPage() {
+  const { profile } = useAuth();
+  const mayEdit = canEditLedgers(profile?.role);
   const [ledgers, setLedgers] = useState<CustomerLedger[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [containers, setContainers] = useState<Container[]>([]);
@@ -62,7 +66,7 @@ export default function CustomerLedgersPage() {
       setCustomers(cList);
       setContainers(contList);
       setRentals(rList);
-    } catch (err) {
+    } catch {
       console.error("Failed to load customer ledgers:", err);
     } finally {
       setLoading(false);
@@ -70,6 +74,7 @@ export default function CustomerLedgersPage() {
   };
 
   const handleOpenCreate = () => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     setCreateForm({
       customer_id: customers[0]?.customer_id || '',
       container_id: containers[0]?.container_id || '',
@@ -87,6 +92,7 @@ export default function CustomerLedgersPage() {
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     if (createForm.amount <= 0) return alert("金額必須大於 0");
     
     try {
@@ -98,7 +104,7 @@ export default function CustomerLedgersPage() {
       });
       setIsCreateModalOpen(false);
       await loadData();
-    } catch (err) {
+    } catch {
       alert("帳單建立成功（離線快取）！");
       setIsCreateModalOpen(false);
       await loadData();
@@ -106,6 +112,7 @@ export default function CustomerLedgersPage() {
   };
 
   const handleOpenPayment = (entry: CustomerLedger) => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     setPayingEntry(entry);
     setPaymentForm({
       paid_date: format(new Date(), 'yyyy-MM-dd'),
@@ -117,6 +124,7 @@ export default function CustomerLedgersPage() {
 
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     if (!payingEntry) return;
 
     try {
@@ -129,7 +137,7 @@ export default function CustomerLedgersPage() {
       });
       setPayingEntry(null);
       await loadData();
-    } catch (err) {
+    } catch {
       alert("登記付款成功（離線佇列）！");
       setPayingEntry(null);
       await loadData();
@@ -220,6 +228,8 @@ export default function CustomerLedgersPage() {
           </button>
           <button
             onClick={handleOpenCreate}
+            disabled={!mayEdit}
+            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
           >
             💵 新增應收/退押項目
@@ -333,6 +343,8 @@ export default function CustomerLedgersPage() {
                       {l.paid_status !== 'paid' && (
                         <button
                           onClick={() => handleOpenPayment(l)}
+                          disabled={!mayEdit}
+                          title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
                           className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow shadow-emerald-650/10"
                         >
                           💵 登記收款
@@ -359,7 +371,7 @@ export default function CustomerLedgersPage() {
                   <label className="block text-xs font-semibold text-slate-400 mb-1">科目類型</label>
                   <select
                     value={createForm.event_type}
-                    onChange={(e) => setCreateForm({...createForm, event_type: e.target.value as any})}
+                    onChange={(e) => setCreateForm({...createForm, event_type: e.target.value as CustomerLedger['event_type']})}
                     className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                   >
                     <option value="rent">租金應收 (Rent)</option>

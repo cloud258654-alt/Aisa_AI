@@ -1,0 +1,20 @@
+name: Container rental CI
+on:
+  push:
+    paths: ['Daily_Ai_004_Futain0857 system/container-rental-app-v1/**', 'Daily_Ai_004_Futain0857 system/CLAUDE.md', '.github/workflows/container-rental-ci.yml']
+  pull_request:
+    paths: ['Daily_Ai_004_Futain0857 system/container-rental-app-v1/**', 'Daily_Ai_004_Futain0857 system/CLAUDE.md', '.github/workflows/container-rental-ci.yml']
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'Daily_Ai_004_Futain0857 system/container-rental-app-v1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm, cache-dependency-path: 'Daily_Ai_004_Futain0857 system/container-rental-app-v1/package-lock.json' }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build

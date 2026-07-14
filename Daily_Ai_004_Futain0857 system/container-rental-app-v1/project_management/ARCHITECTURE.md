@@ -48,3 +48,6 @@ graph TD
 
 所有與 Firebase Firestore 的讀寫皆被封裝在 `src/services/api` 的獨立模組中。
 - 當未來需要從 Firebase 升級至正式的 PostgreSQL 關係型資料庫時，前端 UI 程式碼無需做任何改動，僅需改寫 API 層與數據庫連線 client 即可，將遷移風險降至最低。
+# 現行架構說明（2026-07-14）
+
+本系統採 React/Vite 前端直接連線 Firebase Auth 與 Firestore；不存在獨立 Backend API。`src/services/api` 為 Firestore 資料存取抽象層。Google Apps Script 相關描述已過時，不屬於現行架構。Firebase 設定由建置階段 `VITE_FIREBASE_*` 注入，資料授權由 Firestore Rules 執行。

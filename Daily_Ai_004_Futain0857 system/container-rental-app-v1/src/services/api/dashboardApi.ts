@@ -55,7 +55,9 @@ export async function getDashboardSummary(): Promise<DashboardSummaryData> {
           if (endDate >= now && endDate <= thirtyDaysLater) {
             expiring30Days++;
           }
-        } catch (e) {}
+        } catch {
+          return;
+        }
       }
     });
 
@@ -83,7 +85,9 @@ export async function getDashboardSummary(): Promise<DashboardSummaryData> {
           if (isSameMonth(paidDate, now)) {
             monthlyRentCollected += amount;
           }
-        } catch (e) {}
+        } catch {
+          return;
+        }
       }
 
       // Unpaid rent
@@ -103,7 +107,9 @@ export async function getDashboardSummary(): Promise<DashboardSummaryData> {
           if (isSameMonth(paidDate, now)) {
             monthlyExpensePaid += amount;
           }
-        } catch (e) {}
+        } catch {
+          return;
+        }
       }
     });
 

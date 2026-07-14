@@ -38,7 +38,7 @@ export default function DashboardPage() {
             try {
               const d = parseISO(r.end_date);
               return d >= now && d <= thirtyDaysLater;
-            } catch (e) {
+            } catch {
               return false;
             }
           })

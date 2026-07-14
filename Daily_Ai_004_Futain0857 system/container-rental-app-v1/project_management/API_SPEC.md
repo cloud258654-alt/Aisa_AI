@@ -143,3 +143,6 @@
   2. `monthly_rent_collected` 為當月所有對客流水中 `event_type === 'rent'` 且 `paid_status === 'paid'` 且 `paid_date` 落在本月之總和。
   3. `monthly_expense_paid` 為當月所有營運支出流水中 `paid_status === 'paid'` 且 `paid_date` 落在本月之總和。
   4. `deposit_balance` = 所有已收押金總額 - 所有已退押金總額。
+# 資料存取規格（2026-07-14）
+
+本專案沒有 HTTP API 或 Google Apps Script API。`src/services/api` 以 TypeScript 函式封裝 Firestore 的讀寫與 Transaction；呼叫者不得假設 REST endpoint 存在。資料集合與欄位相容性以 `src/types` 和 `DATABASE_SCHEMA.md` 為準。

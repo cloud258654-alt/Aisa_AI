@@ -46,3 +46,9 @@
 
 - **打包相容性處理**
   - 撰寫 `preload-crypto.cjs` 腳本，完美解決 Node.js 18 環境下 Rollup Terser Plugin 缺乏 global.crypto 導致的打包編譯錯誤。
+# Changelog
+
+## [1.1.0] - 2026-07-14
+- 導入 users Profile、角色權限與拒絕缺失/停用 Profile 的登入流程。
+- 重寫 Firestore Rules、移除瀏覽器動態 Firebase 設定，新增測試、CI 與部署文件。
+- 最終驗證修正：CI workflow 移至儲存庫根目錄，補上頁面角色按鈕限制與 staff 貨櫃欄位限制；Node/npm/Java 缺失使實際驗證待後續環境執行。

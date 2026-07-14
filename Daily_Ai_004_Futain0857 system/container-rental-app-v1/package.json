@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:rules:vitest": "vitest run tests/firestore --reporter=verbose --no-file-parallelism",
+    "test:rules": "firebase emulators:exec --only firestore \"npm run test:rules:vitest\"",
+    "check": "npm run lint && npm run test && npm run build"
   },
   "dependencies": {
     "date-fns": "^4.4.0",
@@ -20,6 +25,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@firebase/rules-unit-testing": "^5.0.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
@@ -27,12 +35,15 @@
     "eslint": "^9.13.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
+    "firebase-tools": "^13.31.2",
     "globals": "^15.11.0",
+    "jsdom": "^25.0.1",
     "postcss": "^8.5.16",
     "tailwindcss": "^3.4.19",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.11.0",
     "vite": "^5.4.10",
-    "vite-plugin-pwa": "^1.3.0"
+    "vite-plugin-pwa": "^1.3.0",
+    "vitest": "^2.1.8"
   }
 }

@@ -2,8 +2,13 @@ import { useState, useEffect } from 'react';
 import { listContainers, createContainer, updateContainer } from '../services/api/containersApi';
 import { Container } from '../types/container';
 import { format } from 'date-fns';
+import { useAuth } from '../hooks/useAuth';
+import { canEditContainerCost, canEditContainers } from '../utils/permissions';
 
 export default function ContainersPage() {
+  const { profile } = useAuth();
+  const mayEdit = canEditContainers(profile?.role) || profile?.role === 'staff';
+  const mayEditCost = canEditContainerCost(profile?.role);
   const [containers, setContainers] = useState<Container[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -36,7 +41,7 @@ export default function ContainersPage() {
       setLoading(true);
       const data = await listContainers();
       setContainers(data);
-    } catch (err) {
+    } catch {
       console.error("Failed to load containers:", err);
     } finally {
       setLoading(false);
@@ -44,6 +49,7 @@ export default function ContainersPage() {
   };
 
   const handleOpenCreate = () => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     setModalMode('create');
     setEditingId(null);
     setFormData({
@@ -60,6 +66,7 @@ export default function ContainersPage() {
   };
 
   const handleOpenEdit = (container: Container) => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     setModalMode('edit');
     setEditingId(container.container_id);
     setFormData({
@@ -77,6 +84,7 @@ export default function ContainersPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     if (!formData.container_no.trim()) return alert("請輸入貨櫃編號");
 
     try {
@@ -87,7 +95,7 @@ export default function ContainersPage() {
       }
       setIsModalOpen(false);
       await loadContainers();
-    } catch (err) {
+    } catch {
       alert("儲存貨櫃失敗，已儲存至離線佇列，待網路回復後同步");
       setIsModalOpen(false);
       await loadContainers();
@@ -95,10 +103,11 @@ export default function ContainersPage() {
   };
 
   const handleQuickStatusChange = async (id: string, newStatus: Container['status']) => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     try {
       await updateContainer(id, { status: newStatus });
       await loadContainers();
-    } catch (err) {
+    } catch {
       alert("更新狀態失敗，已加入離線佇列");
       await loadContainers();
     }
@@ -186,6 +195,8 @@ export default function ContainersPage() {
           </button>
           <button
             onClick={handleOpenCreate}
+            disabled={!mayEdit}
+            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
           >
             📦 新增貨櫃
@@ -278,7 +289,8 @@ export default function ContainersPage() {
                         <div className="flex justify-end gap-2">
                           <select
                             value={c.status}
-                            onChange={(e) => handleQuickStatusChange(c.container_id, e.target.value as any)}
+                            onChange={(e) => handleQuickStatusChange(c.container_id, e.target.value as Container['status'])}
+                            disabled={!mayEdit}
                             className="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded px-2 py-1"
                           >
                             <option value="available">空櫃</option>
@@ -288,6 +300,8 @@ export default function ContainersPage() {
                           </select>
                           <button
                             onClick={() => handleOpenEdit(c)}
+                            disabled={!mayEdit}
+                            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
                             className="text-xs bg-indigo-950/40 text-indigo-400 border border-indigo-900/50 hover:bg-indigo-900/40 px-3 py-1.5 rounded-lg transition"
                           >
                             編輯
@@ -335,7 +349,8 @@ export default function ContainersPage() {
                     <span className="text-xs text-slate-400">快速切換:</span>
                     <select
                       value={c.status}
-                      onChange={(e) => handleQuickStatusChange(c.container_id, e.target.value as any)}
+                      onChange={(e) => handleQuickStatusChange(c.container_id, e.target.value as Container['status'])}
+                      disabled={!mayEdit}
                       className="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded px-2 py-1"
                     >
                       <option value="available">空櫃</option>
@@ -347,6 +362,8 @@ export default function ContainersPage() {
                   
                   <button
                     onClick={() => handleOpenEdit(c)}
+                    disabled={!mayEdit}
+                    title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
                     className="text-xs bg-indigo-950/40 text-indigo-400 border border-indigo-900/50 hover:bg-indigo-900/40 px-3.5 py-1.5 rounded-lg transition"
                   >
                     編輯規格
@@ -411,7 +428,7 @@ export default function ContainersPage() {
                   <label className="block text-xs font-semibold text-slate-400 mb-1">初始狀態</label>
                   <select
                     value={formData.status}
-                    onChange={(e) => setFormData({...formData, status: e.target.value as any})}
+                    onChange={(e) => setFormData({...formData, status: e.target.value as Container['status']})}
                     disabled={modalMode === 'edit' && formData.status === 'rented'}
                     className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                   >
@@ -453,6 +470,8 @@ export default function ContainersPage() {
                   type="number"
                   placeholder="總建置金額"
                   value={formData.total_setup_cost || ''}
+                  disabled={!mayEditCost}
+                  title={mayEditCost ? undefined : '你目前的角色無權修改貨櫃成本'}
                   onChange={(e) => setFormData({...formData, total_setup_cost: parseInt(e.target.value, 10) || 0})}
                   className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                 />

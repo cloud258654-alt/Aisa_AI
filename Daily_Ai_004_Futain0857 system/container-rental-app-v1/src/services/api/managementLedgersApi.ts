@@ -26,7 +26,7 @@ export async function listManagementLedgers(): Promise<ManagementLedger[]> {
 
 export async function createManagementLedgerEntry(
   entryData: Omit<ManagementLedger, 'ledger_id' | 'created_at' | 'updated_at'>
-): Promise<ManagementLedger> {
+): Promise<void> {
   const ledgerId = generateLocalId('ML');
   const nowStr = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   
@@ -60,10 +60,6 @@ export async function updateManagementLedgerEntry(
       updated_at: nowStr
     };
     await updateDoc(docRef, updatePayload);
-    return {
-      ledger_id: id,
-      ...updatePayload
-    } as any;
   } catch (error) {
     console.error("Firestore updateManagementLedgerEntry failed:", error);
     throw error;

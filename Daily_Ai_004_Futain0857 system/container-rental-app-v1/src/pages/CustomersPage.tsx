@@ -6,8 +6,13 @@ import { Customer } from '../types/customer';
 import { RentalRecord } from '../types/rentalRecord';
 import { CustomerLedger } from '../types/customerLedger';
 import { format } from 'date-fns';
+import { useAuth } from '../hooks/useAuth';
+import { canDeleteCustomers, canEditCustomers } from '../utils/permissions';
 
 export default function CustomersPage() {
+  const { profile } = useAuth();
+  const mayEdit = canEditCustomers(profile?.role);
+  const mayDelete = canDeleteCustomers(profile?.role);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [rentals, setRentals] = useState<RentalRecord[]>([]);
   const [ledgers, setLedgers] = useState<CustomerLedger[]>([]);
@@ -58,7 +63,7 @@ export default function CustomersPage() {
       setCustomers(custList);
       setRentals(rentalList);
       setLedgers(ledgerList);
-    } catch (err) {
+    } catch {
       console.error("Failed to load customer data:", err);
     } finally {
       setLoading(false);
@@ -66,6 +71,7 @@ export default function CustomersPage() {
   };
 
   const handleOpenCreate = () => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     setModalMode('create');
     setEditingId(null);
     setFormData({
@@ -83,6 +89,7 @@ export default function CustomersPage() {
   };
 
   const handleOpenEdit = (customer: Customer) => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     setModalMode('edit');
     setEditingId(customer.customer_id);
     setFormData({
@@ -127,6 +134,7 @@ export default function CustomersPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     if (!formData.name.trim()) return alert("請輸入客戶名稱");
 
     try {
@@ -137,7 +145,7 @@ export default function CustomersPage() {
       }
       setIsModalOpen(false);
       await loadData();
-    } catch (err) {
+    } catch {
       alert("儲存客戶資料失敗，已儲存至離線佇列，待網路回復後同步");
       setIsModalOpen(false);
       await loadData();
@@ -145,11 +153,12 @@ export default function CustomersPage() {
   };
 
   const handleToggleStatus = async (customer: Customer) => {
+    if (!mayDelete) return alert('你目前的角色無權執行此操作');
     const nextStatus = customer.status === 'active' ? 'inactive' : 'active';
     try {
       await updateCustomer(customer.customer_id, { status: nextStatus });
       await loadData();
-    } catch (err) {
+    } catch {
       alert("更新狀態失敗，已加入離線佇列");
       await loadData();
     }
@@ -223,6 +232,8 @@ export default function CustomersPage() {
           </button>
           <button
             onClick={handleOpenCreate}
+            disabled={!mayEdit}
+            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
           >
             ➕ 新增客戶
@@ -332,12 +343,16 @@ export default function CustomersPage() {
                     </button>
                     <button
                       onClick={() => handleOpenEdit(cust)}
+                      disabled={!mayEdit}
+                      title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
                       className="text-xs font-semibold bg-indigo-950/40 text-indigo-400 hover:bg-indigo-900/40 border border-indigo-900/50 px-3 py-1.5 rounded-lg transition"
                     >
                       編輯
                     </button>
                     <button
                       onClick={() => handleToggleStatus(cust)}
+                      disabled={!mayDelete}
+                      title={mayDelete ? undefined : '你目前的角色無權執行此操作'}
                       className={`text-xs font-semibold px-2 py-1.5 rounded-lg transition ${
                         cust.status === 'active' ? 'bg-rose-950/20 text-rose-400 border border-rose-950/40 hover:bg-rose-900/20' : 'bg-emerald-950/20 text-emerald-400 border border-emerald-950/40 hover:bg-emerald-900/20'
                       }`}
@@ -377,7 +392,7 @@ export default function CustomersPage() {
                   <label className="block text-xs font-semibold text-slate-400 mb-1">狀態</label>
                   <select
                     value={formData.status}
-                    onChange={(e) => setFormData({...formData, status: e.target.value as any})}
+                    onChange={(e) => setFormData({...formData, status: e.target.value as Customer['status']})}
                     className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                   >
                     <option value="active">使用中</option>

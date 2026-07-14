@@ -4,8 +4,12 @@ import { listContainers } from '../services/api/containersApi';
 import { ManagementLedger } from '../types/managementLedger';
 import { Container } from '../types/container';
 import { format } from 'date-fns';
+import { useAuth } from '../hooks/useAuth';
+import { canEditLedgers } from '../utils/permissions';
 
 export default function ManagementLedgersPage() {
+  const { profile } = useAuth();
+  const mayEdit = canEditLedgers(profile?.role);
   const [ledgers, setLedgers] = useState<ManagementLedger[]>([]);
   const [containers, setContainers] = useState<Container[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,7 +56,7 @@ export default function ManagementLedgersPage() {
       ]);
       setLedgers(lList);
       setContainers(contList);
-    } catch (err) {
+    } catch {
       console.error("Failed to load management ledgers:", err);
     } finally {
       setLoading(false);
@@ -60,6 +64,7 @@ export default function ManagementLedgersPage() {
   };
 
   const handleOpenCreate = () => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     setCreateForm({
       container_id: '',
       expense_type: 'maintenance',
@@ -78,6 +83,7 @@ export default function ManagementLedgersPage() {
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     if (createForm.amount <= 0) return alert("金額必須大於 0");
 
     try {
@@ -87,7 +93,7 @@ export default function ManagementLedgersPage() {
       });
       setIsCreateOpen(false);
       await loadData();
-    } catch (err) {
+    } catch {
       alert("支出登記成功（已排入離線佇列）！");
       setIsCreateOpen(false);
       await loadData();
@@ -95,6 +101,7 @@ export default function ManagementLedgersPage() {
   };
 
   const handleOpenPayment = (entry: ManagementLedger) => {
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     setPayingEntry(entry);
     setPaymentForm({
       paid_date: format(new Date(), 'yyyy-MM-dd'),
@@ -105,6 +112,7 @@ export default function ManagementLedgersPage() {
 
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!mayEdit) return alert('你目前的角色無權執行此操作');
     if (!payingEntry) return;
 
     try {
@@ -116,7 +124,7 @@ export default function ManagementLedgersPage() {
       });
       setPayingEntry(null);
       await loadData();
-    } catch (err) {
+    } catch {
       alert("標記付款登記成功（離線佇列）！");
       setPayingEntry(null);
       await loadData();
@@ -213,6 +221,8 @@ export default function ManagementLedgersPage() {
           </button>
           <button
             onClick={handleOpenCreate}
+            disabled={!mayEdit}
+            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
           >
             🛠️ 登記支出費用
@@ -332,6 +342,8 @@ export default function ManagementLedgersPage() {
                       {l.paid_status !== 'paid' && (
                         <button
                           onClick={() => handleOpenPayment(l)}
+                          disabled={!mayEdit}
+                          title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
                           className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow"
                         >
                           💵 標記付款
@@ -358,7 +370,7 @@ export default function ManagementLedgersPage() {
                   <label className="block text-xs font-semibold text-slate-400 mb-1">費用類型</label>
                   <select
                     value={createForm.expense_type}
-                    onChange={(e) => setCreateForm({...createForm, expense_type: e.target.value as any})}
+                    onChange={(e) => setCreateForm({...createForm, expense_type: e.target.value as ManagementLedger['expense_type']})}
                     className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                   >
                     <option value="maintenance">貨櫃修繕 (Maintenance)</option>
@@ -438,7 +450,7 @@ export default function ManagementLedgersPage() {
                   <label className="block text-xs font-semibold text-slate-400 mb-1">付款狀態</label>
                   <select
                     value={createForm.paid_status}
-                    onChange={(e) => setCreateForm({...createForm, paid_status: e.target.value as any})}
+                    onChange={(e) => setCreateForm({...createForm, paid_status: e.target.value as ManagementLedger['paid_status']})}
                     className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                   >
                     <option value="unpaid">未付 (Unpaid)</option>

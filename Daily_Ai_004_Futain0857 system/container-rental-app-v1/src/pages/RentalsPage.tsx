@@ -6,8 +6,12 @@ import { RentalRecord } from '../types/rentalRecord';
 import { Customer } from '../types/customer';
 import { Container } from '../types/container';
 import { format } from 'date-fns';
+import { useAuth } from '../hooks/useAuth';
+import { canManageRentals } from '../utils/permissions';
 
 export default function RentalsPage() {
+  const { profile } = useAuth();
+  const mayManage = canManageRentals(profile?.role);
   const [rentals, setRentals] = useState<RentalRecord[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [containers, setContainers] = useState<Container[]>([]);
@@ -64,7 +68,7 @@ export default function RentalsPage() {
       setRentals(rList);
       setCustomers(cList);
       setContainers(contList);
-    } catch (err) {
+    } catch {
       console.error("Failed to load rental data:", err);
     } finally {
       setLoading(false);
@@ -72,6 +76,7 @@ export default function RentalsPage() {
   };
 
   const handleOpenWizard = () => {
+    if (!mayManage) return alert('你目前的角色無權執行此操作');
     setWizardStep(1);
     setSelectedCustomerId('');
     setSelectedContainerId('');
@@ -103,6 +108,7 @@ export default function RentalsPage() {
   };
 
   const handleCreateContract = async () => {
+    if (!mayManage) return alert('你目前的角色無權執行此操作');
     try {
       await createRental({
         customer_id: selectedCustomerId,
@@ -122,7 +128,7 @@ export default function RentalsPage() {
 
       setIsWizardOpen(false);
       await loadData();
-    } catch (err) {
+    } catch {
       alert("簽約成功！部分資料已排入離線佇列等待上傳。");
       setIsWizardOpen(false);
       await loadData();
@@ -130,6 +136,7 @@ export default function RentalsPage() {
   };
 
   const handleOpenTerminate = (rental: RentalRecord) => {
+    if (!mayManage) return alert('你目前的角色無權執行此操作');
     setTerminatingRental(rental);
     setTerminationForm({
       ended_date: format(new Date(), 'yyyy-MM-dd'),
@@ -138,12 +145,13 @@ export default function RentalsPage() {
   };
 
   const handleConfirmTerminate = async () => {
+    if (!mayManage) return alert('你目前的角色無權執行此操作');
     if (!terminatingRental) return;
     try {
       await terminateRental(terminatingRental.rental_id, terminationForm.ended_date, terminationForm.note);
       setTerminatingRental(null);
       await loadData();
-    } catch (err) {
+    } catch {
       alert("退租操作失敗，已加入離線佇列");
       setTerminatingRental(null);
       await loadData();
@@ -151,6 +159,7 @@ export default function RentalsPage() {
   };
 
   const handleOpenEdit = (rental: RentalRecord) => {
+    if (!mayManage) return alert('你目前的角色無權執行此操作');
     setEditingRental(rental);
     setEditForm({
       end_date: rental.end_date || '',
@@ -160,6 +169,7 @@ export default function RentalsPage() {
   };
 
   const handleConfirmEdit = async () => {
+    if (!mayManage) return alert('你目前的角色無權執行此操作');
     if (!editingRental) return;
     try {
       await updateRental(editingRental.rental_id, {
@@ -169,7 +179,7 @@ export default function RentalsPage() {
       });
       setEditingRental(null);
       await loadData();
-    } catch (err) {
+    } catch {
       alert("更新合約失敗，已加入離線佇列");
       setEditingRental(null);
       await loadData();
@@ -255,6 +265,8 @@ export default function RentalsPage() {
           </button>
           <button
             onClick={handleOpenWizard}
+            disabled={!mayManage}
+            title={mayManage ? undefined : '你目前的角色無權執行此操作'}
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
           >
             📜 建立新租約
@@ -350,12 +362,16 @@ export default function RentalsPage() {
                 <div className="mt-6 pt-4 border-t border-slate-800/80 flex justify-end gap-2">
                   <button
                     onClick={() => handleOpenEdit(r)}
+                    disabled={!mayManage}
+                    title={mayManage ? undefined : '你目前的角色無權執行此操作'}
                     className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-lg transition"
                   >
                     續約/調整
                   </button>
                   <button
                     onClick={() => handleOpenTerminate(r)}
+                    disabled={!mayManage}
+                    title={mayManage ? undefined : '你目前的角色無權執行此操作'}
                     className="text-xs bg-rose-950/20 text-rose-400 border border-rose-950/40 hover:bg-rose-900/20 px-3.5 py-2 rounded-lg transition"
                   >
                     辦理退租
@@ -482,7 +498,7 @@ export default function RentalsPage() {
                     <label className="block text-xs font-semibold text-slate-400 mb-1">計費週期</label>
                     <select
                       value={wizardData.billing_cycle}
-                      onChange={(e) => setWizardData({...wizardData, billing_cycle: e.target.value as any})}
+                      onChange={(e) => setWizardData({...wizardData, billing_cycle: e.target.value as RentalRecord['billing_cycle']})}
                       className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                     >
                       <option value="monthly">每月繳 (Monthly)</option>

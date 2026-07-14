@@ -27,7 +27,7 @@ export async function listCustomers(): Promise<Customer[]> {
 
 export async function createCustomer(
   customerData: Omit<Customer, 'customer_id' | 'created_at' | 'updated_at'>
-): Promise<Customer> {
+): Promise<void> {
   const customerId = generateLocalId('CUST');
   const nowStr = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   
@@ -62,11 +62,6 @@ export async function updateCustomer(
     };
     await updateDoc(docRef, updatePayload);
 
-    // Fetch the updated document to return it
-    return {
-      customer_id: id,
-      ...updatePayload
-    } as any;
   } catch (error) {
     console.error("Firestore updateCustomer failed:", error);
     throw error;

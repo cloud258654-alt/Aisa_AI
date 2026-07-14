@@ -26,7 +26,7 @@ export async function listCustomerLedgers(): Promise<CustomerLedger[]> {
 
 export async function createCustomerLedgerEntry(
   entryData: Omit<CustomerLedger, 'ledger_id' | 'created_at' | 'updated_at'>
-): Promise<CustomerLedger> {
+): Promise<void> {
   const ledgerId = generateLocalId('CL');
   const nowStr = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   
@@ -60,10 +60,6 @@ export async function updateCustomerLedgerEntry(
       updated_at: nowStr
     };
     await updateDoc(docRef, updatePayload);
-    return {
-      ledger_id: id,
-      ...updatePayload
-    } as any;
   } catch (error) {
     console.error("Firestore updateCustomerLedgerEntry failed:", error);
     throw error;

@@ -115,3 +115,6 @@
 - **詳細描述**：
   - 網址列順利出現 PWA 安裝按鈕，安裝後可作為獨立視窗運作，離線時仍可正常啟動。
   - 桌機端顯示左側 Sidebar，手機端自適應切換為底部導航欄（Bottom Nav），表格自動折疊成 Card 佈局，手勢操作順暢，符合行動化營運標準。
+# Phase 1 最終驗證紀錄（2026-07-14）
+
+本次環境已實際確認 `node`、`npm`、`java` 不存在於 PATH，且 `C:\Program Files\nodejs\node.exe` 不存在。因此 `npm ci`、lint、Vitest、build、Firestore Emulator Rules 測試與 PWA 產物檢查皆**尚未執行**；不可視為通過。`package.json` 已加入測試相依套件，但 `package-lock.json` 尚未包含它們，因此目前 `npm ci` 預期會失敗；這必須以 Node 20 執行 `npm install` 更新 lockfile 後才能驗證。已完成 package scripts、Vitest/Rules Emulator 設定與靜態檔案檢查。請在 Node 20 與 Java 可用的環境依序執行 `npm install`、`npm ci`、`npm run lint`、`npm run test`、`npm run build`、`npm run test:rules`、`npm run check`。

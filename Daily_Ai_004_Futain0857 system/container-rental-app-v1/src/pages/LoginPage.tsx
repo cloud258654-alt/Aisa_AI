@@ -17,17 +17,19 @@ export default function LoginPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Login failed:", err);
+      const authError = err instanceof Error ? err : new Error('未知登入錯誤');
       let errMsg = "登入失敗，請檢查信箱與密碼。";
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+      const code = (authError as { code?: string }).code;
+      if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
         errMsg = "信箱或密碼輸入錯誤。";
-      } else if (err.code === 'auth/network-request-failed') {
+      } else if (code === 'auth/network-request-failed') {
         errMsg = "網路連線失敗，請檢查網路連線。";
-      } else if (err.code === 'auth/configuration-not-found') {
+      } else if (code === 'auth/configuration-not-found') {
         errMsg = "請確認 Firebase Console 中已啟用 Email/Password 登入方式！";
       }
-      setError(errMsg + ` (${err.code || err.message})`);
+      setError(errMsg + ` (${code || authError.message})`);
     } finally {
       setLoading(false);
     }

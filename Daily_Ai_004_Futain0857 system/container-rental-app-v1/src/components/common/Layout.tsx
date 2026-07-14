@@ -3,12 +3,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { onSnapshot, collection } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { db, auth } from '../../services/firebase/firebase';
+import { useAuth } from '../../hooks/useAuth';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const { profile, user } = useAuth();
   const location = useLocation();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isFromCache, setIsFromCache] = useState(true);
@@ -48,8 +50,8 @@ export default function Layout({ children }: LayoutProps) {
     { path: '/rentals', label: '租約管理', icon: '📜' },
     { path: '/customer-ledgers', label: '客戶帳務', icon: '💰' },
     { path: '/management-ledgers', label: '場地支出', icon: '🛠️' },
-    { path: '/settings', label: '系統設定', icon: '⚙️' },
-  ];
+    { path: '/settings', label: '系統設定', icon: '⚙️', adminOnly: true },
+  ].filter((item) => !item.adminOnly || profile?.role === 'admin');
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-slate-950 text-slate-100">
@@ -89,6 +91,10 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Footer in Sidebar */}
         <div className="border-t border-slate-800 pt-4 mt-auto space-y-2">
+          <div className="rounded-lg bg-slate-900/70 p-2 text-xs">
+            <p className="truncate text-slate-300">{user?.email}</p>
+            <p className="mt-1 text-indigo-300">角色：{profile?.role}</p>
+          </div>
           <div className="flex items-center justify-between text-xs">
             <span className="text-slate-400">連線狀態</span>
             <div className="flex items-center gap-1.5">

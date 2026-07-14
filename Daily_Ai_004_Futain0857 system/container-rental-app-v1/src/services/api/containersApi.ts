@@ -26,7 +26,7 @@ export async function listContainers(): Promise<Container[]> {
 
 export async function createContainer(
   containerData: Omit<Container, 'container_id' | 'created_at' | 'updated_at'>
-): Promise<Container> {
+): Promise<void> {
   const containerId = generateLocalId('CONT');
   const nowStr = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   
@@ -60,10 +60,6 @@ export async function updateContainer(
       updated_at: nowStr
     };
     await updateDoc(docRef, updatePayload);
-    return {
-      container_id: id,
-      ...updatePayload
-    } as any;
   } catch (error) {
     console.error("Firestore updateContainer failed:", error);
     throw error;
