@@ -1,5 +1,6 @@
 name: Container rental CI
 on:
+  workflow_dispatch:
   push:
     paths: ['Daily_Ai_004_Futain0857 system/container-rental-app-v1/**', 'Daily_Ai_004_Futain0857 system/apps-script/**', 'Daily_Ai_004_Futain0857 system/CLAUDE.md', '.github/workflows/container-rental-ci.yml']
   pull_request:
