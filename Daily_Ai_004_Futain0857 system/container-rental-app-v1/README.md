@@ -27,4 +27,4 @@ npm run test    # 執行單元與邏輯測試
 npm run build   # 編譯打包為 PWA 靜態檔案
 ```
 
-詳細的部署與設定步驟請參考 [apps-script/README.md](file:///e:/Ai%20study/Aisa_AI/Daily_Ai_004_Futain0857%20system/apps-script/README.md) 及 [project_management/DEPLOYMENT.md](file:///e:/Ai%20study/Aisa_AI/Daily_Ai_004_Futain0857%20system/container-rental-app-v1/project_management/DEPLOYMENT.md)。
+詳細的部署與設定步驟請參考 [apps-script/README.md](../apps-script/README.md) 及 [project_management/DEPLOYMENT.md](project_management/DEPLOYMENT.md)。

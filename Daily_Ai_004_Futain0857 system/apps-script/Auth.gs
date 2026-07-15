@@ -3,6 +3,49 @@
  */
 
 /**
+ * Custom AppError constructor for safe business error passing
+ */
+function AppError(code, message) {
+  this.name = 'AppError';
+  this.code = code;
+  this.message = message;
+  this.isAppError = true;
+}
+
+/**
+ * Verify script properties and return authentication configuration parameters
+ */
+function getRequiredAuthConfig() {
+  var props = PropertiesService.getScriptProperties().getProperties();
+  
+  var adminUsername = props.ADMIN_USERNAME;
+  var passwordHash = props.PASSWORD_HASH;
+  var passwordSalt = props.PASSWORD_SALT;
+  var sessionSecret = props.SESSION_SECRET;
+  
+  // If any config is missing, throw AppError to indicate system is not configured
+  if (!adminUsername || !passwordHash || !passwordSalt || !sessionSecret) {
+    throw new AppError("SYSTEM_NOT_CONFIGURED", "系統尚未完成管理員設定");
+  }
+
+  var sessionVersion = props.SESSION_VERSION || "1";
+  var ttlSeconds = parseInt(props.SESSION_TTL_SECONDS || "86400", 10); // Default 1 day
+  var maxFailures = parseInt(props.LOGIN_MAX_FAILURES || "5", 10);
+  var lockMinutes = parseInt(props.LOGIN_LOCK_MINUTES || "5", 10);
+
+  return {
+    adminUsername: adminUsername,
+    passwordHash: passwordHash,
+    passwordSalt: passwordSalt,
+    sessionSecret: sessionSecret,
+    sessionVersion: sessionVersion,
+    sessionTtlSeconds: ttlSeconds,
+    maxFailures: maxFailures,
+    lockMinutes: lockMinutes
+  };
+}
+
+/**
  * Handle login request
  */
 function handleLoginAction(payload) {
@@ -20,18 +63,27 @@ function handleLoginAction(payload) {
     };
   }
 
-  var props = PropertiesService.getScriptProperties().getProperties();
-  var expectedUsername = props.ADMIN_USERNAME || "admin";
-  var expectedHash = props.PASSWORD_HASH;
-  var expectedSalt = props.PASSWORD_SALT;
-
-  if (!expectedHash) {
+  var config;
+  try {
+    config = getRequiredAuthConfig();
+  } catch (configError) {
+    if (configError.isAppError) {
+      return {
+        ok: false,
+        data: null,
+        error: {
+          code: configError.code,
+          message: configError.message
+        }
+      };
+    }
+    // Generic internal configuration issue fallback
     return {
       ok: false,
       data: null,
       error: {
         code: "SYSTEM_NOT_CONFIGURED",
-        message: "系統尚未初始化管理員密碼，請聯絡系統管理員"
+        message: "系統尚未完成管理員設定"
       }
     };
   }
@@ -48,32 +100,30 @@ function handleLoginAction(payload) {
       data: null,
       error: {
         code: "LOCKED_OUT",
-        message: "連續登入失敗次數過多，請於 5 分鐘後再試"
+        message: "連續登入失敗次數過多，請於 " + config.lockMinutes + " 分鐘後再試"
       }
     };
   }
 
   // Verify username and password
-  var inputHash = hashPassword(password, expectedSalt);
+  var inputHash = hashPassword(password, config.passwordSalt);
   
   // Constant-time string comparison to mitigate timing attacks
-  var authSuccess = (username === expectedUsername) && safeCompare(inputHash, expectedHash);
+  var authSuccess = safeCompare(username, config.adminUsername) && safeCompare(inputHash, config.passwordHash);
 
   if (!authSuccess) {
     // Record failure
     var failures = parseInt(cache.get(countKey) || "0", 10) + 1;
-    var maxFailures = parseInt(props.LOGIN_MAX_FAILURES || "5", 10);
-    var lockMinutes = parseInt(props.LOGIN_LOCK_MINUTES || "5", 10);
 
-    if (failures >= maxFailures) {
-      cache.put(lockKey, "1", lockMinutes * 60);
+    if (failures >= config.maxFailures) {
+      cache.put(lockKey, "1", config.lockMinutes * 60);
       cache.remove(countKey);
       return {
         ok: false,
         data: null,
         error: {
           code: "LOCKED_OUT",
-          message: "連續登入失敗次數過多，請於 " + lockMinutes + " 分鐘後再試"
+          message: "連續登入失敗次數過多，請於 " + config.lockMinutes + " 分鐘後再試"
         }
       };
     } else {
@@ -94,16 +144,17 @@ function handleLoginAction(payload) {
   cache.remove(lockKey);
 
   // Generate Token
-  var ttlSeconds = parseInt(props.SESSION_TTL_SECONDS || "86400", 10); // Default 1 day
-  var expiresAt = new Date().getTime() + (ttlSeconds * 1000);
+  var expiresAt = new Date().getTime() + (config.sessionTtlSeconds * 1000);
   
   var sessionPayload = {
     username: username,
+    issuedAt: new Date().getTime(),
     expiresAt: expiresAt,
-    salt: Math.random().toString()
+    nonce: Utilities.getUuid(),
+    sessionVersion: config.sessionVersion
   };
   
-  var token = generateToken(sessionPayload, props.SESSION_SECRET || "default_session_secret");
+  var token = generateToken(sessionPayload, config.sessionSecret);
 
   return {
     ok: true,
@@ -119,11 +170,19 @@ function handleLoginAction(payload) {
  * Handle logout request
  */
 function handleLogoutAction(sessionToken) {
-  // Since tokens are stateless and verified by signature, we can't easily revoke them
-  // without storing a blacklist. For a single admin app, clearing token in frontend sessionStorage
-  // is sufficient. If needed, a blocklist could be stored in CacheService.
-  var cache = CacheService.getScriptCache();
-  cache.put("blacklisted_" + sessionToken, "1", 86400); // blocklist for 24h
+  var now = new Date().getTime();
+  var authCheck = verifySessionToken(sessionToken);
+  
+  if (authCheck.valid && authCheck.payload) {
+    var expiresAt = authCheck.payload.expiresAt;
+    var remainingSeconds = Math.max(0, Math.ceil((expiresAt - now) / 1000));
+    
+    if (remainingSeconds > 0) {
+      var cache = CacheService.getScriptCache();
+      cache.put("blacklisted_" + sessionToken, "1", remainingSeconds);
+    }
+  }
+  
   return { ok: true, data: { success: true }, error: null };
 }
 
@@ -144,11 +203,15 @@ function verifySessionToken(token) {
   var payloadBase64 = parts[0];
   var signatureBase64 = parts[1];
 
-  var props = PropertiesService.getScriptProperties().getProperties();
-  var secret = props.SESSION_SECRET || "default_session_secret";
+  var config;
+  try {
+    config = getRequiredAuthConfig();
+  } catch (e) {
+    return { valid: false, message: "系統尚未完成管理員設定，驗證失敗" };
+  }
 
   // Verify Signature
-  var expectedSignatureBytes = Utilities.computeHmacSha256Signature(payloadBase64, secret);
+  var expectedSignatureBytes = Utilities.computeHmacSha256Signature(payloadBase64, config.sessionSecret);
   var expectedSignatureBase64 = Utilities.base64EncodeWebSafe(expectedSignatureBytes);
 
   if (!safeCompare(signatureBase64, expectedSignatureBase64)) {
@@ -168,6 +231,16 @@ function verifySessionToken(token) {
   var now = new Date().getTime();
   if (now > payload.expiresAt) {
     return { valid: false, message: "驗證已逾期，請重新登入" };
+  }
+
+  // Check Session Version
+  if (payload.sessionVersion !== config.sessionVersion) {
+    return { valid: false, message: "驗證版本不符，請重新登入" };
+  }
+
+  // Check Issued At reasonableness (cannot be in the future)
+  if (payload.issuedAt > now + 60000) { // Allow 1 minute clock skew
+    return { valid: false, message: "Token 發行時間異常" };
   }
 
   return { valid: true, payload: payload };

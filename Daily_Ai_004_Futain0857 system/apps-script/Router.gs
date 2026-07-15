@@ -19,7 +19,7 @@ function routeRequest(action, sessionToken, payload) {
       data: null,
       error: {
         code: "UNAUTHORIZED",
-        message: authCheck.message || "登入逾期，請重新登入"
+        message: authCheck.message || "登入已逾期，請重新登入"
       }
     };
   }
@@ -44,22 +44,30 @@ function routeRequest(action, sessionToken, payload) {
       case "dashboardSummary":
         return handleDashboardSummaryAction();
       default:
-        return {
-          ok: false,
-          data: null,
-          error: {
-            code: "UNKNOWN_ACTION",
-            message: "未知的 action: " + action
-          }
-        };
+        throw new AppError("UNKNOWN_ACTION", "未知的 action: " + action);
     }
   } catch (error) {
+    console.error("Action " + action + " failed:", error);
+    
+    // Check if it is a known business error (AppError)
+    if (error && error.isAppError) {
+      return {
+        ok: false,
+        data: null,
+        error: {
+          code: error.code,
+          message: error.message
+        }
+      };
+    }
+    
+    // Internal server errors shouldn't leak sheet details
     return {
       ok: false,
       data: null,
       error: {
-        code: "ACTION_FAILED",
-        message: error.message || error.toString()
+        code: "INTERNAL_SERVER_ERROR",
+        message: "系統處理失敗，請稍後再試"
       }
     };
   }
@@ -70,7 +78,7 @@ function routeRequest(action, sessionToken, payload) {
  */
 function handleListAction(payload) {
   var table = payload.table;
-  if (!table) throw new Error("缺少 table 參數");
+  if (!table) throw new AppError("BAD_REQUEST", "缺少 table 參數");
   var list = listRecords(table);
   return { ok: true, data: list, error: null };
 }
@@ -81,17 +89,10 @@ function handleListAction(payload) {
 function handleGetAction(payload) {
   var table = payload.table;
   var id = payload.id;
-  if (!table || !id) throw new Error("缺少 table 或 id 參數");
+  if (!table || !id) throw new AppError("BAD_REQUEST", "缺少 table 或 id 參數");
   var record = findRecordById(table, id);
   if (!record) {
-    return {
-      ok: false,
-      data: null,
-      error: {
-        code: "NOT_FOUND",
-        message: "找不到指定的紀錄"
-      }
-    };
+    throw new AppError("NOT_FOUND", "找不到指定的紀錄");
   }
   return { ok: true, data: record, error: null };
 }
@@ -102,7 +103,7 @@ function handleGetAction(payload) {
 function handleCreateAction(payload) {
   var table = payload.table;
   var data = payload.data;
-  if (!table || !data) throw new Error("缺少 table 或 data 參數");
+  if (!table || !data) throw new AppError("BAD_REQUEST", "缺少 table 或 data 參數");
 
   // Implement route-level lock for safety
   var lock = LockService.getScriptLock();
@@ -120,7 +121,7 @@ function handleCreateAction(payload) {
     } else if (table === "management_ledgers") {
       createdRecord = createManagementLedger(data);
     } else {
-      throw new Error("不支援的寫入資料表: " + table);
+      throw new AppError("BAD_REQUEST", "不支援的寫入資料表: " + table);
     }
     return { ok: true, data: createdRecord, error: null };
   } finally {
@@ -135,7 +136,7 @@ function handleUpdateAction(payload) {
   var table = payload.table;
   var id = payload.id;
   var updates = payload.updates;
-  if (!table || !id || !updates) throw new Error("缺少 table、id 或 updates 參數");
+  if (!table || !id || !updates) throw new AppError("BAD_REQUEST", "缺少 table、id 或 updates 參數");
 
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -152,7 +153,7 @@ function handleUpdateAction(payload) {
     } else if (table === "management_ledgers") {
       updatedRecord = updateManagementLedger(id, updates);
     } else {
-      throw new Error("不支援的更新資料表: " + table);
+      throw new AppError("BAD_REQUEST", "不支援的更新資料表: " + table);
     }
     return { ok: true, data: updatedRecord, error: null };
   } finally {
@@ -166,7 +167,7 @@ function handleUpdateAction(payload) {
 function handleSoftDeleteAction(payload) {
   var table = payload.table;
   var id = payload.id;
-  if (!table || !id) throw new Error("缺少 table 或 id 參數");
+  if (!table || !id) throw new AppError("BAD_REQUEST", "缺少 table 或 id 參數");
 
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -185,7 +186,7 @@ function handleTerminateRentalAction(payload) {
   var id = payload.id;
   var endedDate = payload.endedDate;
   var note = payload.note;
-  if (!id || !endedDate) throw new Error("缺少 id 或 endedDate 參數");
+  if (!id || !endedDate) throw new AppError("BAD_REQUEST", "缺少 id 或 endedDate 參數");
 
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);

@@ -50,19 +50,20 @@ function doPost(e) {
     return makeJsonOutput(responseData);
 
   } catch (globalError) {
+    console.error("Global crash in doPost:", globalError);
     return makeJsonOutput({
       ok: false,
       data: null,
       error: {
         code: "INTERNAL_SERVER_ERROR",
-        message: "伺服器內部錯誤: " + globalError.toString()
+        message: "系統處理失敗，請稍後再試"
       }
     });
   }
 }
 
 /**
- * Helper to generate JSON output with CORS options (CORS is native to GAS Web Apps, but we format output)
+ * Helper to generate JSON output
  */
 function makeJsonOutput(responseObj) {
   return ContentService.createTextOutput(JSON.stringify(responseObj))

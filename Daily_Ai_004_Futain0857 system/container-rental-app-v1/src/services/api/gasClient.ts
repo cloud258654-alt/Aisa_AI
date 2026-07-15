@@ -1,19 +1,31 @@
-export interface GasResponse<T = any> {
-  ok: boolean;
-  data: T | null;
-  error: {
-    code: string;
-    message: string;
-  } | null;
+export interface GasError {
+  code: string;
+  message: string;
 }
 
-const GAS_WEB_APP_URL = import.meta.env.VITE_GAS_WEB_APP_URL || '';
+export interface GasResponse<T> {
+  ok: boolean;
+  data: T | null;
+  error: GasError | null;
+}
+
+export type GasPayload = Record<string, unknown>;
+
+/**
+ * Extract message safely from unknown error object
+ */
+export function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return '未知錯誤';
+}
 
 /**
  * Execute request to Google Apps Script Web App
  */
-export async function callGasApi<T = any>(action: string, payload: any = {}): Promise<T> {
-  if (!GAS_WEB_APP_URL) {
+export async function callGasApi<T>(action: string, payload: GasPayload = {}): Promise<T> {
+  const gasWebAppUrl = import.meta.env.VITE_GAS_WEB_APP_URL || '';
+  if (!gasWebAppUrl) {
     throw new Error('系統設定錯誤：未設定後端 API 網址 (VITE_GAS_WEB_APP_URL)。');
   }
 
@@ -27,7 +39,7 @@ export async function callGasApi<T = any>(action: string, payload: any = {}): Pr
   };
 
   try {
-    const response = await fetch(GAS_WEB_APP_URL, {
+    const response = await fetch(gasWebAppUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
@@ -40,7 +52,7 @@ export async function callGasApi<T = any>(action: string, payload: any = {}): Pr
       throw new Error(`連線失敗 (HTTP ${response.status})，請檢查網路狀態。`);
     }
 
-    const resJson: GasResponse<T> = await response.json();
+    const resJson = (await response.json()) as GasResponse<T>;
 
     if (!resJson.ok) {
       // Check for unauthorized access
@@ -54,11 +66,16 @@ export async function callGasApi<T = any>(action: string, payload: any = {}): Pr
       throw new Error(resJson.error?.message || '未知後端錯誤');
     }
 
-    return resJson.data as T;
-  } catch (error: any) {
+    if (resJson.data === null) {
+      throw new Error('未收到有效的資料回傳');
+    }
+
+    return resJson.data;
+  } catch (error: unknown) {
     console.error(`GAS API [${action}] failed:`, error);
+    const message = getErrorMessage(error);
     // Standardize error message for frontend
-    if (error.message && error.message.includes('Failed to fetch')) {
+    if (message.includes('Failed to fetch')) {
       throw new Error('網路連線失敗，無法與伺服器建立連接，請確認網路連線。');
     }
     throw error;

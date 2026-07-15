@@ -18,9 +18,9 @@ export default function LoginPage() {
 
     try {
       await login(username.trim(), password);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Login failed:", err);
-      setError(err.message || '登入失敗，請檢查管理員帳號與密碼。');
+      setError(err instanceof Error ? err.message : '登入失敗，請檢查管理員帳號與密碼。');
     } finally {
       setLoading(false);
     }

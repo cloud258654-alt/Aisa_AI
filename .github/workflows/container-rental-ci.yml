@@ -24,17 +24,23 @@ jobs:
           test -f "../apps-script/Code.gs"
           test -f "../apps-script/Router.gs"
           test -f "../apps-script/Setup.gs"
+          test -f "../apps-script/Auth.gs"
+          test -f "../apps-script/RentalsService.gs"
           
       - name: Check for credential and Spreadsheet ID leaks
         run: |
-          # Ensure no real Spreadsheet ID or password hash is hardcoded
-          # Checking if any Spreadsheet ID like 1[a-zA-Z0-9_-]{43} is present in code
-          if grep -rE "1[a-zA-Z0-9_-]{43}" ../apps-script/; then
-            echo "Error: Detected potential hardcoded Spreadsheet ID in Apps Script files!"
+          # 1. Search for potential Spreadsheet ID (44 character string starting with 1)
+          if grep -rnE "1[a-zA-Z0-9_-]{43}" ../apps-script/ ../container-rental-app-v1/src/; then
+            echo "Error: Potential Spreadsheet ID found in source code!"
             exit 1
           fi
-          # Ensure no real deployment Web App URL or password leak
-          if grep -rnE "AKfycby|admin123|password123" ../apps-script/; then
-            echo "Error: Detected potential plain text credentials in Apps Script files!"
+          # 2. Search for raw Web App URL (script.google.com/macros/s/...)
+          if grep -rn "script.google.com/macros/s/" ../apps-script/ ../container-rental-app-v1/src/; then
+            echo "Error: Apps Script Web App URL found in source code!"
+            exit 1
+          fi
+          # 3. Search for potential PASSWORD_HASH assignment (64 character hex string)
+          if grep -rnE "[0-9a-fA-F]{64}" ../apps-script/ ../container-rental-app-v1/src/; then
+            echo "Error: Potential PASSWORD_HASH found in source code!"
             exit 1
           fi

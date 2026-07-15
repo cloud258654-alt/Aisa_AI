@@ -12,7 +12,7 @@ export async function loginAdmin(username: string, password: string): Promise<Lo
 export async function logoutAdmin(token: string): Promise<void> {
   try {
     await callGasApi('logout', { sessionToken: token });
-  } catch (error) {
+  } catch (error: unknown) {
     console.warn("Logout request failed on server, cleaning local session anyway.", error);
   }
 }

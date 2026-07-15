@@ -151,8 +151,8 @@ export default function CustomersPage() {
       }
       setIsModalOpen(false);
       await loadData();
-    } catch (err: any) {
-      alert("儲存客戶資料失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("儲存客戶資料失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 
@@ -162,8 +162,8 @@ export default function CustomersPage() {
     try {
       await updateCustomer(customer.customer_id, { status: nextStatus });
       await loadData();
-    } catch (err: any) {
-      alert("更新狀態失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("更新狀態失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 

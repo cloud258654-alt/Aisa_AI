@@ -100,8 +100,8 @@ export default function ManagementLedgersPage() {
       });
       setIsCreateOpen(false);
       await loadData();
-    } catch (err: any) {
-      alert("支出登記失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("支出登記失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 
@@ -129,8 +129,8 @@ export default function ManagementLedgersPage() {
       });
       setPayingEntry(null);
       await loadData();
-    } catch (err: any) {
-      alert("標記付款失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("標記付款失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 

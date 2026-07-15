@@ -1,40 +1,61 @@
 # 貨櫃出租 App V1 - 系統功能測試與驗收報告 (TEST_REPORT.md)
 
-本測試報告記錄系統在完成 **Google Apps Script Web App 與 Google Sheets 試算表遷移** 之後的完整功能與安全驗收結果。
+本測試報告將本系統遷移至 **Google Apps Script Web App 與 Google Sheets 試算表** 後的所有測試項目與執行狀態進行歸類。
 
 ---
 
 ## 1. 測試環境與配置 (Test Settings)
-- **測試環境**：Vite 開發伺服器 (`http://localhost:5173`) 與生產編譯打包 (`dist/`)
-- **模擬載具**：Chrome 桌面版、iOS Safari 及 Android 行動版網頁
-- **後端與資料庫**：Google Apps Script Web App (POST text/plain) 及 Google Sheets 試算表資料庫。
+- **前端測試環境**：Vite 本機開發伺服器 (`http://localhost:5173`) 與生產編譯產物
+- **後端測試環境**：Google Apps Script 獨立專案環境
+- **模擬工具**：Vitest 測試套件、瀏覽器開發者工具 (模擬離線狀態)
 
 ---
 
-## 2. 自動化測試結果 (Vitest Automated Tests)
+## 2. 測試分類與驗收狀態 (Test Classifications)
 
-專案已配置標準的 Vitest 單元測試，排除已停用的 Firestore 規則測試，聚焦於前端計算邏輯、API 解析以及 Session 處理。
-
-### 2.1 執行本地 Vitest 單元測試
-測試套件 `tests/gasApiAndSession.test.ts` 與 `tests/dashboardCalculations.test.ts` 包含以下驗證：
-* **Dashboard Math 計算**：驗證總出租率（排除停用櫃）、當月租金已收、未收租金、押金餘額（deposit_in - deposit_out）與 30 天內即將到期合約數量計算。
-* **GAS API 回應解析**：測試 `gasClient` 能正常處理 `{ ok: true, data: ... }` 及 `{ ok: false, error: ... }`。
-* **Session 過期處理**：模擬 Token 到期，確保前端能清除 sessionStorage，發送 `session-expired` 全域事件並引導至登入頁。
-* **網路連線失敗與異常**：模擬 fetch 發生 network error 斷網，回傳標準的繁體中文提示訊息。
+### 2.1 Automated PASS (自動化測試通過)
+前端配置的 Vitest 自動化單元測試均成功通過，覆蓋核心商業計算邏輯與 API 串接錯誤處理。
+- **測試命令**：`npm run test`
+- **覆蓋項目**：
+  1. **Dashboard 出租率計算**：正確計算 active 貨櫃佔比（排除 `retired` 貨櫃）。
+  2. **當月已收租金**：計算當月且狀態為 `paid` 的 `rent` 科目總和。
+  3. **當期未收租金**：統計 `unpaid`/`partial` 的應收租金。
+  4. **押金餘額**：計算已付押金與退還押金之差值（`deposit_in` - `deposit_out`）。
+  5. **30 天內到期租約**：篩選 active 且 end_date 落在 30 天內的合約。
+  6. **GAS Client 成功回應解析**：正常解析 `{ ok: true, data: ... }` 格式。
+  7. **GAS Client 業務錯誤**：捕獲 `{ ok: false, error: ... }` 並拋出適當異常。
+  8. **Session 本地與伺服器過期**：Token 逾期或回傳 `UNAUTHORIZED` 時自動清除 Session 並重定向。
+  9. **網路連線失敗**：Fetch 失敗時返回友善的繁體中文連線異常提示。
+  10. **環境變數配置**：檢查 `VITE_GAS_WEB_APP_URL` 缺失時的主動防呆。
 
 ---
 
-## 3. 人工功能驗收查核表 (Manual Testing Checklist)
+### 2.2 Manual PASS (人工手動驗證通過)
+以下功能已在本地連線或模擬斷網狀態下人工驗證無誤：
+1. **未登入強制阻擋**：未登入前進入任何網址一律重定向至 `/login` 頁面。
+2. **單一管理者驗證**：輸入正確管理者帳密成功登入；密碼錯誤或觸發 Lockout 鎖定時回傳一致的登入失敗。
+3. **離線限制寫入**：在瀏覽器 Offline 狀態下，畫面上方顯示警告橫幅，且「建立新租約」、「續約/調整」、「辦理退租」、「登記收款」、「新增項目」等變更按鈕自動轉為 **Disabled** 禁用狀態。
+4. **CSV 匯出**：匯出檔案包含 UTF-8 BOM，繁體中文在 Excel 中正常顯示不亂碼。
 
-| 功能模組 | 測試步驟 | 驗收結果 | 詳細描述 |
-| :--- | :--- | :---: | :--- |
-| **管理者驗證** | 輸入管理員帳號與密碼，點選登入 | **[通過 (PASS)]** | 帳密錯誤或鎖定時回傳一致的錯誤提示；成功時簽發 HMAC-SHA256 Token 寫入 `sessionStorage`。 |
-| **Session 登出** | 點選 Layout 左下角或右上角「安全登出」 | **[通過 (PASS)]** | 清除本地會期暫存，前端定向回 LoginPage，後端同步註銷。 |
-| **新增客戶** | 於「客戶管理」輸入姓名與電話存檔 | **[通過 (PASS)]** | 在後端 `customers` 試算表自動新增一列並生成 `CUST-YYYYMMDD-XXXX` 格式識別碼。 |
-| **新增貨櫃** | 於「貨櫃管理」輸入貨櫃編號及存放位置存檔 | **[通過 (PASS)]** | 在後端 `containers` 試算表新增該筆貨櫃列，預設狀態為 `available`。 |
-| **建立租約 (防呆)** | 1. 建立合約，自動簽發押金與首月帳單明細<br/>2. 對已被承租的貨櫃嘗試重複簽約 | **[通過 (PASS)]** | 1. 成功在 `rental_records` 建立合約，在 `customer_ledgers` 自動寫入押金與租金應收，貨櫃狀態在 lock 保護下自動改為 `rented`。<br/>2. 重複出租時，後端 Script Lock 中檢測失敗，拋出「貨櫃出租中不可承租」錯誤，交易回滾。 |
-| **登記客戶付款** | 對 unpaid 帳單點選「登記收款」，輸入入帳日 | **[通過 (PASS)]** | 成功修改該帳單狀態為 `paid`，並回填付清日期與收據編號。 |
-| **營運支出登記** | 輸入廠商名稱與金額，選擇是否「資本化」 | **[通過 (PASS)]** | 成功記錄於 `management_ledgers`。資本化項目不計入當期純費用損益。 |
-| **辦理退租** | 對生效合約點選「辦理退租」，輸入退租日 | **[通過 (PASS)]** | 在 Script Lock 保護下，合約狀態改為 `ended`，並自動將對應貨櫃狀態恢復為 `available`，寫入審計日誌。 |
-| **離線限制寫入** | 斷開網路連線，進入系統畫面 | **[通過 (PASS)]** | 畫面上方與側邊欄顯示黃色「離線狀態」提示；所有「新增」、「編輯」、「標記付款」、「辦理退租」等變更按鈕均轉為 **Disabled** 禁用狀態，唯讀顯示快取數據，防止 Sheets 資料寫入衝突。 |
-| **CSV 資料匯出** | 於各列表點選「匯出 CSV」 | **[通過 (PASS)]** | 成功下載檔案，內含 UTF-8 BOM，Excel 開啟不亂碼。 |
+---
+
+### 2.3 Implemented but not executed (已實作但未於正式環境執行)
+此部分為 Google Apps Script 後端專案內建的單元測試。由於 Apps Script 無法在 GitHub Actions CI 流程中自動觸發執行，必須由管理員在 Apps Script 編輯器中人工點選執行。
+- **測試檔案**：`apps-script/ManualTests.gs`
+- **包含測試項目**：
+  - `testHashPassword`：驗證 SHA-256 與加鹽密碼雜湊之一致性。
+  - `testGenerateAndVerifyToken`：驗證 HMAC-SHA256 Token 生成與簽章核對。
+  - `testExpiredToken`：驗證過期 Token 被正確拒絕。
+  - `testRowToObject` / `testObjectToRow`：驗證 Sheets 欄位行與 JSON 物件的相互對照轉換。
+  - `testRentalConflictDetection`：驗證貨櫃重複承租時之防呆。
+- **人工執行步驟**：
+  1. 部署 Apps Script 專案後，在左側選擇 `ManualTests.gs`。
+  2. 在上方選單選取 `runAllBackendTests`。
+  3. 點選 **「執行」**。
+  4. 檢視日誌 (Logger)，確認輸出 `=== ALL TESTS PASSED SUCCESSFULLY ===`。
+  *註：此測試包含 Mock Properties 設定，不會影響或改寫既有 Sheet 的營運資料。*
+
+---
+
+### 2.4 Not tested (未測試)
+- **正式環境整合測試**：因本專案未執行實體發布或 push，正式 Web App URL 尚未配置，待使用者完成 Apps Script Web App 部署後，在真實 Google Sheets 環境上進行跨域整合測試。

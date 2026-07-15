@@ -300,3 +300,31 @@ function writeAuditLog(actionType, tableName, recordId, beforeObj, afterObj) {
     console.error('寫入審計日誌失敗:', err);
   }
 }
+
+/**
+ * Hard delete a record specifically for database failure rollback.
+ * ONLY allowed within backend transactional rollback workflows.
+ */
+function hardDeleteRecordForRollback(tableName, id) {
+  var sheet = getSheet(tableName);
+  var lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return;
+
+  var headers = getHeaders(sheet);
+  var idColName = getIdColumnName(tableName);
+  var idIndex = headers.indexOf(idColName);
+  if (idIndex === -1) return;
+
+  var values = sheet.getRange(2, 1, lastRow - 1, headers.length).getValues();
+  for (var i = 0; i < values.length; i++) {
+    var row = values[i];
+    if (row[idIndex].toString() === id.toString()) {
+      var rowIndex = i + 2;
+      sheet.deleteRow(rowIndex);
+      
+      // Log the hard deletion to audit_logs
+      writeAuditLog('HARD_DELETE', tableName, id, rowToObject(headers, row), null);
+      break;
+    }
+  }
+}

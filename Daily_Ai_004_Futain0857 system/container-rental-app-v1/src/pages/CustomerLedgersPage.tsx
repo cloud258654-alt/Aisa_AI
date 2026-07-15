@@ -111,8 +111,8 @@ export default function CustomerLedgersPage() {
       });
       setIsCreateModalOpen(false);
       await loadData();
-    } catch (err: any) {
-      alert("建立帳單失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("建立帳單失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 
@@ -142,8 +142,8 @@ export default function CustomerLedgersPage() {
       });
       setPayingEntry(null);
       await loadData();
-    } catch (err: any) {
-      alert("登記付款失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("登記付款失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 

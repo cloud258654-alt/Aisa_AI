@@ -101,8 +101,8 @@ export default function ContainersPage() {
       }
       setIsModalOpen(false);
       await loadContainers();
-    } catch (err: any) {
-      alert("儲存貨櫃失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("儲存貨櫃失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 
@@ -111,8 +111,8 @@ export default function ContainersPage() {
     try {
       await updateContainer(id, { status: newStatus });
       await loadContainers();
-    } catch (err: any) {
-      alert("更新狀態失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("更新狀態失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 

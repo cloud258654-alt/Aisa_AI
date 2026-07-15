@@ -135,8 +135,8 @@ export default function RentalsPage() {
 
       setIsWizardOpen(false);
       await loadData();
-    } catch (err: any) {
-      alert("簽約失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("簽約失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 
@@ -156,8 +156,8 @@ export default function RentalsPage() {
       await terminateRental(terminatingRental.rental_id, terminationForm.ended_date, terminationForm.note);
       setTerminatingRental(null);
       await loadData();
-    } catch (err: any) {
-      alert("退租操作失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("退租操作失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 
@@ -182,8 +182,8 @@ export default function RentalsPage() {
       });
       setEditingRental(null);
       await loadData();
-    } catch (err: any) {
-      alert("更新合約失敗: " + err.message);
+    } catch (err: unknown) {
+      alert("更新合約失敗: " + (err instanceof Error ? err.message : '未知錯誤'));
     }
   };
 

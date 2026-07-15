@@ -1,5 +1,6 @@
-import { createContext, useState, useEffect, useMemo, ReactNode } from 'react';
+import { createContext, useState, useEffect, useMemo, ReactNode, useCallback } from 'react';
 import { loginAdmin, logoutAdmin } from '../services/auth/authService';
+import { getErrorMessage } from '../services/api/gasClient';
 
 export interface SessionContextValue {
   sessionToken: string | null;
@@ -11,6 +12,7 @@ export interface SessionContextValue {
   logout: () => Promise<void>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const SessionContext = createContext<SessionContextValue | undefined>(undefined);
 
 export function SessionProvider({ children }: { children: ReactNode }) {
@@ -26,7 +28,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     return new Date().getTime() < expiresTime;
   }, [sessionToken, expiresAt]);
 
-  const login = async (username: string, password: string) => {
+  const login = useCallback(async (username: string, password: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -35,16 +37,16 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       sessionStorage.setItem('sessionExpiresAt', res.expiresAt);
       setSessionToken(res.sessionToken);
       setExpiresAt(res.expiresAt);
-    } catch (err: any) {
-      const errMsg = err.message || '登入失敗，請確認帳號或密碼。';
+    } catch (err: unknown) {
+      const errMsg = getErrorMessage(err);
       setError(errMsg);
       throw err;
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setLoading(true);
     try {
       if (sessionToken) {
@@ -58,7 +60,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setError(null);
       setLoading(false);
     }
-  };
+  }, [sessionToken]);
 
   // Listen to session expiry event dispatched by gasClient
   useEffect(() => {
@@ -82,7 +84,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     error,
     login,
     logout
-  }), [sessionToken, expiresAt, isAuthenticated, loading, error]);
+  }), [sessionToken, expiresAt, isAuthenticated, loading, error, login, logout]);
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }
