@@ -1,13 +1,24 @@
 # 貨櫃出租 App V1 - 後端 API 接口說明規格書 (API Spec)
 
-本專案 Phase 1 所有 API 均對接至單一 Google Apps Script Web App。
+本專案使用 Google Apps Script Web App 作為後端。所有請求皆為 **POST** 發送至單一入口網址，並在 JSON body 中附帶 `action` 及 `sessionToken` 進行驗證。
 
 ---
 
 ## 1. 通用規格
 
-- **請求根網址 (Base URL)**: `https://script.google.com/macros/s/xxxxx/exec`
-- **身份驗證**: 需在 Query String 或是 POST JSON Body 中夾帶 `apiKey`。
+- **請求方法**: `POST`
+- **Content-Type**: `text/plain;charset=utf-8`
+- **後端 API 網址 (VITE_GAS_WEB_APP_URL)**: `https://script.google.com/macros/s/xxxxx/exec`
+- **請求 JSON 格式 (Body)**:
+  ```json
+  {
+    "action": "actionName",
+    "sessionToken": "your_session_token_here",
+    "payload": {
+      // 具體業務參數
+    }
+  }
+  ```
 - **統一回應格式 (Response JSON)**:
   - 成功：
     ```json
@@ -24,104 +35,129 @@
       "data": null,
       "error": {
         "code": "ERROR_CODE",
-        "message": "錯誤原因說明文字"
+        "message": "繁體中文錯誤說明"
       }
     }
     ```
 
 ---
 
-## 2. 接口明細 (Endpoints)
+## 2. API Actions 清單
 
-### 2.1 系統健康檢查 (Health Check)
-- **方法**: `GET`
-- **參數**: `?action=health`
-- **回應 data 範例**:
+### 2.1 系統健康檢查 (health)
+* **無需登入**
+* **Payload**: `{}`
+* **回應 data 範例**:
   ```json
   {
-    "service": "container-rental-app-api",
-    "version": "1.0.0",
-    "status": "ok"
+    "status": "healthy",
+    "timestamp": "2026-07-15 19:50:00"
   }
   ```
 
----
-
-### 2.2 獲取資料列表 (List Records)
-- **方法**: `GET`
-- **參數**: `?action=list&table={table_name}`
-  - `{table_name}` 可選值：`customers`、`containers`、`rental_records`、`customer_ledgers`、`management_ledgers`
-  - 支援過濾參數：`status`、`customer_id`、`container_id`、`rental_id`
-- **回應 data 範例**: 回傳該表格所有未經軟刪除的資料陣列。
-  ```json
-  [
-    {
-      "customer_id": "CUST-20260707-0001",
-      "name": "張小明",
-      "customer_type": "personal",
-      "phone": "0912345678",
-      "status": "active"
-      // ... 欄位依資料庫定義
-    }
-  ]
-  ```
-
----
-
-### 2.3 新增資料列 (Create Record)
-- **方法**: `POST`
-- **參數**: `?action=create&table={table_name}`
-- **請求 Body**：
+### 2.2 管理者登入 (login)
+* **無需登入**
+* **Payload**:
   ```json
   {
-    "apiKey": "your_api_key",
+    "username": "admin",
+    "password": "adminpassword"
+  }
+  ```
+* **回應 data 範例**:
+  ```json
+  {
+    "sessionToken": "payloadBase64.signatureBase64",
+    "expiresAt": "2026-07-16T19:50:00.000Z"
+  }
+  ```
+* **錯誤代碼**:
+  - `INVALID_CREDENTIALS` (帳號或密碼錯誤)
+  - `LOCKED_OUT` (登入失敗次數過多被鎖定)
+
+### 2.3 管理者登出 (logout)
+* **需登入**
+* **Payload**: `{}`
+* **回應 data 範例**:
+  ```json
+  {
+    "success": true
+  }
+  ```
+
+### 2.4 獲取資料清單 (list)
+* **需登入**
+* **Payload**:
+  ```json
+  {
+    "table": "customers" // options: customers, containers, rental_records, customer_ledgers, management_ledgers
+  }
+  ```
+* **回應 data 範例**: 回傳該表格所有未經軟刪除的資料陣列。
+
+### 2.5 獲取單筆資料 (get)
+* **需登入**
+* **Payload**:
+  ```json
+  {
+    "table": "containers",
+    "id": "CONT-20260707-0001"
+  }
+  ```
+
+### 2.6 新增資料列 (create)
+* **需登入（在後端 Script Lock 中執行）**
+* **Payload**:
+  ```json
+  {
+    "table": "customers",
     "data": {
       "name": "王大同",
       "phone": "0987654321"
-      // 欲新增之欄位值物件，主鍵 ID 與時間戳記由 GAS 自動補齊
+      // 依各資料型別定義
+    },
+    "createFirstMonthBill": true // 僅用於 table 為 rental_records 時，指定是否自動產生首期帳單與押金
+  }
+  ```
+
+### 2.7 修改資料列 (update)
+* **需登入（在後端 Script Lock 中執行）**
+* **Payload**:
+  ```json
+  {
+    "table": "containers",
+    "id": "CONT-20260707-0001",
+    "updates": {
+      "status": "maintenance"
     }
   }
   ```
-- **回應 data 範例**: 回傳寫入成功且已補齊 ID 與 `created_at`、`updated_at` 的完整物件。
 
----
-
-### 2.4 修改資料列 (Update Record)
-- **方法**: `POST`
-- **參數**: `?action=update&table={table_name}&id={id}`
-- **請求 Body**：
+### 2.8 軟刪除資料列 (softDelete)
+* **需登入（在後端 Script Lock 中執行）**
+* **Payload**:
   ```json
   {
-    "apiKey": "your_api_key",
-    "data": {
-      "phone": "0988888888",
-      "status": "inactive"
-      // 欲修改之欄位值，不允許修改主鍵
-    }
-  }
-  ```
-- **回應 data 範例**: 回傳修改後之完整資料列物件。
-
----
-
-### 2.5 軟刪除資料列 (Soft Delete Record)
-- **方法**: `POST`
-- **參數**: `?action=softDelete&table={table_name}&id={id}`
-- **回應 data 範例**:
-  ```json
-  {
-    "id": "CUST-20260707-0001",
-    "deleted": true,
-    "deleted_at": "2026-07-07 15:30:22"
+    "table": "customers",
+    "id": "CUST-20260707-0001"
   }
   ```
 
----
+### 2.9 退租合約結案 (terminateRental)
+* **需登入（在後端 Script Lock 中執行）**
+* **Payload**:
+  ```json
+  {
+    "id": "RENT-20260707-0001",
+    "endedDate": "2026-07-15",
+    "note": "貨櫃清空無損"
+  }
+  ```
 
-### 2.6 看板營運數據彙整 (Dashboard Summary)
-- **方法**: `GET`
-- **參數**: `?action=dashboardSummary`
-- **回應 data 範例**:
+### 2.10 看板營運數據彙整 (dashboardSummary)
+* **需登入**
+* **Payload**: `{}`
+* **回應 data 範例**:
   ```json
   {
     "total_containers": 12,
@@ -138,11 +174,3 @@
     "expiring_rentals_30_days": 2
   }
   ```
-- **計算說明**：
-  1. `occupancy_rate` = `rented_containers` / (`total_containers` - `retired_containers`)
-  2. `monthly_rent_collected` 為當月所有對客流水中 `event_type === 'rent'` 且 `paid_status === 'paid'` 且 `paid_date` 落在本月之總和。
-  3. `monthly_expense_paid` 為當月所有營運支出流水中 `paid_status === 'paid'` 且 `paid_date` 落在本月之總和。
-  4. `deposit_balance` = 所有已收押金總額 - 所有已退押金總額。
-# 資料存取規格（2026-07-14）
-
-本專案沒有 HTTP API 或 Google Apps Script API。`src/services/api` 以 TypeScript 函式封裝 Firestore 的讀寫與 Transaction；呼叫者不得假設 REST endpoint 存在。資料集合與欄位相容性以 `src/types` 和 `DATABASE_SCHEMA.md` 為準。

@@ -1,20 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { onSnapshot, collection } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
-import { db, auth } from '../../services/firebase/firebase';
-import { useAuth } from '../../hooks/useAuth';
+import { useSession } from '../../hooks/useSession';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { profile, user } = useAuth();
+  const { logout } = useSession();
   const location = useLocation();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [isFromCache, setIsFromCache] = useState(true);
-  const [hasPendingWrites, setHasPendingWrites] = useState(false);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -23,23 +18,9 @@ export default function Layout({ children }: LayoutProps) {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Subscribe to containers metadata to watch offline status dynamically
-    let unsubscribe: (() => void) | undefined;
-    try {
-      unsubscribe = onSnapshot(collection(db, 'containers'), (snapshot) => {
-        setIsFromCache(snapshot.metadata.fromCache);
-        setHasPendingWrites(snapshot.metadata.hasPendingWrites);
-      }, (err) => {
-        console.error("Layout firestore onSnapshot failed:", err);
-      });
-    } catch (e) {
-      console.error(e);
-    }
-
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-      if (unsubscribe) unsubscribe();
     };
   }, []);
 
@@ -50,8 +31,8 @@ export default function Layout({ children }: LayoutProps) {
     { path: '/rentals', label: '租約管理', icon: '📜' },
     { path: '/customer-ledgers', label: '客戶帳務', icon: '💰' },
     { path: '/management-ledgers', label: '場地支出', icon: '🛠️' },
-    { path: '/settings', label: '系統設定', icon: '⚙️', adminOnly: true },
-  ].filter((item) => !item.adminOnly || profile?.role === 'admin');
+    { path: '/settings', label: '系統設定', icon: '⚙️' },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-slate-950 text-slate-100">
@@ -64,7 +45,7 @@ export default function Layout({ children }: LayoutProps) {
             <h1 className="font-bold text-lg tracking-wider bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
               貨櫃出租 V1
             </h1>
-            <p className="text-xs text-slate-400">智能營運管理系統</p>
+            <p className="text-xs text-slate-400">試算表營運管理系統</p>
           </div>
         </div>
 
@@ -91,9 +72,9 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Footer in Sidebar */}
         <div className="border-t border-slate-800 pt-4 mt-auto space-y-2">
-          <div className="rounded-lg bg-slate-900/70 p-2 text-xs">
-            <p className="truncate text-slate-300">{user?.email}</p>
-            <p className="mt-1 text-indigo-300">角色：{profile?.role}</p>
+          <div className="rounded-lg bg-slate-900/70 p-2 text-xs space-y-1">
+            <p className="truncate text-indigo-300 font-semibold">👤 系統管理員</p>
+            <p className="text-[10px] text-slate-400">Google Sheets 後端</p>
           </div>
           <div className="flex items-center justify-between text-xs">
             <span className="text-slate-400">連線狀態</span>
@@ -102,17 +83,8 @@ export default function Layout({ children }: LayoutProps) {
               <span className="font-medium text-slate-300">{isOnline ? '線上' : '離線暫存'}</span>
             </div>
           </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-slate-400">資料來源</span>
-            <span className="text-slate-300 font-medium">{isFromCache ? '本地快取' : '雲端同步'}</span>
-          </div>
-          {hasPendingWrites && (
-            <div className="p-2 rounded bg-indigo-950/40 border border-indigo-900/60 text-[10px] text-indigo-300 text-center animate-pulse">
-              ⏳ 有待同步變更
-            </div>
-          )}
           <button
-            onClick={() => signOut(auth)}
+            onClick={() => void logout()}
             className="w-full mt-2 text-xs text-rose-400 hover:text-rose-300 font-semibold bg-rose-500/10 hover:bg-rose-500/20 py-2 rounded-xl border border-rose-500/20 transition-all duration-200"
           >
             🚪 帳號登出
@@ -133,20 +105,15 @@ export default function Layout({ children }: LayoutProps) {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => signOut(auth)}
-            className="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-450 border border-rose-500/20 text-xs flex items-center justify-center font-bold"
+            onClick={() => void logout()}
+            className="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs flex items-center justify-center font-bold"
             title="登出"
           >
             🚪
           </button>
-          {hasPendingWrites && (
-            <span className="text-[10px] bg-indigo-950 border border-indigo-850 text-indigo-300 px-2 py-0.5 rounded-full font-semibold animate-pulse">
-              ⏳ 待同步
-            </span>
-          )}
           <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-xs">
             <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'}`}></span>
-            <span>{isOnline ? (isFromCache ? '快取' : '同步') : '離線'}</span>
+            <span>{isOnline ? '線上' : '離線'}</span>
           </div>
         </div>
       </header>

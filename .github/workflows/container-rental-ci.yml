@@ -1,9 +1,9 @@
 name: Container rental CI
 on:
   push:
-    paths: ['Daily_Ai_004_Futain0857 system/container-rental-app-v1/**', 'Daily_Ai_004_Futain0857 system/CLAUDE.md', '.github/workflows/container-rental-ci.yml']
+    paths: ['Daily_Ai_004_Futain0857 system/container-rental-app-v1/**', 'Daily_Ai_004_Futain0857 system/apps-script/**', 'Daily_Ai_004_Futain0857 system/CLAUDE.md', '.github/workflows/container-rental-ci.yml']
   pull_request:
-    paths: ['Daily_Ai_004_Futain0857 system/container-rental-app-v1/**', 'Daily_Ai_004_Futain0857 system/CLAUDE.md', '.github/workflows/container-rental-ci.yml']
+    paths: ['Daily_Ai_004_Futain0857 system/container-rental-app-v1/**', 'Daily_Ai_004_Futain0857 system/apps-script/**', 'Daily_Ai_004_Futain0857 system/CLAUDE.md', '.github/workflows/container-rental-ci.yml']
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -18,3 +18,23 @@ jobs:
       - run: npm run lint
       - run: npm run test
       - run: npm run build
+      
+      - name: Verify Apps Script files exist
+        run: |
+          test -f "../apps-script/Code.gs"
+          test -f "../apps-script/Router.gs"
+          test -f "../apps-script/Setup.gs"
+          
+      - name: Check for credential and Spreadsheet ID leaks
+        run: |
+          # Ensure no real Spreadsheet ID or password hash is hardcoded
+          # Checking if any Spreadsheet ID like 1[a-zA-Z0-9_-]{43} is present in code
+          if grep -rE "1[a-zA-Z0-9_-]{43}" ../apps-script/; then
+            echo "Error: Detected potential hardcoded Spreadsheet ID in Apps Script files!"
+            exit 1
+          fi
+          # Ensure no real deployment Web App URL or password leak
+          if grep -rnE "AKfycby|admin123|password123" ../apps-script/; then
+            echo "Error: Detected potential plain text credentials in Apps Script files!"
+            exit 1
+          fi

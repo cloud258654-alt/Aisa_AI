@@ -4,12 +4,9 @@ import { listContainers } from '../services/api/containersApi';
 import { ManagementLedger } from '../types/managementLedger';
 import { Container } from '../types/container';
 import { format } from 'date-fns';
-import { useAuth } from '../hooks/useAuth';
-import { canEditLedgers } from '../utils/permissions';
 
 export default function ManagementLedgersPage() {
-  const { profile } = useAuth();
-  const mayEdit = canEditLedgers(profile?.role);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [ledgers, setLedgers] = useState<ManagementLedger[]>([]);
   const [containers, setContainers] = useState<Container[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +41,17 @@ export default function ManagementLedgersPage() {
   });
 
   useEffect(() => {
+    const online = () => setIsOnline(true);
+    const offline = () => setIsOnline(false);
+    window.addEventListener('online', online);
+    window.addEventListener('offline', offline);
+
     loadData();
+
+    return () => {
+      window.removeEventListener('online', online);
+      window.removeEventListener('offline', offline);
+    };
   }, []);
 
   const loadData = async () => {
@@ -56,7 +63,7 @@ export default function ManagementLedgersPage() {
       ]);
       setLedgers(lList);
       setContainers(contList);
-    } catch {
+    } catch (err) {
       console.error("Failed to load management ledgers:", err);
     } finally {
       setLoading(false);
@@ -64,7 +71,7 @@ export default function ManagementLedgersPage() {
   };
 
   const handleOpenCreate = () => {
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     setCreateForm({
       container_id: '',
       expense_type: 'maintenance',
@@ -83,7 +90,7 @@ export default function ManagementLedgersPage() {
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     if (createForm.amount <= 0) return alert("金額必須大於 0");
 
     try {
@@ -93,15 +100,13 @@ export default function ManagementLedgersPage() {
       });
       setIsCreateOpen(false);
       await loadData();
-    } catch {
-      alert("支出登記成功（已排入離線佇列）！");
-      setIsCreateOpen(false);
-      await loadData();
+    } catch (err: any) {
+      alert("支出登記失敗: " + err.message);
     }
   };
 
   const handleOpenPayment = (entry: ManagementLedger) => {
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     setPayingEntry(entry);
     setPaymentForm({
       paid_date: format(new Date(), 'yyyy-MM-dd'),
@@ -112,7 +117,7 @@ export default function ManagementLedgersPage() {
 
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     if (!payingEntry) return;
 
     try {
@@ -124,10 +129,8 @@ export default function ManagementLedgersPage() {
       });
       setPayingEntry(null);
       await loadData();
-    } catch {
-      alert("標記付款登記成功（離線佇列）！");
-      setPayingEntry(null);
-      await loadData();
+    } catch (err: any) {
+      alert("標記付款失敗: " + err.message);
     }
   };
 
@@ -221,14 +224,21 @@ export default function ManagementLedgersPage() {
           </button>
           <button
             onClick={handleOpenCreate}
-            disabled={!mayEdit}
-            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
+            disabled={!isOnline}
+            title={isOnline ? undefined : '目前離線，恢復網路後才能儲存'}
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
           >
             🛠️ 登記支出費用
           </button>
         </div>
       </div>
+
+      {/* Offline Alert */}
+      {!isOnline && (
+        <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs rounded-xl text-center">
+          ⚠️ 目前處於離線狀態，已顯示最近一次載入的暫存資料（可能不是最新資料）。請恢復網路連線以進行新增、修改或刪除操作。
+        </div>
+      )}
 
       {/* Filters Bar */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/40">
@@ -342,9 +352,9 @@ export default function ManagementLedgersPage() {
                       {l.paid_status !== 'paid' && (
                         <button
                           onClick={() => handleOpenPayment(l)}
-                          disabled={!mayEdit}
-                          title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
-                          className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow"
+                          disabled={!isOnline}
+                          title={isOnline ? undefined : '目前離線，恢復網路後才能儲存'}
+                          className="bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow"
                         >
                           💵 標記付款
                         </button>

@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:rules:vitest": "vitest run tests/firestore --reporter=verbose --no-file-parallelism",
-    "test:rules": "firebase emulators:exec --only firestore \"npm run test:rules:vitest\"",
+    "test:rules:vitest": "echo \"Rules vitest deprecated\"",
+    "test:rules": "echo \"Rules emulator tests deprecated\"",
     "check": "npm run lint && npm run test && npm run build"
   },
   "dependencies": {

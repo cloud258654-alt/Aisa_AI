@@ -2,13 +2,9 @@ import { useState, useEffect } from 'react';
 import { listContainers, createContainer, updateContainer } from '../services/api/containersApi';
 import { Container } from '../types/container';
 import { format } from 'date-fns';
-import { useAuth } from '../hooks/useAuth';
-import { canEditContainerCost, canEditContainers } from '../utils/permissions';
 
 export default function ContainersPage() {
-  const { profile } = useAuth();
-  const mayEdit = canEditContainers(profile?.role) || profile?.role === 'staff';
-  const mayEditCost = canEditContainerCost(profile?.role);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [containers, setContainers] = useState<Container[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -33,7 +29,17 @@ export default function ContainersPage() {
   });
 
   useEffect(() => {
+    const online = () => setIsOnline(true);
+    const offline = () => setIsOnline(false);
+    window.addEventListener('online', online);
+    window.addEventListener('offline', offline);
+
     loadContainers();
+
+    return () => {
+      window.removeEventListener('online', online);
+      window.removeEventListener('offline', offline);
+    };
   }, []);
 
   const loadContainers = async () => {
@@ -41,7 +47,7 @@ export default function ContainersPage() {
       setLoading(true);
       const data = await listContainers();
       setContainers(data);
-    } catch {
+    } catch (err) {
       console.error("Failed to load containers:", err);
     } finally {
       setLoading(false);
@@ -49,7 +55,7 @@ export default function ContainersPage() {
   };
 
   const handleOpenCreate = () => {
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     setModalMode('create');
     setEditingId(null);
     setFormData({
@@ -66,7 +72,7 @@ export default function ContainersPage() {
   };
 
   const handleOpenEdit = (container: Container) => {
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     setModalMode('edit');
     setEditingId(container.container_id);
     setFormData({
@@ -84,7 +90,7 @@ export default function ContainersPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     if (!formData.container_no.trim()) return alert("請輸入貨櫃編號");
 
     try {
@@ -95,21 +101,18 @@ export default function ContainersPage() {
       }
       setIsModalOpen(false);
       await loadContainers();
-    } catch {
-      alert("儲存貨櫃失敗，已儲存至離線佇列，待網路回復後同步");
-      setIsModalOpen(false);
-      await loadContainers();
+    } catch (err: any) {
+      alert("儲存貨櫃失敗: " + err.message);
     }
   };
 
   const handleQuickStatusChange = async (id: string, newStatus: Container['status']) => {
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     try {
       await updateContainer(id, { status: newStatus });
       await loadContainers();
-    } catch {
-      alert("更新狀態失敗，已加入離線佇列");
-      await loadContainers();
+    } catch (err: any) {
+      alert("更新狀態失敗: " + err.message);
     }
   };
 
@@ -195,14 +198,21 @@ export default function ContainersPage() {
           </button>
           <button
             onClick={handleOpenCreate}
-            disabled={!mayEdit}
-            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
+            disabled={!isOnline}
+            title={isOnline ? undefined : '目前離線，恢復網路後才能儲存'}
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
           >
             📦 新增貨櫃
           </button>
         </div>
       </div>
+
+      {/* Offline Alert */}
+      {!isOnline && (
+        <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs rounded-xl text-center">
+          ⚠️ 目前處於離線狀態，已顯示最近一次載入的暫存資料（可能不是最新資料）。請恢復網路連線以進行新增、修改或刪除操作。
+        </div>
+      )}
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/40">
@@ -290,7 +300,7 @@ export default function ContainersPage() {
                           <select
                             value={c.status}
                             onChange={(e) => handleQuickStatusChange(c.container_id, e.target.value as Container['status'])}
-                            disabled={!mayEdit}
+                            disabled={!isOnline}
                             className="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded px-2 py-1"
                           >
                             <option value="available">空櫃</option>
@@ -300,9 +310,9 @@ export default function ContainersPage() {
                           </select>
                           <button
                             onClick={() => handleOpenEdit(c)}
-                            disabled={!mayEdit}
-                            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
-                            className="text-xs bg-indigo-950/40 text-indigo-400 border border-indigo-900/50 hover:bg-indigo-900/40 px-3 py-1.5 rounded-lg transition"
+                            disabled={!isOnline}
+                            title={isOnline ? undefined : '目前離線，恢復網路後才能儲存'}
+                            className="text-xs bg-indigo-950/40 text-indigo-400 border border-indigo-900/50 hover:bg-indigo-900/40 disabled:opacity-50 px-3 py-1.5 rounded-lg transition"
                           >
                             編輯
                           </button>
@@ -350,7 +360,7 @@ export default function ContainersPage() {
                     <select
                       value={c.status}
                       onChange={(e) => handleQuickStatusChange(c.container_id, e.target.value as Container['status'])}
-                      disabled={!mayEdit}
+                      disabled={!isOnline}
                       className="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded px-2 py-1"
                     >
                       <option value="available">空櫃</option>
@@ -362,9 +372,9 @@ export default function ContainersPage() {
                   
                   <button
                     onClick={() => handleOpenEdit(c)}
-                    disabled={!mayEdit}
-                    title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
-                    className="text-xs bg-indigo-950/40 text-indigo-400 border border-indigo-900/50 hover:bg-indigo-900/40 px-3.5 py-1.5 rounded-lg transition"
+                    disabled={!isOnline}
+                    title={isOnline ? undefined : '目前離線，恢復網路後才能儲存'}
+                    className="text-xs bg-indigo-950/40 text-indigo-400 border border-indigo-900/50 hover:bg-indigo-900/40 disabled:opacity-50 px-3.5 py-1.5 rounded-lg transition"
                   >
                     編輯規格
                   </button>
@@ -470,8 +480,6 @@ export default function ContainersPage() {
                   type="number"
                   placeholder="總建置金額"
                   value={formData.total_setup_cost || ''}
-                  disabled={!mayEditCost}
-                  title={mayEditCost ? undefined : '你目前的角色無權修改貨櫃成本'}
                   onChange={(e) => setFormData({...formData, total_setup_cost: parseInt(e.target.value, 10) || 0})}
                   className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                 />

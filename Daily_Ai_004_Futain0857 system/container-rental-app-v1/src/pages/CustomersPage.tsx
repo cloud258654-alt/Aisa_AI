@@ -6,13 +6,9 @@ import { Customer } from '../types/customer';
 import { RentalRecord } from '../types/rentalRecord';
 import { CustomerLedger } from '../types/customerLedger';
 import { format } from 'date-fns';
-import { useAuth } from '../hooks/useAuth';
-import { canDeleteCustomers, canEditCustomers } from '../utils/permissions';
 
 export default function CustomersPage() {
-  const { profile } = useAuth();
-  const mayEdit = canEditCustomers(profile?.role);
-  const mayDelete = canDeleteCustomers(profile?.role);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [rentals, setRentals] = useState<RentalRecord[]>([]);
   const [ledgers, setLedgers] = useState<CustomerLedger[]>([]);
@@ -49,7 +45,17 @@ export default function CustomersPage() {
   } | null>(null);
 
   useEffect(() => {
+    const online = () => setIsOnline(true);
+    const offline = () => setIsOnline(false);
+    window.addEventListener('online', online);
+    window.addEventListener('offline', offline);
+
     loadData();
+
+    return () => {
+      window.removeEventListener('online', online);
+      window.removeEventListener('offline', offline);
+    };
   }, []);
 
   const loadData = async () => {
@@ -63,7 +69,7 @@ export default function CustomersPage() {
       setCustomers(custList);
       setRentals(rentalList);
       setLedgers(ledgerList);
-    } catch {
+    } catch (err) {
       console.error("Failed to load customer data:", err);
     } finally {
       setLoading(false);
@@ -71,7 +77,7 @@ export default function CustomersPage() {
   };
 
   const handleOpenCreate = () => {
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     setModalMode('create');
     setEditingId(null);
     setFormData({
@@ -89,7 +95,7 @@ export default function CustomersPage() {
   };
 
   const handleOpenEdit = (customer: Customer) => {
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     setModalMode('edit');
     setEditingId(customer.customer_id);
     setFormData({
@@ -134,7 +140,7 @@ export default function CustomersPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!mayEdit) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     if (!formData.name.trim()) return alert("請輸入客戶名稱");
 
     try {
@@ -145,22 +151,19 @@ export default function CustomersPage() {
       }
       setIsModalOpen(false);
       await loadData();
-    } catch {
-      alert("儲存客戶資料失敗，已儲存至離線佇列，待網路回復後同步");
-      setIsModalOpen(false);
-      await loadData();
+    } catch (err: any) {
+      alert("儲存客戶資料失敗: " + err.message);
     }
   };
 
   const handleToggleStatus = async (customer: Customer) => {
-    if (!mayDelete) return alert('你目前的角色無權執行此操作');
+    if (!isOnline) return alert('目前離線，恢復網路後才能儲存');
     const nextStatus = customer.status === 'active' ? 'inactive' : 'active';
     try {
       await updateCustomer(customer.customer_id, { status: nextStatus });
       await loadData();
-    } catch {
-      alert("更新狀態失敗，已加入離線佇列");
-      await loadData();
+    } catch (err: any) {
+      alert("更新狀態失敗: " + err.message);
     }
   };
 
@@ -232,14 +235,21 @@ export default function CustomersPage() {
           </button>
           <button
             onClick={handleOpenCreate}
-            disabled={!mayEdit}
-            title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
+            disabled={!isOnline}
+            title={isOnline ? undefined : '目前離線，恢復網路後才能儲存'}
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
           >
             ➕ 新增客戶
           </button>
         </div>
       </div>
+
+      {/* Offline Alert */}
+      {!isOnline && (
+        <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs rounded-xl text-center">
+          ⚠️ 目前處於離線狀態，已顯示最近一次載入的暫存資料（可能不是最新資料）。請恢復網路連線以進行新增、修改或刪除操作。
+        </div>
+      )}
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/40">
@@ -343,17 +353,17 @@ export default function CustomersPage() {
                     </button>
                     <button
                       onClick={() => handleOpenEdit(cust)}
-                      disabled={!mayEdit}
-                      title={mayEdit ? undefined : '你目前的角色無權執行此操作'}
-                      className="text-xs font-semibold bg-indigo-950/40 text-indigo-400 hover:bg-indigo-900/40 border border-indigo-900/50 px-3 py-1.5 rounded-lg transition"
+                      disabled={!isOnline}
+                      title={isOnline ? undefined : '目前離線，恢復網路後才能儲存'}
+                      className="text-xs font-semibold bg-indigo-950/40 text-indigo-400 hover:bg-indigo-900/40 border border-indigo-900/50 disabled:opacity-50 px-3 py-1.5 rounded-lg transition"
                     >
                       編輯
                     </button>
                     <button
                       onClick={() => handleToggleStatus(cust)}
-                      disabled={!mayDelete}
-                      title={mayDelete ? undefined : '你目前的角色無權執行此操作'}
-                      className={`text-xs font-semibold px-2 py-1.5 rounded-lg transition ${
+                      disabled={!isOnline}
+                      title={isOnline ? undefined : '目前離線，恢復網路後才能儲存'}
+                      className={`text-xs font-semibold px-2 py-1.5 rounded-lg transition disabled:opacity-50 ${
                         cust.status === 'active' ? 'bg-rose-950/20 text-rose-400 border border-rose-950/40 hover:bg-rose-900/20' : 'bg-emerald-950/20 text-emerald-400 border border-emerald-950/40 hover:bg-emerald-900/20'
                       }`}
                     >

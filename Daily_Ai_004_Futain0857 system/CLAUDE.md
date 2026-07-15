@@ -1,23 +1,28 @@
 # 貨櫃出租系統開發指引
 
-本目錄的主要產品為 `container-rental-app-v1`，以 React/Vite、Firebase Auth 與 Firestore 提供貨櫃、客戶、租約與帳務營運管理；沒有獨立 HTTP Backend。
+本目錄的主要產品為 `container-rental-app-v1`，以 React/Vite、Google Apps Script Web App 與 Google Sheets 提供貨櫃、客戶、租約與帳務營運管理。本系統無獨立的實體 HTTP 後端，Firebase 與 Firestore 已完全移除。
 
-## 架構與目錄
+## 架構與技術棧
 
-- `src/services/api` 是 Firestore 資料存取抽象層，不是 HTTP API。
-- `src/services/firebase` 初始化 Firebase；設定只來自 `VITE_FIREBASE_*` 環境變數。
-- `src/services/auth` 與 `src/contexts/AuthContext.tsx` 管理登入者的 Profile。
-- `src/types` 是資料合約；不可任意改名 Collection 或既有欄位。
-- `project_management` 為部署、架構與測試交接文件。
+- **前端**：React + Vite + TypeScript + Tailwind CSS (RWD / PWA)。
+- **後端**：Google Apps Script (GAS) Web App，所有操作統一使用 POST (`Content-Type: text/plain;charset=utf-8`)。
+- **資料儲存**：Google Drive 中的 Google Sheets 試算表（包括分頁：`customers`, `containers`, `rental_records`, `customer_ledgers`, `management_ledgers`, `audit_logs`）。
+- **驗證方式**：單一管理員帳號密碼登入。後端使用雜湊與鹽值比對，簽發具有時效且含簽章的 Session Token 儲存於前端 `sessionStorage`。
 
-Firestore Collections 為 `users`、`customers`、`containers`、`rental_records`、`customer_ledgers`、`management_ledgers`。其中前五個營運集合加上 `management_ledgers` 均受 `firestore.rules` 保護。
+## 目錄結構說明
 
-## Auth、角色與資料規範
+- `apps-script/`：Google Apps Script 後端程式碼。
+- `container-rental-app-v1/src/services/api/gasClient.ts`：與 GAS Web App 進行通訊的共用 Client 端，自動處理 302 重導向與 Session Token 注入。
+- `container-rental-app-v1/src/services/api/`：API 呼叫抽象層（均重導向至 `callGasApi`）。
+- `container-rental-app-v1/src/contexts/SessionContext.tsx`：管理管理員 Session 登入狀態與過期檢測。
+- `container-rental-app-v1/project_management/`：系統架構、部署手冊與 API 規格文件。
 
-Firebase Auth Email/Password 登入後必須讀取 `users/{uid}`。Profile 欠缺或 `disabled` 必須拒絕進入；首位 admin 由 Firebase Console 建立 Auth 使用者與對應 Profile。角色是 `admin`、`manager`、`finance`、`staff`；前端僅做 UX 防呆，Firestore Rules 是實際授權邊界。
+## 開發指令
 
-建立租約必須以 Transaction 讀取貨櫃、確認 `available`、新增 `rental_records`、更新貨櫃為 `rented`，並可同時建立首期帳務。刪除採軟刪除（`deleted_at`）；僅 admin/manager 可改變該欄位。不得新增真實憑證、提交 `.env`、`.env.local` 或 service-account 金鑰。
+在 `container-rental-app-v1` 目錄下執行：
+- `npm ci`：安裝相依套件。
+- `npm run lint`：程式碼風格檢查。
+- `npm run test`：執行 Vitest 單元與邏輯測試。
+- `npm run build`：專案編譯打包（編譯前請確保 `.env` 中的 `VITE_GAS_WEB_APP_URL` 已正確設定）。
 
-## 指令與紀錄
-
-在 `container-rental-app-v1` 執行：`npm ci`、`npm run lint`、`npm run test`、`npm run build`，Rules 測試使用 `npm run test:rules`。每次功能變更後必須更新 `project_management/CHANGELOG.md`。
+每次功能變更後，必須更新 `project_management/CHANGELOG.md`。
