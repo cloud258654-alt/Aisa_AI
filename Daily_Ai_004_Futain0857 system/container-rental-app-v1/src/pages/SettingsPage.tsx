@@ -1,49 +1,64 @@
-import { useEffect, useState } from 'react';
-import { useSession } from '../hooks/useSession';
+import PageHeader from '../components/ui/PageHeader';
+import StatusBadge from '../components/ui/StatusBadge';
 
 export default function SettingsPage() {
-  const { expiresAt, logout } = useSession();
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  useEffect(() => {
-    const online = () => setIsOnline(true);
-    const offline = () => setIsOnline(false);
-    window.addEventListener('online', online);
-    window.addEventListener('offline', offline);
-    return () => {
-      window.removeEventListener('online', online);
-      window.removeEventListener('offline', offline);
-    };
-  }, []);
-
-  const gasWebAppUrl = import.meta.env.VITE_GAS_WEB_APP_URL || '未設定';
+  const gasUrl = import.meta.env.VITE_GAS_WEB_APP_URL || '未設定 (請於 .env.local 配置)';
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-extrabold text-white">系統設定</h2>
-        <p className="mt-1 text-slate-400">連線與後端狀態；後端設定僅由建置環境變數提供。</p>
+      <PageHeader
+        title="系統設定與環境配置"
+        description="檢視 Google Apps Script 後端部署網址、Session 會期設定與單一管理員模式宣告。"
+      />
+
+      <div className="saas-card p-6 space-y-6">
+        <div>
+          <h3 className="font-bold text-base text-brand-navy-950 border-b border-border-default pb-2 mb-3">
+            🌐 廣域 API 與後端連線
+          </h3>
+          <div className="space-y-2 text-xs">
+            <div>
+              <span className="text-text-secondary font-medium block mb-1">GAS Web App 連線 URL:</span>
+              <code className="p-2.5 bg-surface-muted rounded-lg border border-border-default font-mono text-brand-navy-950 block overflow-x-auto">
+                {gasUrl}
+              </code>
+            </div>
+            <p className="text-text-secondary">
+              資料同步庫存：Google Sheets 8 大核心資料表 (`containers`, `contracts`, `invoices`, `payments` 等)
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="font-bold text-base text-brand-navy-950 border-b border-border-default pb-2 mb-3">
+            🔐 Session 安全與會期設定
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div className="p-3.5 bg-surface-muted rounded-lg border border-border-default space-y-1">
+              <span className="text-text-secondary">會期憑證類型：</span>
+              <span className="font-bold text-brand-navy-950 block">HMAC-SHA256 Signed Token</span>
+            </div>
+            <div className="p-3.5 bg-surface-muted rounded-lg border border-border-default space-y-1">
+              <span className="text-text-secondary">預設有效時間：</span>
+              <span className="font-bold text-brand-navy-950 block">86,400 秒 (24 小時)</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="font-bold text-base text-brand-navy-950 border-b border-border-default pb-2 mb-3">
+            ⚠️ 系統模式與權限矩陣
+          </h3>
+          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs space-y-2 text-amber-800">
+            <div className="flex items-center gap-2">
+              <StatusBadge status="ACTIVE" customLabel="單一管理員模式 (Single Admin)" />
+            </div>
+            <p className="leading-relaxed">
+              本系統目前採取單一管理員權限控制，全域實施排他鎖與 <code>requestId</code> 寫入冪等保護。**目前尚未支援多角色權限與 RBAC (Role-Based Access Control) 存取控制矩陣**。
+            </p>
+          </div>
+        </div>
       </div>
-      
-      <section className="glass-card max-w-2xl rounded-2xl p-6 space-y-4 text-sm">
-        <h3 className="font-bold text-white text-base border-b border-slate-800 pb-2">帳號與連線狀態</h3>
-        <p>登入帳號：<span className="text-indigo-300 font-semibold">系統管理員 (Admin)</span></p>
-        <p>Session 到期時間：<span className="text-indigo-300 font-mono">{expiresAt ? new Date(expiresAt).toLocaleString() : '未知'}</span></p>
-        <p>後端 API 網址：<span className="font-mono text-slate-300 break-all">{gasWebAppUrl}</span></p>
-        <p>網路狀態：<span className={isOnline ? "text-emerald-400 font-semibold" : "text-amber-400 font-semibold"}>{isOnline ? '線上' : '離線'}</span></p>
-        <p>資料庫架構：<span className="text-indigo-300">Google Drive Sheets 試算表</span></p>
-        
-        <button
-          onClick={() => void logout()}
-          className="rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-rose-300 hover:bg-rose-500/20 transition-all font-semibold"
-        >
-          安全登出
-        </button>
-      </section>
-      
-      <p className="text-xs text-slate-500">
-        為避免安全設定遭竄改，此頁面僅顯示基本連線與驗證中繼資料，不開放編輯試算表 ID 或密碼雜湊。
-      </p>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 ---
 plan_id: "005"
 title: "正式部署、PWA 與端到端驗證"
-status: "planned"
+status: "verification-pending"
 depends_on: ["001", "002", "003", "004"]
 format_version: 1
 last_updated: "2026-07-21"

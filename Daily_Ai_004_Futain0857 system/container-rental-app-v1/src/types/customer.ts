@@ -8,7 +8,7 @@ export interface Customer {
   email: string;
   tax_id: string; // Unified business number (for business customers)
   billing_address: string;
-  status: 'active' | 'inactive' | 'blacklisted';
+  status: 'ACTIVE' | 'INACTIVE' | 'BLACKLISTED' | 'active' | 'inactive' | 'blacklisted';
   note: string;
   created_at: string; // ISO date-time string
   updated_at: string; // ISO date-time string

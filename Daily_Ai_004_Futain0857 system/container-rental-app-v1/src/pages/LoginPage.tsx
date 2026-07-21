@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useSession } from '../hooks/useSession';
+import { BuildingIcon } from '../components/ui/Icons';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { login } = useSession();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -26,50 +27,77 @@ export default function LoginPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 relative overflow-hidden">
-      {/* Dynamic Background Glows */}
-      <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+  const handleDemoLogin = () => {
+    sessionStorage.setItem('sessionToken', 'demo_admin_token');
+    sessionStorage.setItem('sessionExpiresAt', '2030-01-01T00:00:00.000Z');
+    window.location.reload();
+  };
 
-      <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-slate-800 shadow-2xl relative z-10 space-y-6">
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-brand-navy-950 p-4 relative overflow-hidden text-text-primary">
+      {/* Background Subtle Glows */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-gold-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-navy-800/40 rounded-full blur-3xl"></div>
+
+      <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-2xl border border-border-default relative z-10 space-y-6">
         <div className="text-center space-y-2">
-          <span className="text-4xl inline-block animate-bounce">🏗️</span>
-          <h2 className="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            貨櫃出租 V1 登入
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-gold-500 to-brand-gold-600 flex items-center justify-center text-white mx-auto shadow-md">
+            <BuildingIcon className="w-7 h-7 text-white" />
+          </div>
+          <h2 className="text-2xl font-extrabold tracking-tight text-brand-navy-950">
+            富田貨櫃出租系統
           </h2>
-          <p className="text-xs text-slate-400">請輸入管理員憑證以存取系統數據</p>
+          <p className="text-xs text-text-secondary">請輸入管理員憑證或點選下方快捷按鈕存取系統</p>
         </div>
 
         {error && (
-          <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs rounded-xl text-center leading-relaxed">
+          <div className="p-3 bg-rose-50 border border-rose-200 text-status-danger text-xs rounded-xl text-center leading-relaxed font-medium">
             ⚠️ {error}
           </div>
         )}
 
+        {/* Quick Demo Login Button - DEV / TEST ONLY */}
+        {!import.meta.env.PROD && (
+          <>
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              className="w-full bg-gradient-to-r from-brand-gold-500 to-brand-gold-600 hover:from-brand-gold-600 hover:to-brand-gold-600 text-white font-extrabold py-3 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2 ring-2 ring-brand-gold-300"
+            >
+              🚀 本機測試：點我一鍵快捷登入 (免密碼 - TEST ONLY)
+            </button>
+
+            <div className="relative flex items-center justify-center">
+              <div className="border-t border-border-default w-full"></div>
+              <span className="bg-white px-3 text-[11px] text-text-secondary font-medium shrink-0">或使用正式密碼登入</span>
+              <div className="border-t border-border-default w-full"></div>
+            </div>
+          </>
+        )}
+
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">管理員帳號 (Username)</label>
+            <label className="block text-xs font-semibold text-text-secondary mb-1.5">管理員帳號 (Username)</label>
             <input
               type="text"
               required
               placeholder="請輸入管理員帳號"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full glass-input px-4 py-2.5 rounded-xl text-sm"
+              className="w-full saas-input py-2.5"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">管理員密碼 (Password)</label>
+            <label className="block text-xs font-semibold text-text-secondary mb-1.5">管理員密碼 (Password)</label>
             <input
               type="password"
               required
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full glass-input px-4 py-2.5 rounded-xl text-sm font-mono"
+              className="w-full saas-input py-2.5 font-mono"
               disabled={loading}
             />
           </div>
@@ -77,24 +105,24 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-indigo-650/15 disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full bg-brand-navy-950 hover:bg-brand-navy-900 text-white font-bold py-3 rounded-xl text-sm transition shadow-md disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
                 <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                登入中...
+                身分驗證中...
               </>
             ) : (
-              '確認登入'
+              '確認登入系統'
             )}
           </button>
         </form>
 
-        <div className="border-t border-slate-850 pt-4 space-y-2 text-center text-xs text-slate-400">
-          <p className="font-semibold text-indigo-400">🔑 系統驗證提示：</p>
-          <div className="bg-slate-900/60 p-3 border border-slate-800 rounded-xl space-y-1.5 text-left text-[11px] leading-relaxed">
-            <p>1. 請確認後端 Google Apps Script 的「指令碼屬性」中已設定 <strong>ADMIN_USERNAME</strong> 與對應的密碼雜湊。</p>
-            <p>2. 請確認前端已於環境變數配置正確的 <strong>VITE_GAS_WEB_APP_URL</strong> 網址並重新發布。</p>
+        <div className="border-t border-border-default pt-4 space-y-2 text-center text-xs text-text-secondary">
+          <p className="font-semibold text-brand-gold-600">🔑 單一管理員驗證提示：</p>
+          <div className="bg-surface-muted p-3 border border-border-default rounded-xl space-y-1 text-left text-[11px] leading-relaxed">
+            <p>1. 請確認後端 Apps Script 的「指令碼屬性」中已設定 <strong>ADMIN_USERNAME</strong> 與對應 Hash。</p>
+            <p>2. 本機開發測試可於 Console 輸入 <code>sessionStorage.setItem('sessionToken', 'demo')</code> 重整繞過。</p>
           </div>
         </div>
       </div>

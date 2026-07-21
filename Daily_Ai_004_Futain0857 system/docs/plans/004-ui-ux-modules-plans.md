@@ -1,7 +1,7 @@
 ---
 plan_id: "004"
 title: "UI／UX 與操作者流程"
-status: "planned"
+status: "completed"
 depends_on: ["001", "002", "003"]
 format_version: 1
 last_updated: "2026-07-21"

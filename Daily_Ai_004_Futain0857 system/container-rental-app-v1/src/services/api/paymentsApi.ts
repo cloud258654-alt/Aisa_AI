@@ -28,7 +28,7 @@ export async function fetchPayments(): Promise<Payment[]> {
   return PaymentListSchema.parse(data);
 }
 
-export async function createPayment(input: CreatePaymentInput): Promise<Payment> {
+export async function createPayment(input: CreatePaymentInput & { requestId?: string }): Promise<Payment> {
   const data = await callGasApi<unknown>('recordPayment', input as unknown as Record<string, unknown>);
   return PaymentSchema.parse(data);
 }

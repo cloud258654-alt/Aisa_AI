@@ -1,7 +1,7 @@
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import { SessionProvider } from './contexts/SessionContext';
 import { useSession } from './hooks/useSession';
-import Layout from './components/common/Layout';
+import AppShell from './components/layout/AppShell';
 import DashboardPage from './pages/DashboardPage';
 import CustomersPage from './pages/CustomersPage';
 import ContainersPage from './pages/ContainersPage';
@@ -19,7 +19,7 @@ function AccessGate() {
   const { isAuthenticated, loading, error, logout } = useSession();
   
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-400">正在確認登入狀態...</div>;
+    return <div className="min-h-screen flex items-center justify-center bg-surface-page text-text-secondary">正在確認登入狀態...</div>;
   }
   
   if (!isAuthenticated) {
@@ -28,9 +28,9 @@ function AccessGate() {
   
   if (error) {
     return (
-      <div className="min-h-screen flex flex-col gap-4 items-center justify-center bg-slate-950 text-rose-300">
+      <div className="min-h-screen flex flex-col gap-4 items-center justify-center bg-surface-page text-status-danger">
         <p>{error}</p>
-        <button onClick={() => void logout()} className="rounded bg-rose-600 px-4 py-2 text-white">
+        <button onClick={() => void logout()} className="rounded bg-status-danger px-4 py-2 text-white font-medium">
           返回登入
         </button>
       </div>
@@ -39,7 +39,7 @@ function AccessGate() {
   
   return (
     <Router>
-      <Layout>
+      <AppShell>
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/customers" element={<CustomersPage />} />
@@ -54,7 +54,7 @@ function AccessGate() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<DashboardPage />} />
         </Routes>
-      </Layout>
+      </AppShell>
     </Router>
   );
 }
