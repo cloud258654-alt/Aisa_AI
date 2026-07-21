@@ -2,6 +2,12 @@
 
 React/Vite 前端應用程式，使用 Google Apps Script (GAS) Web App 作為後端，並以 Google Sheets (試算表) 作為雲端資料庫，管理客戶、貨櫃、租約、帳單流水及營運支出。
 
+## 🌐 Live Demo & 本機試用
+
+- **本機即時 Live Demo 網址**：[http://localhost:5173/](http://localhost:5173/)
+- **快捷測試登入**：登入頁按一下 `🚀 本機測試：點我一鍵快捷登入 (免密碼 - TEST ONLY)` 金黃色按鈕。
+- **測試帳號**：`admin`
+
 ## 系統架構
 
 - **前端**：React / Vite / TypeScript / Tailwind CSS / PWA 離線檢視。
