@@ -43,6 +43,27 @@ function routeRequest(action, sessionToken, payload) {
         return handleTerminateRentalAction(payload);
       case "dashboardSummary":
         return handleDashboardSummaryAction();
+      case "activateContract":
+      case "createContractDraft":
+        return { ok: true, data: createAndActivateContract(payload.data || payload), error: null };
+      case "recordPayment":
+        return { ok: true, data: createPayment(payload.data || payload), error: null };
+      case "voidPayment":
+        return { ok: true, data: voidPayment(payload.payment_id || payload.id, payload.note), error: null };
+      case "renewContract":
+        return { ok: true, data: renewContract(payload.data || payload), error: null };
+      case "startTermination":
+        return { ok: true, data: startTermination(payload.data || payload), error: null };
+      case "completeTermination":
+        return { ok: true, data: completeTermination(payload.data || payload), error: null };
+      case "completeContainerInspection":
+        return { ok: true, data: completeContainerInspection(payload.data || payload), error: null };
+      case "dryRunMigration":
+        var migRental = migrateLegacyRentalsToContracts({ dryRun: true });
+        var migLedger = migrateLegacyLedgersToInvoicesAndPayments({ dryRun: true });
+        return { ok: true, data: { rentalsMigration: migRental, ledgersMigration: migLedger }, error: null };
+      case "verifyMigration":
+        return { ok: true, data: verifyMigration(), error: null };
       default:
         throw new AppError("UNKNOWN_ACTION", "未知的 action: " + action);
     }
@@ -104,6 +125,7 @@ function handleCreateAction(payload) {
   var table = payload.table;
   var data = payload.data;
   if (!table || !data) throw new AppError("BAD_REQUEST", "缺少 table 或 data 參數");
+  if (table === "audit_logs") throw new AppError("UNAUTHORIZED", "禁止透過一般 CRUD API 修改或刪除審計日誌 (audit_logs)");
 
   // Implement route-level lock for safety
   var lock = LockService.getScriptLock();
@@ -114,11 +136,21 @@ function handleCreateAction(payload) {
       createdRecord = createCustomer(data);
     } else if (table === "containers") {
       createdRecord = createContainer(data);
+    } else if (table === "rate_plans") {
+      createdRecord = createRatePlan(data);
+    } else if (table === "contracts") {
+      createdRecord = createAndActivateContract(data);
+    } else if (table === "invoices") {
+      createdRecord = createInvoice(data);
+    } else if (table === "payments") {
+      createdRecord = createPayment(data);
+    } else if (table === "termination_records") {
+      createdRecord = createTerminationRecord(data);
     } else if (table === "rental_records") {
       createdRecord = createRentalRecord(data, payload.createFirstMonthBill);
     } else if (table === "customer_ledgers") {
       createdRecord = createCustomerLedger(data);
-    } else if (table === "management_ledgers") {
+    } else if (table === "management_ledgers" || table === "expenses") {
       createdRecord = createManagementLedger(data);
     } else {
       throw new AppError("BAD_REQUEST", "不支援的寫入資料表: " + table);
@@ -137,6 +169,7 @@ function handleUpdateAction(payload) {
   var id = payload.id;
   var updates = payload.updates;
   if (!table || !id || !updates) throw new AppError("BAD_REQUEST", "缺少 table、id 或 updates 參數");
+  if (table === "audit_logs") throw new AppError("UNAUTHORIZED", "禁止透過一般 CRUD API 修改或刪除審計日誌 (audit_logs)");
 
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -146,11 +179,17 @@ function handleUpdateAction(payload) {
       updatedRecord = updateCustomer(id, updates);
     } else if (table === "containers") {
       updatedRecord = updateContainer(id, updates);
+    } else if (table === "rate_plans") {
+      updatedRecord = updateRatePlan(id, updates);
+    } else if (table === "contracts") {
+      updatedRecord = updateContract(id, updates);
+    } else if (table === "invoices") {
+      updatedRecord = updateInvoice(id, updates);
     } else if (table === "rental_records") {
       updatedRecord = updateRentalRecord(id, updates);
     } else if (table === "customer_ledgers") {
       updatedRecord = updateCustomerLedger(id, updates);
-    } else if (table === "management_ledgers") {
+    } else if (table === "management_ledgers" || table === "expenses") {
       updatedRecord = updateManagementLedger(id, updates);
     } else {
       throw new AppError("BAD_REQUEST", "不支援的更新資料表: " + table);
@@ -168,6 +207,7 @@ function handleSoftDeleteAction(payload) {
   var table = payload.table;
   var id = payload.id;
   if (!table || !id) throw new AppError("BAD_REQUEST", "缺少 table 或 id 參數");
+  if (table === "audit_logs") throw new AppError("UNAUTHORIZED", "禁止透過一般 CRUD API 修改或刪除審計日誌 (audit_logs)");
 
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);

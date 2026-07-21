@@ -62,3 +62,10 @@ sessionToken = payloadBase64 + "." + signatureBase64
 - **儲存位置**：`sessionToken` 及 `expiresAt` 統一保存在瀏覽器的 **`sessionStorage`** 中。當使用者關閉瀏覽器分頁或視窗時，會期資料將會自動被瀏覽器清除。
 - **過期重導向**：如果呼叫 GAS API 時後端回傳 `UNAUTHORIZED` 錯誤，前端 `gasClient` 將會自動清除 `sessionStorage` 內的憑證，發送過期事件並重定向回登入頁面。
 - **登出動作**：點選登出時，前端會通知後端將 Token 寫入暫時黑名單並清除本地 `sessionStorage`。
+
+---
+
+## 4. 權限與 RBAC 限制說明
+
+> [!IMPORTANT]
+> **系統權限限制提示**：本系統目前為單一管理員模式 (Single Admin System)，所有受保護的操作皆基於單一管理員會期驗證。**目前尚未支援多角色權限控制與 RBAC (Role-Based Access Control) 矩陣**。前端與後端在全域範圍內實施一致性 Lock 與 HMAC Session 驗證。

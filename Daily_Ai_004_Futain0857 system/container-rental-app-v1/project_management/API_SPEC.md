@@ -174,3 +174,30 @@
     "expiring_rentals_30_days": 2
   }
   ```
+
+### 2.11 試算表遷移模擬 (dryRunMigration)
+* **需登入**
+* **Payload**: `{}`
+* **回應 data 範例**:
+  ```json
+  {
+    "rentalsMigration": { "dryRun": true, "contractsCreated": 10, "itemsCreated": 10, "errors": [] },
+    "ledgersMigration": { "dryRun": true, "invoicesCreated": 15, "paymentsCreated": 12, "errors": [] }
+  }
+  ```
+
+### 2.12 遷移結果驗證 (verifyMigration)
+* **需登入**
+* **Payload**: `{}`
+* **回應 data 範例**:
+  ```json
+  {
+    "legacyRentalsCount": 10,
+    "contractsCount": 10,
+    "legacyLedgersCount": 15,
+    "invoicesCount": 15,
+    "paymentsCount": 12,
+    "report": ["=== 遷移驗證報告 ==="]
+  }
+  ```
+

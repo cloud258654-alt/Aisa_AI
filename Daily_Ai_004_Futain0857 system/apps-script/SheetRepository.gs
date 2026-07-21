@@ -36,10 +36,18 @@ function getSheet(tableName) {
 function getIdColumnName(tableName) {
   if (tableName === 'customers') return 'customer_id';
   if (tableName === 'containers') return 'container_id';
+  if (tableName === 'rate_plans') return 'rate_plan_id';
+  if (tableName === 'contracts') return 'contract_id';
+  if (tableName === 'contract_items') return 'contract_item_id';
+  if (tableName === 'invoices') return 'invoice_id';
+  if (tableName === 'payments') return 'payment_id';
+  if (tableName === 'expenses') return 'expense_id';
+  if (tableName === 'termination_records') return 'termination_id';
+  if (tableName === 'audit_logs') return 'audit_id';
+  if (tableName === 'request_logs') return 'request_id';
   if (tableName === 'rental_records') return 'rental_id';
   if (tableName === 'customer_ledgers') return 'ledger_id';
   if (tableName === 'management_ledgers') return 'ledger_id';
-  if (tableName === 'audit_logs') return 'audit_id';
   return 'id';
 }
 
@@ -197,6 +205,13 @@ function updateRecord(tableName, id, changes) {
 
   if (rowIndex === -1 || (oldRecord && oldRecord.deleted_at)) {
     throw new Error('找不到指定 ID 的有效紀錄以進行更新: ' + id);
+  }
+
+  // Validate state machine transition if status is changing
+  if (changes.status !== undefined && oldRecord.status !== undefined) {
+    var newStatusUpper = changes.status.toString().toUpperCase();
+    validateStatusTransition(tableName, oldRecord.status, newStatusUpper);
+    changes.status = newStatusUpper;
   }
 
   // Merge changes

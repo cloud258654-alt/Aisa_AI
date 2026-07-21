@@ -4,6 +4,48 @@
 
 ---
 
+## [1.5.0] - 2026-07-21
+
+### Added (新增)
+- **資料一致性、安全與稽核強化 (Phase 003)**
+  - 後端：狀態值正規化為大寫 Canonical Status (`AVAILABLE`, `RENTED`, `INSPECTION`, `MAINTENANCE`, `DRAFT`, `ACTIVE`, `ENDING`, `ENDED`, `UNPAID`, `PARTIAL`, `PAID`, `VOID`, `CONFIRMED`)，並新增 `StateMachine.gs` 白名單轉換校驗（非法轉換如 `RENTED -> AVAILABLE` 或 `ENDED -> ACTIVE` 自動被拒絕）。
+  - 後端：新增 `Idempotency.gs` (`checkAndLockRequestId`, `updateRequestIdSuccess`, `updateRequestIdFailed`)，針對寫入 RequestId 提供 `PROCESSING`, `SUCCESS`, `FAILED` 狀態控制，防止重複請求。
+  - 後端：所有寫入與跨表異動統一採用 `LockService.getScriptLock()` 於鎖內重讀最新狀態並執行 `SpreadsheetApp.flush()`。
+  - 後端：`Router.gs` 加入對 `audit_logs` 資料表之一般 CRUD 的權限阻擋 (`UNAUTHORIZED`)。
+  - 後端：`Migration.gs` 新增 `normalizeStatusToUppercase({ dryRun })`。
+  - 前端：TypeScript 型別與 Zod Schema 定義大寫狀態 Union Types。
+  - 測試：`ManualTests.gs` 新增 8 大必測安全與一致性案例。
+
+---
+
+## [1.4.0] - 2026-07-21
+
+### Added (新增)
+- **核心營運流程實作 (Phase 002)**
+  - 後端：`ContractsService.gs` 新增單櫃/多櫃合約啟用 (`createAndActivateContract`) 與續約 (`renewContract`)，包含獨立 `contract_items` 建立與自動開立分期帳單。
+  - 後端：`PaymentsService.gs` 與 `InvoicesService.gs` 支援多筆付款、部分付款 (`partial`) 狀態動態計算與作廢紀錄復原 (`voidPayment`)。
+  - 後端：`TerminationService.gs` 實作退租啟動 (`startTermination`)、7 步驟押金費用結算 (`completeTermination`) 與貨櫃檢查狀態解鎖 (`completeContainerInspection`)，確保退租時貨櫃先進入 `inspection` 狀態而非直接改為 `available`。
+  - 前端：新增 `ContractsPage.tsx`, `InvoicesPage.tsx`, `TerminationPage.tsx`, `RatePlansPage.tsx` 四大流程操作頁面與路由對應。
+  - 測試：`ManualTests.gs` 與 Vitest (`tests/workflows.test.ts`) 補齊案例 A (單櫃與分期)、案例 B (多櫃同一合約)、案例 C (部分付款至結清)、案例 D (退租扣款與檢查狀態流轉) 之測試驗證。
+
+---
+
+## [1.3.0] - 2026-07-21
+
+### Added (新增)
+- **資料模型與 API 升級 (Phase 001)**
+  - 後端：新增 `rate_plans`, `contracts`, `contract_items`, `invoices`, `payments`, `expenses`, `termination_records`, `request_logs` 資料表與對應的 `RatePlansService`, `ContractsService`, `InvoicesService`, `PaymentsService`, `TerminationService` 模組。
+  - 後端：新增 `Migration.gs` 資料備份與 Dry-run 遷移腳本（`backupLegacySheets`, `migrateLegacyRentalsToContracts`, `migrateLegacyLedgersToInvoicesAndPayments`, `verifyMigration`）。
+  - 前端：新增型別定義 (`ratePlan.ts`, `contract.ts`, `contractItem.ts`, `invoice.ts`, `payment.ts`, `terminationRecord.ts`)。
+  - 前端：新增 API 模組並採用 Zod 進行 Response 通訊協議驗證 (`ratePlansApi.ts`, `contractsApi.ts`, `invoicesApi.ts`, `paymentsApi.ts`, `terminationsApi.ts`)。
+
+### Changed (變更)
+- `Setup.gs` 與 `SheetRepository.gs` 支援新版工作表及舊版工作表並存初始化。
+- `Router.gs` 加入 Phase 001 實體路由與 `dryRunMigration`, `verifyMigration` 端點。
+- `ManualTests.gs` 擴充 Phase 001 遷移測試案例。
+
+---
+
 ## [1.2.0] - 2026-07-15
 
 ### Added (新增)

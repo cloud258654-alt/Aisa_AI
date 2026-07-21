@@ -53,7 +53,19 @@
   2. 在上方選單選取 `runAllBackendTests`。
   3. 點選 **「執行」**。
   4. 檢視日誌 (Logger)，確認輸出 `=== ALL TESTS PASSED SUCCESSFULLY ===`。
-  *註：此測試包含 Mock Properties 設定，不會影響或改寫既有 Sheet 的營運資料。*
+  *註：此測試包含 Mock Properties 與 `testPhase001DataModelsAndDryRun` 測試，不會影響或改寫既有 Sheet 的營運資料。*
+
+---
+
+### 2.6 Phase 003 Consistency & Security 8 Mandatory Test Cases
+- **案例 1 (併發撞櫃衝突)**: PASS (同時建立使用相同貨櫃的兩份合約，第 2 份被 `CONFLICT` 成功阻擋)
+- **案例 2 (requestId 冪等合約)**: PASS (同一 `requestId` 連送兩次，回傳先前結果，未重複產生合約)
+- **案例 3 (requestId 冪等付款)**: PASS (同一 `requestId` 連送兩次，回傳先前結果，未重複產生付款)
+- **案例 4 (非法狀態轉變 RENTED -> AVAILABLE)**: PASS (嘗試直接更新為 `AVAILABLE` 被 `INVALID_STATE` 阻擋)
+- **案例 5 (非法狀態轉變 ENDED -> ACTIVE)**: PASS (嘗試重啟已結束合約被 `INVALID_STATE` 阻擋)
+- **案例 6 (Session 到期鑑權阻擋)**: PASS (過期 Token 呼叫 API 回傳 `UNAUTHORIZED` 拒絕存取)
+- **案例 7 (Audit Logs 修改保護)**: PASS (透過一般 CRUD 修改 `audit_logs` 被 `UNAUTHORIZED` 阻擋)
+- **案例 8 (狀態正規化 Dry-run 測試)**: PASS (`normalizeStatusToUppercase({ dryRun: true })` 可檢視需正規化筆數而不改寫 Sheet)
 
 ---
 

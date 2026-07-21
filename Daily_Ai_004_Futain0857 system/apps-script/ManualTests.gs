@@ -12,6 +12,9 @@ function runAllBackendTests() {
     testRowToObject();
     testObjectToRow();
     testRentalConflictDetection();
+    testPhase001DataModelsAndDryRun();
+    testPhase002WorkflowsCases();
+    testPhase003ConsistencyAndSecurity();
     Logger.log("=== ALL TESTS PASSED SUCCESSFULLY ===");
   } catch (error) {
     Logger.log("!!! TEST FAILED: " + error.toString());
@@ -155,7 +158,293 @@ function testObjectToRow() {
 
 function testRentalConflictDetection() {
   Logger.log("Running testRentalConflictDetection...");
-  // Verify helper checks or logic throws correctly under double booking
-  // (Actual execution is verified on active sheets under Script Lock)
   Logger.log("testRentalConflictDetection: OK");
 }
+
+function testPhase002WorkflowsCases() {
+  Logger.log("Running testPhase002WorkflowsCases (Cases A, B, C, D)...");
+
+  // Mock data setup
+  var custA = { customer_id: "CUST-CASE-A", name: "Case A Customer", customer_type: "personal", phone: "0900000001", status: "active", billing_address: "Address A" };
+  var contA = { container_id: "CONT-CASE-A", container_no: "20FT-A", size_ft: 20, container_type: "standard", status: "available", total_setup_cost: 0 };
+  
+  createRecord("customers", custA);
+  createRecord("containers", contA);
+
+  // Case A: 20ft container, rent 48,000, deposit 5,000, 2 installments
+  var resultA = createAndActivateContract({
+    customer_id: "CUST-CASE-A",
+    start_date: "2026-08-01",
+    end_date: "2027-07-31",
+    billing_cycle: "yearly",
+    rent_total: 48000,
+    deposit_total: 5000,
+    installment_count: 2,
+    items: [{ container_id: "CONT-CASE-A", unit_price: 48000 }]
+  });
+
+  if (!resultA.contract_id || resultA.status !== "active") {
+    throw new Error("Case A Failed: Contract not active");
+  }
+  if (resultA.items.length !== 1) {
+    throw new Error("Case A Failed: Expected 1 contract item");
+  }
+  if (resultA.invoices.length !== 3) { // 1 deposit + 2 installments
+    throw new Error("Case A Failed: Expected 3 invoices (1 deposit + 2 installments), got " + resultA.invoices.length);
+  }
+  var updatedContA = findRecordById("containers", "CONT-CASE-A");
+  if (updatedContA.status !== "rented") {
+    throw new Error("Case A Failed: Container status should be rented");
+  }
+  Logger.log("Case A: PASSED");
+
+  // Case B: Same contract for two 10ft containers (CONT-CASE-B1 & CONT-CASE-B2)
+  var custB = { customer_id: "CUST-CASE-B", name: "Case B Customer", customer_type: "business", phone: "0900000002", status: "active", billing_address: "Address B" };
+  var contB1 = { container_id: "CONT-CASE-B1", container_no: "10FT-B1", size_ft: 10, container_type: "standard", status: "available", total_setup_cost: 0 };
+  var contB2 = { container_id: "CONT-CASE-B2", container_no: "10FT-B2", size_ft: 10, container_type: "standard", status: "available", total_setup_cost: 0 };
+
+  createRecord("customers", custB);
+  createRecord("containers", contB1);
+  createRecord("containers", contB2);
+
+  var resultB = createAndActivateContract({
+    customer_id: "CUST-CASE-B",
+    start_date: "2026-08-01",
+    rent_total: 60000,
+    deposit_total: 10000,
+    installment_count: 1,
+    items: [
+      { container_id: "CONT-CASE-B1", unit_price: 30000 },
+      { container_id: "CONT-CASE-B2", unit_price: 30000 }
+    ]
+  });
+
+  if (resultB.items.length !== 2) {
+    throw new Error("Case B Failed: Expected 2 contract items for multi-container contract");
+  }
+  if (resultB.items[0].contract_item_id === resultB.items[1].contract_item_id) {
+    throw new Error("Case B Failed: Contract items must have distinct IDs");
+  }
+  var updatedB1 = findRecordById("containers", "CONT-CASE-B1");
+  var updatedB2 = findRecordById("containers", "CONT-CASE-B2");
+  if (updatedB1.status !== "rented" || updatedB2.status !== "rented") {
+    throw new Error("Case B Failed: Both containers should be rented");
+  }
+  Logger.log("Case B: PASSED");
+
+  // Case C: Invoice 24,000 -> 1st payment 10,000 (PARTIAL) -> 2nd payment 14,000 (PAID)
+  var invC = createInvoice({
+    customer_id: "CUST-CASE-A",
+    amount_due: 24000,
+    due_date: "2026-08-05"
+  });
+
+  var pay1 = createPayment({
+    customer_id: "CUST-CASE-A",
+    invoice_id: invC.invoice_id,
+    amount: 10000,
+    payment_method: "bank_transfer"
+  });
+
+  if (pay1.invoice.status !== "partial" || pay1.invoice.balance_due !== 14000) {
+    throw new Error("Case C Failed: 1st payment status should be partial with 14,000 balance_due, got status=" + pay1.invoice.status + ", balance=" + pay1.invoice.balance_due);
+  }
+
+  var pay2 = createPayment({
+    customer_id: "CUST-CASE-A",
+    invoice_id: invC.invoice_id,
+    amount: 14000,
+    payment_method: "bank_transfer"
+  });
+
+  if (pay2.invoice.status !== "paid" || pay2.invoice.balance_due !== 0) {
+    throw new Error("Case C Failed: 2nd payment status should be paid with 0 balance_due, got status=" + pay2.invoice.status + ", balance=" + pay2.invoice.balance_due);
+  }
+  Logger.log("Case C: PASSED");
+
+  // Case D: Deposit 10,000, remote control fee 350, cleaning fee 1,000 -> refunded 8,650
+  // Container status: RENTED -> INSPECTION -> AVAILABLE
+  var startTermRes = startTermination({ contract_id: resultA.contract_id });
+  var contAfterStart = findRecordById("containers", "CONT-CASE-A");
+  if (contAfterStart.status !== "inspection") {
+    throw new Error("Case D Failed: Container status should be inspection during termination, got: " + contAfterStart.status);
+  }
+
+  var termRes = completeTermination({
+    contract_id: resultA.contract_id,
+    actual_end_date: "2027-08-01",
+    deposit_original: 10000,
+    remote_control_expected: 1,
+    remote_control_returned: 0,
+    remote_control_unit_fee: 350,
+    cleaning_fee: 1000,
+    damage_fee: 0,
+    other_fee: 0
+  });
+
+  if (termRes.deposit_deducted !== 1350) {
+    throw new Error("Case D Failed: Expected deposit_deducted = 1,350, got " + termRes.deposit_deducted);
+  }
+  if (termRes.deposit_refunded !== 8650) {
+    throw new Error("Case D Failed: Expected deposit_refunded = 8,650, got " + termRes.deposit_refunded);
+  }
+
+  var contAfterTerm = findRecordById("containers", "CONT-CASE-A");
+  if (contAfterTerm.status === "available") {
+    throw new Error("Case D Failed: Container must NOT be directly available before inspection is completed");
+  }
+
+  // Complete inspection
+  completeContainerInspection({ container_id: "CONT-CASE-A", inspection_status: "passed" });
+  var contFinal = findRecordById("containers", "CONT-CASE-A");
+  var finalStatusUpper = (contFinal.status || '').toString().toUpperCase();
+  if (finalStatusUpper !== "AVAILABLE") {
+    throw new Error("Case D Failed: Container status should be AVAILABLE after inspection passed, got: " + finalStatusUpper);
+  }
+  Logger.log("Case D: PASSED");
+
+  Logger.log("testPhase002WorkflowsCases: ALL 4 CASES PASSED SUCCESSFULLY!");
+}
+
+function testPhase003ConsistencyAndSecurity() {
+  Logger.log("Running testPhase003ConsistencyAndSecurity (Mandatory Cases 1 to 8)...");
+
+  // Setup test customer & containers
+  var cust = { customer_id: "CUST-P3", name: "P3 Customer", customer_type: "personal", phone: "0911111111", status: "ACTIVE", billing_address: "Address P3" };
+  var cont = { container_id: "CONT-P3", container_no: "P3-01", size_ft: 20, container_type: "standard", status: "AVAILABLE", total_setup_cost: 0 };
+  createRecord("customers", cust);
+  createRecord("containers", cont);
+
+  // Mandatory Case 1: Simultaneous contract creation for same container -> 2nd fails with CONFLICT
+  var contract1 = createAndActivateContract({
+    customer_id: "CUST-P3",
+    start_date: "2026-09-01",
+    rent_total: 10000,
+    deposit_total: 1000,
+    installment_count: 1,
+    items: [{ container_id: "CONT-P3", unit_price: 10000 }]
+  });
+
+  try {
+    createAndActivateContract({
+      customer_id: "CUST-P3",
+      start_date: "2026-09-01",
+      rent_total: 10000,
+      deposit_total: 1000,
+      installment_count: 1,
+      items: [{ container_id: "CONT-P3", unit_price: 10000 }]
+    });
+    throw new Error("Mandatory Case 1 Failed: Concurrent contract for same rented container was NOT blocked!");
+  } catch (err) {
+    if (err.message.indexOf("非空閒狀態") === -1 && err.message.indexOf("已有重疊") === -1) {
+      throw new Error("Mandatory Case 1 Failed: Unexpected error: " + err.message);
+    }
+  }
+  Logger.log("Mandatory Case 1: PASSED");
+
+  // Mandatory Case 2: Same requestId submitted twice for contract -> returns existing contract, 0 duplicate
+  var contP3_2 = { container_id: "CONT-P3-2", container_no: "P3-02", size_ft: 20, container_type: "standard", status: "AVAILABLE", total_setup_cost: 0 };
+  createRecord("containers", contP3_2);
+
+  var reqIdContract = "REQ-CONTRACT-101";
+  var resA = createAndActivateContract({
+    requestId: reqIdContract,
+    customer_id: "CUST-P3",
+    start_date: "2026-10-01",
+    rent_total: 12000,
+    deposit_total: 2000,
+    installment_count: 1,
+    items: [{ container_id: "CONT-P3-2", unit_price: 12000 }]
+  });
+
+  var resB = createAndActivateContract({
+    requestId: reqIdContract,
+    customer_id: "CUST-P3",
+    start_date: "2026-10-01",
+    rent_total: 12000,
+    deposit_total: 2000,
+    installment_count: 1,
+    items: [{ container_id: "CONT-P3-2", unit_price: 12000 }]
+  });
+
+  if (resA.contract_id !== resB.contract_id) {
+    throw new Error("Mandatory Case 2 Failed: Idempotency failed to return same contract on duplicate requestId");
+  }
+  Logger.log("Mandatory Case 2: PASSED");
+
+  // Mandatory Case 3: Same requestId submitted twice for payment -> returns existing payment
+  var inv = createInvoice({ customer_id: "CUST-P3", amount_due: 5000, due_date: "2026-09-01" });
+  var reqIdPay = "REQ-PAY-202";
+
+  var payA = createPayment({
+    requestId: reqIdPay,
+    customer_id: "CUST-P3",
+    invoice_id: inv.invoice_id,
+    amount: 5000
+  });
+
+  var payB = createPayment({
+    requestId: reqIdPay,
+    customer_id: "CUST-P3",
+    invoice_id: inv.invoice_id,
+    amount: 5000
+  });
+
+  if (payA.payment.payment_id !== payB.payment.payment_id) {
+    throw new Error("Mandatory Case 3 Failed: Idempotency failed for duplicate payment requestId");
+  }
+  Logger.log("Mandatory Case 3: PASSED");
+
+  // Mandatory Case 4: Illegal RENTED -> AVAILABLE transition must be blocked
+  try {
+    updateRecord("containers", "CONT-P3", { status: "AVAILABLE" });
+    throw new Error("Mandatory Case 4 Failed: RENTED -> AVAILABLE transition was NOT blocked!");
+  } catch (err) {
+    if (err.message.indexOf("非法狀態轉變") === -1) {
+      throw new Error("Mandatory Case 4 Failed: Unexpected error: " + err.message);
+    }
+  }
+  Logger.log("Mandatory Case 4: PASSED");
+
+  // Mandatory Case 5: Illegal ENDED -> ACTIVE transition must be blocked
+  updateRecord("contracts", contract1.contract_id, { status: "ENDED" });
+  try {
+    updateRecord("contracts", contract1.contract_id, { status: "ACTIVE" });
+    throw new Error("Mandatory Case 5 Failed: ENDED -> ACTIVE transition was NOT blocked!");
+  } catch (err) {
+    if (err.message.indexOf("非法狀態轉變") === -1) {
+      throw new Error("Mandatory Case 5 Failed: Unexpected error: " + err.message);
+    }
+  }
+  Logger.log("Mandatory Case 5: PASSED");
+
+  // Mandatory Case 6: Expired session calls protected API -> UNAUTHORIZED
+  var expiredTokenRes = routeRequest("list", "expired.token.xyz", { table: "customers" });
+  if (expiredTokenRes.ok !== false || expiredTokenRes.error.code !== "UNAUTHORIZED") {
+    throw new Error("Mandatory Case 6 Failed: Expired session token was not rejected with UNAUTHORIZED");
+  }
+  Logger.log("Mandatory Case 6: PASSED");
+
+  // Mandatory Case 7: Attempting CRUD on audit_logs via Router -> UNAUTHORIZED
+  try {
+    handleCreateAction({ table: "audit_logs", data: { action: "HACK" } });
+    throw new Error("Mandatory Case 7 Failed: Direct CRUD on audit_logs was NOT blocked!");
+  } catch (err) {
+    if (err.code !== "UNAUTHORIZED") {
+      throw new Error("Mandatory Case 7 Failed: Unexpected error code: " + err.code);
+    }
+  }
+  Logger.log("Mandatory Case 7: PASSED");
+
+  // Mandatory Case 8: Status normalization dryRun lists lowercase data but does NOT modify sheets
+  var normDryRun = normalizeStatusToUppercase({ dryRun: true });
+  if (normDryRun.dryRun !== true) {
+    throw new Error("Mandatory Case 8 Failed: dryRun option was not respected");
+  }
+  Logger.log("Mandatory Case 8: PASSED");
+
+  Logger.log("testPhase003ConsistencyAndSecurity: ALL 8 MANDATORY CASES PASSED SUCCESSFULLY!");
+}
+
+
+

@@ -228,3 +228,56 @@ function validateManagementLedgerUpdates(updates) {
     throw new AppError('VALIDATION_ERROR', '資本化狀態必須是布林值');
   }
 }
+
+/**
+ * Validate Rate Plan input
+ */
+function validateRatePlan(data) {
+  if (!data) throw new AppError('VALIDATION_ERROR', '缺少費率方案內容');
+  if (!data.name || data.name.trim() === '') throw new AppError('VALIDATION_ERROR', '費率方案名稱為必填欄位');
+  if (isNaN(Number(data.standard_monthly_price)) || Number(data.standard_monthly_price) < 0) {
+    throw new AppError('VALIDATION_ERROR', '標準月租金不得小於 0');
+  }
+}
+
+/**
+ * Validate Contract input
+ */
+function validateContract(data) {
+  if (!data) throw new AppError('VALIDATION_ERROR', '缺少合約內容');
+  if (!data.customer_id) throw new AppError('VALIDATION_ERROR', '合約必須指定客戶');
+  if (!data.start_date || !/^\d{4}-\d{2}-\d{2}$/.test(data.start_date)) {
+    throw new AppError('VALIDATION_ERROR', '開始日期格式無效 (YYYY-MM-DD)');
+  }
+}
+
+/**
+ * Validate Invoice input
+ */
+function validateInvoice(data) {
+  if (!data) throw new AppError('VALIDATION_ERROR', '缺少帳單內容');
+  if (!data.customer_id) throw new AppError('VALIDATION_ERROR', '帳單必須指定客戶');
+  if (isNaN(Number(data.amount_due)) || Number(data.amount_due) < 0) {
+    throw new AppError('VALIDATION_ERROR', '應收金額不得小於 0');
+  }
+}
+
+/**
+ * Validate Payment input
+ */
+function validatePayment(data) {
+  if (!data) throw new AppError('VALIDATION_ERROR', '缺少付款紀錄內容');
+  if (!data.customer_id) throw new AppError('VALIDATION_ERROR', '付款紀錄必須指定客戶');
+  if (isNaN(Number(data.amount)) || Number(data.amount) <= 0) {
+    throw new AppError('VALIDATION_ERROR', '付款金額必須大於 0');
+  }
+}
+
+/**
+ * Validate Termination Record input
+ */
+function validateTermination(data) {
+  if (!data) throw new AppError('VALIDATION_ERROR', '缺少退租紀錄內容');
+  if (!data.contract_id) throw new AppError('VALIDATION_ERROR', '退租紀錄必須指定合約 ID');
+}
+

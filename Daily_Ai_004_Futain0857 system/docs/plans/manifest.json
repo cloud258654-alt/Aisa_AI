@@ -1,0 +1,37 @@
+{
+  "root": "Daily_Ai_004_Futain0857 system/docs/plans",
+  "files": [
+    {
+      "name": "000-index-modules-plans.md",
+      "bytes": 3394
+    },
+    {
+      "name": "001-data-model-modules-plans.md",
+      "bytes": 5185
+    },
+    {
+      "name": "002-core-workflows-modules-plans.md",
+      "bytes": 3726
+    },
+    {
+      "name": "003-consistency-security-modules-plans.md",
+      "bytes": 3529
+    },
+    {
+      "name": "004-ui-ux-modules-plans.md",
+      "bytes": 4866
+    },
+    {
+      "name": "005-deployment-e2e-modules-plans.md",
+      "bytes": 3056
+    },
+    {
+      "name": "006-customer-acceptance-modules-plans.md",
+      "bytes": 3139
+    },
+    {
+      "name": "007-markdown-docs-center-modules-plans.md",
+      "bytes": 5461
+    }
+  ]
+}

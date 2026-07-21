@@ -24,7 +24,7 @@ export default function ContainersPage() {
     location_zone: 'A區',
     location_label: '',
     total_setup_cost: 0,
-    status: 'available' as 'available' | 'rented' | 'maintenance' | 'retired',
+    status: 'AVAILABLE' as Container['status'],
     note: ''
   });
 
@@ -439,7 +439,7 @@ export default function ContainersPage() {
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({...formData, status: e.target.value as Container['status']})}
-                    disabled={modalMode === 'edit' && formData.status === 'rented'}
+                    disabled={modalMode === 'edit' && (formData.status === 'rented' || formData.status === 'RENTED')}
                     className="w-full glass-input px-3 py-2 rounded-xl text-sm"
                   >
                     <option value="available">空櫃 (Available)</option>

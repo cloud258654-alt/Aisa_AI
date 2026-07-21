@@ -10,6 +10,10 @@ import CustomerLedgersPage from './pages/CustomerLedgersPage';
 import ManagementLedgersPage from './pages/ManagementLedgersPage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
+import ContractsPage from './pages/ContractsPage';
+import InvoicesPage from './pages/InvoicesPage';
+import TerminationPage from './pages/TerminationPage';
+import RatePlansPage from './pages/RatePlansPage';
 
 function AccessGate() {
   const { isAuthenticated, loading, error, logout } = useSession();
@@ -41,6 +45,10 @@ function AccessGate() {
           <Route path="/customers" element={<CustomersPage />} />
           <Route path="/containers" element={<ContainersPage />} />
           <Route path="/rentals" element={<RentalsPage />} />
+          <Route path="/contracts" element={<ContractsPage />} />
+          <Route path="/invoices" element={<InvoicesPage />} />
+          <Route path="/termination" element={<TerminationPage />} />
+          <Route path="/rate-plans" element={<RatePlansPage />} />
           <Route path="/customer-ledgers" element={<CustomerLedgersPage />} />
           <Route path="/management-ledgers" element={<ManagementLedgersPage />} />
           <Route path="/settings" element={<SettingsPage />} />

@@ -13,6 +13,57 @@ var SCHEMAS = {
     'location_zone', 'location_label', 'total_setup_cost', 'status', 
     'note', 'created_at', 'updated_at', 'deleted_at'
   ],
+  rate_plans: [
+    'rate_plan_id', 'name', 'container_size_ft', 'container_type', 
+    'billing_cycle', 'contract_months', 'standard_monthly_price', 
+    'contract_price', 'installment_count', 'default_deposit', 
+    'first_year_discount', 'active', 'note', 'created_at', 'updated_at', 'deleted_at'
+  ],
+  contracts: [
+    'contract_id', 'contract_no', 'customer_id', 'rate_plan_id', 
+    'previous_contract_id', 'start_date', 'end_date', 'billing_cycle', 
+    'rent_total', 'deposit_total', 'installment_count', 'status', 
+    'actual_end_date', 'pricing_snapshot_json', 'terms_snapshot_json', 
+    'note', 'created_at', 'updated_at', 'deleted_at'
+  ],
+  contract_items: [
+    'contract_item_id', 'contract_id', 'container_id', 'unit_price', 
+    'discount_amount', 'effective_price', 'start_date', 'end_date', 
+    'status', 'created_at', 'updated_at', 'deleted_at'
+  ],
+  invoices: [
+    'invoice_id', 'invoice_no', 'contract_id', 'customer_id', 
+    'invoice_type', 'period_start', 'period_end', 'due_date', 
+    'amount_due', 'amount_paid', 'balance_due', 'status', 
+    'note', 'created_at', 'updated_at', 'voided_at'
+  ],
+  payments: [
+    'payment_id', 'payment_no', 'invoice_id', 'contract_id', 
+    'customer_id', 'payment_type', 'payment_method', 'payment_date', 
+    'amount', 'bank_last_five', 'receipt_no', 'status', 
+    'note', 'created_at', 'updated_at', 'voided_at'
+  ],
+  expenses: [
+    'expense_id', 'container_id', 'expense_type', 'vendor', 
+    'amount', 'paid_status', 'record_date', 'due_date', 
+    'paid_date', 'payment_method', 'receipt_no', 'is_capitalized', 
+    'issue_desc', 'created_at', 'updated_at', 'deleted_at'
+  ],
+  termination_records: [
+    'termination_id', 'contract_id', 'requested_date', 'actual_end_date', 
+    'inspection_status', 'remote_control_expected', 'remote_control_returned', 
+    'damage_fee', 'cleaning_fee', 'other_fee', 'deposit_original', 
+    'deposit_deducted', 'deposit_refunded', 'settlement_note', 'status', 
+    'created_at', 'updated_at'
+  ],
+  audit_logs: [
+    'audit_id', 'action', 'table_name', 'record_id', 
+    'before_json', 'after_json', 'created_at'
+  ],
+  request_logs: [
+    'request_id', 'action', 'status', 'result_record_id', 
+    'error_code', 'created_at', 'updated_at', 'expires_at'
+  ],
   rental_records: [
     'rental_id', 'customer_id', 'container_id', 'start_date', 'end_date', 
     'billing_cycle', 'monthly_rent', 'deposit_amount', 'payment_due_day', 
@@ -30,10 +81,6 @@ var SCHEMAS = {
     'paid_status', 'record_date', 'due_date', 'paid_date', 'payment_method', 
     'receipt_no', 'is_capitalized', 'issue_desc', 'created_at', 'updated_at', 
     'deleted_at'
-  ],
-  audit_logs: [
-    'audit_id', 'action', 'table_name', 'record_id', 
-    'before_json', 'after_json', 'created_at'
   ]
 };
 
