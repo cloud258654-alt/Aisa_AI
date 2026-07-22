@@ -62,6 +62,10 @@ var ALLOWED_TRANSITIONS = {
     'CONFIRMED': ['VOID', 'REFUNDED'],
     'VOID': [], // Transition VOID -> CONFIRMED is ILLEGAL!
     'REFUNDED': []
+  },
+  customer: {
+    'ACTIVE': ['INACTIVE'],
+    'INACTIVE': ['ACTIVE']
   }
 };
 
@@ -97,4 +101,15 @@ function normalizeStatusValue(statusStr, defaultStatus) {
     return defaultStatus || '';
   }
   return statusStr.toString().trim().toUpperCase();
+}
+
+function getStateMachineEntityType(tableName) {
+  var map = {
+    customers: "customer",
+    containers: "container",
+    contracts: "contract",
+    invoices: "invoice",
+    payments: "payment"
+  };
+  return map[tableName] || null;
 }

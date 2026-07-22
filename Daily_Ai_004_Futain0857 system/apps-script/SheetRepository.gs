@@ -208,9 +208,16 @@ function updateRecord(tableName, id, changes) {
   }
 
   // Validate state machine transition if status is changing
-  if (changes.status !== undefined && oldRecord.status !== undefined) {
+  var entityType = getStateMachineEntityType(tableName);
+  if (changes.status !== undefined &&
+      oldRecord.status !== undefined &&
+      entityType) {
     var newStatusUpper = changes.status.toString().toUpperCase();
-    validateStatusTransition(tableName, oldRecord.status, newStatusUpper);
+    validateStatusTransition(
+      entityType,
+      oldRecord.status,
+      newStatusUpper
+    );
     changes.status = newStatusUpper;
   }
 

@@ -580,6 +580,7 @@ function testSafetyDeleteAndStatusChange() {
     Logger.log("Rule 4: RENTED container block -> PASSED");
 
     // Rule 5: Historical items container cannot be deleted (even if status is AVAILABLE, but it has contract_items history)
+    updateRecord("containers", container2.container_id, { status: "INSPECTION" });
     updateRecord("containers", container2.container_id, { status: "AVAILABLE" });
     try {
       deleteContainer(container2.container_id);
@@ -602,6 +603,55 @@ function testSafetyDeleteAndStatusChange() {
       }
     }
     Logger.log("Rule 6: Customer with history block -> PASSED");
+
+    // Extra test cases:
+    
+    // 1. 客戶 ACTIVE → INACTIVE: PASS
+    var testCust = createCustomer({ name: "TEST-STATE-CUST", phone: "0912", status: "ACTIVE" });
+    updateRecord("customers", testCust.customer_id, { status: "INACTIVE" });
+    var testCustUpdated = findRecordById("customers", testCust.customer_id);
+    if ((testCustUpdated.status || "").toUpperCase() !== "INACTIVE") {
+      throw new Error("Extra Test 1 Failed: Customer ACTIVE -> INACTIVE status was not updated!");
+    }
+    Logger.log("Extra Test 1 (Customer ACTIVE -> INACTIVE): PASSED");
+
+    // 2. 客戶 INACTIVE → ACTIVE: PASS
+    updateRecord("customers", testCust.customer_id, { status: "ACTIVE" });
+    testCustUpdated = findRecordById("customers", testCust.customer_id);
+    if ((testCustUpdated.status || "").toUpperCase() !== "ACTIVE") {
+      throw new Error("Extra Test 2 Failed: Customer INACTIVE -> ACTIVE status was not updated!");
+    }
+    Logger.log("Extra Test 2 (Customer INACTIVE -> ACTIVE): PASSED");
+
+    // 3. 貨櫃 AVAILABLE → RETIRED: PASS
+    var testCont = createContainer({ container_no: "TEST-STATE-CONT", size_ft: 20, status: "AVAILABLE" });
+    updateRecord("containers", testCont.container_id, { status: "RETIRED" });
+    var testContUpdated = findRecordById("containers", testCont.container_id);
+    if ((testContUpdated.status || "").toUpperCase() !== "RETIRED") {
+      throw new Error("Extra Test 3 Failed: Container AVAILABLE -> RETIRED status was not updated!");
+    }
+    Logger.log("Extra Test 3 (Container AVAILABLE -> RETIRED): PASSED");
+
+    // 4. 貨櫃 RENTED → AVAILABLE: 必須 INVALID_STATE
+    var testCont2 = createContainer({ container_no: "TEST-STATE-CONT2", size_ft: 20, status: "RENTED" });
+    try {
+      updateRecord("containers", testCont2.container_id, { status: "AVAILABLE" });
+      throw new Error("Extra Test 4 Failed: Illegal transition RENTED -> AVAILABLE was NOT blocked!");
+    } catch (err) {
+      if (err.code !== "INVALID_STATE") {
+        throw new Error("Extra Test 4 Failed with unexpected error: " + err.message);
+      }
+    }
+    Logger.log("Extra Test 4 (Container RENTED -> AVAILABLE invalid block): PASSED");
+
+    // 5. 貨櫃 RENTED → INSPECTION → AVAILABLE: PASS
+    updateRecord("containers", testCont2.container_id, { status: "INSPECTION" });
+    updateRecord("containers", testCont2.container_id, { status: "AVAILABLE" });
+    var testContUpdated2 = findRecordById("containers", testCont2.container_id);
+    if ((testContUpdated2.status || "").toUpperCase() !== "AVAILABLE") {
+      throw new Error("Extra Test 5 Failed: Legal path RENTED -> INSPECTION -> AVAILABLE failed to update!");
+    }
+    Logger.log("Extra Test 5 (Container RENTED -> INSPECTION -> AVAILABLE path): PASSED");
 
   } finally {
     if (oldUser) props.setProperty("ADMIN_USERNAME", oldUser); else props.deleteProperty("ADMIN_USERNAME");
