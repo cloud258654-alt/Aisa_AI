@@ -76,7 +76,7 @@ export default function ManagementLedgersPage() {
       l.payment_method || '',
       l.issue_desc || ''
     ]);
-    exportToCsv('富田營運支出紀錄報表', headers, rows);
+    exportToCsv('福田營運支出紀錄報表', headers, rows);
   };
 
   return (

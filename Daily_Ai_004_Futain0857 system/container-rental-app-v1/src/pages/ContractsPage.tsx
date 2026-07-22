@@ -92,7 +92,7 @@ export default function ContractsPage() {
       c.installment_count,
       c.status
     ]);
-    exportToCsv('富田租賃合約清單報表', headers, rows);
+    exportToCsv('福田租賃合約清單報表', headers, rows);
   };
 
   return (

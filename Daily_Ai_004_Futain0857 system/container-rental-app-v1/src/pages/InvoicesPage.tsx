@@ -121,7 +121,7 @@ export default function InvoicesPage() {
       inv.due_date,
       inv.status
     ]);
-    exportToCsv('富田應收與對帳報表', headers, rows);
+    exportToCsv('福田應收與對帳報表', headers, rows);
   };
 
   return (

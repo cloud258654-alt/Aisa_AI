@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['container.svg'],
       manifest: {
-        name: '貨櫃出租營運管理 App',
-        short_name: '貨櫃出租',
+        name: '福田貨櫃倉儲出租系統',
+        short_name: '福田貨櫃',
         description: '貨櫃出租公司營運管理系統 - Phase 1 Sheets MVP',
         theme_color: '#0f172a',
         background_color: '#0f172a',

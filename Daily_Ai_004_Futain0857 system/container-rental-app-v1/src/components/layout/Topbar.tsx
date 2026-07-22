@@ -44,7 +44,7 @@ export default function Topbar({ onToggleMobileDrawer }: TopbarProps) {
             <div className="w-8 h-8 rounded-lg bg-brand-gold-500 flex items-center justify-center text-white">
               <BuildingIcon className="w-5 h-5 text-white" />
             </div>
-            <span className="font-extrabold text-sm text-white">富田貨櫃</span>
+            <span className="font-extrabold text-sm text-white">福田貨櫃</span>
           </div>
 
           {/* Breadcrumb Title */}

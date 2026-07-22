@@ -15,6 +15,7 @@ function runAllBackendTests() {
     testPhase001DataModelsAndDryRun();
     testPhase002WorkflowsCases();
     testPhase003ConsistencyAndSecurity();
+    testSafetyDeleteAndStatusChange();
     Logger.log("=== ALL TESTS PASSED SUCCESSFULLY ===");
   } catch (error) {
     Logger.log("!!! TEST FAILED: " + error.toString());
@@ -444,6 +445,169 @@ function testPhase003ConsistencyAndSecurity() {
   Logger.log("Mandatory Case 8: PASSED");
 
   Logger.log("testPhase003ConsistencyAndSecurity: ALL 8 MANDATORY CASES PASSED SUCCESSFULLY!");
+}
+
+function testSafetyDeleteAndStatusChange() {
+  Logger.log("Running testSafetyDeleteAndStatusChange...");
+
+  // Setup test environment keys
+  var props = PropertiesService.getScriptProperties();
+  var oldUser = props.getProperty("ADMIN_USERNAME");
+  props.setProperty("ADMIN_USERNAME", "test_admin");
+
+  try {
+    // 1. Create a fresh available container
+    var containerData = {
+      container_no: "TEST-DEL-CONT-01",
+      size_ft: 20,
+      container_type: "standard",
+      location_zone: "A區",
+      location_label: "L1",
+      total_setup_cost: 1000,
+      status: "AVAILABLE",
+      note: "Test delete available"
+    };
+    var container = createContainer(containerData);
+    var containerId = container.container_id;
+
+    // 2. Create a fresh customer
+    var customerData = {
+      name: "TEST-DEL-CUST-01",
+      customer_type: "personal",
+      phone: "0900000001",
+      email: "del1@test.com",
+      status: "ACTIVE"
+    };
+    var customer = createCustomer(customerData);
+    var customerId = customer.customer_id;
+
+    // Rule 1: AVAILABLE container without contracts can be deleted
+    deleteContainer(containerId);
+    var deletedContainer = findRecordById("containers", containerId);
+    if (deletedContainer !== null) {
+      throw new Error("testSafetyDeleteAndStatusChange failed: AVAILABLE container without history was not soft deleted!");
+    }
+    var listC = listRecords("containers");
+    var foundInList = listC.some(function(c) { return c.container_id === containerId; });
+    if (foundInList) {
+      throw new Error("testSafetyDeleteAndStatusChange failed: soft-deleted container still returned in listRecords!");
+    }
+    Logger.log("Rule 1: AVAILABLE container deleted -> PASSED");
+
+    // Rule 2: Customer without contracts can be deleted
+    deleteCustomer(customerId);
+    var deletedCustomer = findRecordById("customers", customerId);
+    if (deletedCustomer !== null) {
+      throw new Error("testSafetyDeleteAndStatusChange failed: Customer without history was not soft deleted!");
+    }
+    var listCust = listRecords("customers");
+    var foundCustInList = listCust.some(function(c) { return c.customer_id === customerId; });
+    if (foundCustInList) {
+      throw new Error("testSafetyDeleteAndStatusChange failed: soft-deleted customer still returned in listRecords!");
+    }
+    Logger.log("Rule 2: Customer deleted -> PASSED");
+
+    // 3. Create another customer & container, and create a contract
+    var container2 = createContainer({
+      container_no: "TEST-DEL-CONT-02",
+      size_ft: 20,
+      container_type: "standard",
+      status: "AVAILABLE"
+    });
+    var customer2 = createCustomer({
+      name: "TEST-DEL-CUST-02",
+      phone: "0900000002",
+      status: "ACTIVE"
+    });
+
+    // Create rate plan
+    var ratePlan = createRatePlan({
+      name: "Test Delete Rate",
+      container_size_ft: 20,
+      container_type: "standard",
+      billing_cycle: "monthly",
+      contract_months: 6,
+      standard_monthly_price: 5000,
+      contract_price: 45000,
+      installment_count: 6,
+      default_deposit: 5000,
+      active: true
+    });
+
+    // Activate Contract
+    var contract = createAndActivateContract({
+      customer_id: customer2.customer_id,
+      rate_plan_id: ratePlan.rate_plan_id,
+      start_date: "2026-08-01",
+      end_date: "2027-01-31",
+      billing_cycle: "monthly",
+      rent_total: 270000,
+      deposit_total: 5000,
+      installment_count: 6,
+      status: "ACTIVE",
+      items: [
+        {
+          container_id: container2.container_id,
+          unit_price: 5000,
+          discount_amount: 0,
+          effective_price: 5000,
+          start_date: "2026-08-01",
+          status: "ACTIVE"
+        }
+      ]
+    });
+
+    // Rule 3: Customer with ACTIVE contract cannot be deleted
+    try {
+      deleteCustomer(customer2.customer_id);
+      throw new Error("Rule 3 failed: Customer with ACTIVE contract was deleted!");
+    } catch (err) {
+      if (err.code !== "CUSTOMER_HAS_ACTIVE_CONTRACT") {
+        throw new Error("Rule 3 failed with unexpected error code: " + err.code);
+      }
+    }
+    Logger.log("Rule 3: Customer with ACTIVE contract block -> PASSED");
+
+    // Rule 4: RENTED container cannot be deleted
+    try {
+      deleteContainer(container2.container_id);
+      throw new Error("Rule 4 failed: RENTED container was deleted!");
+    } catch (err) {
+      if (err.code !== "CONTAINER_NOT_DELETABLE") {
+        throw new Error("Rule 4 failed with unexpected error code: " + err.code);
+      }
+    }
+    Logger.log("Rule 4: RENTED container block -> PASSED");
+
+    // Rule 5: Historical items container cannot be deleted (even if status is AVAILABLE, but it has contract_items history)
+    updateRecord("containers", container2.container_id, { status: "AVAILABLE" });
+    try {
+      deleteContainer(container2.container_id);
+      throw new Error("Rule 5 failed: Container with contract_items history was deleted!");
+    } catch (err) {
+      if (err.code !== "CONTAINER_HAS_HISTORICAL_CONTRACT") {
+        throw new Error("Rule 5 failed with unexpected error code: " + err.code);
+      }
+    }
+    Logger.log("Rule 5: Container with history block -> PASSED");
+
+    // Rule 6: Historical contract customer cannot be deleted (must deactivate instead)
+    updateRecord("contracts", contract.contract_id, { status: "ENDED" });
+    try {
+      deleteCustomer(customer2.customer_id);
+      throw new Error("Rule 6 failed: Customer with ENDED contract was deleted!");
+    } catch (err) {
+      if (err.code !== "CUSTOMER_HAS_HISTORICAL_CONTRACT") {
+        throw new Error("Rule 6 failed with unexpected error code: " + err.code);
+      }
+    }
+    Logger.log("Rule 6: Customer with history block -> PASSED");
+
+  } finally {
+    if (oldUser) props.setProperty("ADMIN_USERNAME", oldUser); else props.deleteProperty("ADMIN_USERNAME");
+  }
+
+  Logger.log("testSafetyDeleteAndStatusChange: ALL SAFETY DELETE AND DEACTIVATION CASES PASSED!");
 }
 
 

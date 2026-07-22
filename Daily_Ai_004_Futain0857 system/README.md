@@ -1,4 +1,4 @@
-# 富田貨櫃出租營運管理系統 (Futain Container Rental SaaS System)
+# 福田貨櫃倉儲出租系統 (Futain Container Storage & Rental SaaS System)
 
 ![Version](https://img.shields.io/badge/version-1.0.0--rc1-gold.svg)
 ![Status](https://img.shields.io/badge/status-Release--Candidate-blue.svg)

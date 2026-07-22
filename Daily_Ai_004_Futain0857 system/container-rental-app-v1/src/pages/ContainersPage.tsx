@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { listContainers, createContainer, updateContainer } from '../services/api/containersApi';
+import { listContainers, createContainer, updateContainer, deleteContainer } from '../services/api/containersApi';
 import { Container } from '../types/container';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import PageHeader from '../components/ui/PageHeader';
 import DataTable from '../components/ui/DataTable';
 import MobileRecordCard from '../components/ui/MobileRecordCard';
@@ -15,6 +16,12 @@ export default function ContainersPage() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [containers, setContainers] = useState<Container[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Safety Delete Confirmation States
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deleteTargetNo, setDeleteTargetNo] = useState('');
 
   // Search & Filter
   const [search, setSearch] = useState('');
@@ -53,12 +60,53 @@ export default function ContainersPage() {
   const loadContainers = async () => {
     try {
       setLoading(true);
+      setError(null);
       const data = await listContainers();
       setContainers(data);
     } catch (err) {
       console.error("Failed to load containers:", err);
+      setError("載入貨櫃列表失敗：" + (err instanceof Error ? err.message : String(err)));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeactivate = async (id: string) => {
+    try {
+      setError(null);
+      await updateContainer(id, { status: 'RETIRED' });
+      void loadContainers();
+    } catch (err) {
+      setError("停用貨櫃失敗：" + (err instanceof Error ? err.message : String(err)));
+    }
+  };
+
+  const handleActivate = async (id: string) => {
+    try {
+      setError(null);
+      await updateContainer(id, { status: 'AVAILABLE' });
+      void loadContainers();
+    } catch (err) {
+      setError("啟用貨櫃失敗：" + (err instanceof Error ? err.message : String(err)));
+    }
+  };
+
+  const handleOpenDeleteConfirm = (id: string, containerNo: string) => {
+    setDeleteTargetId(id);
+    setDeleteTargetNo(containerNo);
+    setIsConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTargetId) return;
+    try {
+      setError(null);
+      await deleteContainer(deleteTargetId);
+      setIsConfirmOpen(false);
+      void loadContainers();
+    } catch (err) {
+      setError("刪除貨櫃失敗：" + (err instanceof Error ? err.message : String(err)));
+      setIsConfirmOpen(false);
     }
   };
 
@@ -102,6 +150,7 @@ export default function ContainersPage() {
     if (!formData.container_no.trim()) return alert("請輸入貨櫃編號");
 
     try {
+      setError(null);
       if (modalMode === 'create') {
         await createContainer(formData);
       } else if (editingId) {
@@ -110,7 +159,7 @@ export default function ContainersPage() {
       setIsModalOpen(false);
       void loadContainers();
     } catch (err) {
-      alert("儲存失敗：" + (err instanceof Error ? err.message : String(err)));
+      setError("儲存失敗：" + (err instanceof Error ? err.message : String(err)));
     }
   };
 
@@ -136,11 +185,17 @@ export default function ContainersPage() {
       c.status,
       c.note || ''
     ]);
-    exportToCsv('富田貨櫃庫存報表', headers, rows);
+    exportToCsv('福田貨櫃庫存報表', headers, rows);
   };
 
   return (
     <div className="space-y-6">
+      {error && (
+        <div className="p-3.5 bg-rose-50 border border-rose-200 text-status-danger text-xs font-semibold rounded-xl flex items-center justify-between shadow-xs">
+          <span>⚠️ {error}</span>
+          <button onClick={() => setError(null)} className="text-text-secondary hover:text-text-primary ml-2">✕</button>
+        </div>
+      )}
       <PageHeader
         title="貨櫃倉儲管理"
         description="追蹤全場貨櫃尺寸、區域定位、初始建置成本與狀態流轉。"
@@ -208,12 +263,35 @@ export default function ContainersPage() {
               {
                 header: '操作',
                 accessor: (r) => (
-                  <button
-                    onClick={() => handleOpenEdit(r)}
-                    className="px-2.5 py-1 text-xs bg-surface-muted hover:bg-brand-navy-950 hover:text-white font-semibold rounded border border-border-default transition-all"
-                  >
-                    編輯規格
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => handleOpenEdit(r)}
+                      className="px-2 py-1 text-[11px] bg-surface-muted hover:bg-brand-navy-950 hover:text-white font-semibold rounded border border-border-default transition-all"
+                    >
+                      編輯規格
+                    </button>
+                    {r.status?.toUpperCase() !== 'RETIRED' ? (
+                      <button
+                        onClick={() => handleDeactivate(r.container_id)}
+                        className="px-2 py-1 text-[11px] text-amber-700 bg-amber-50 hover:bg-amber-100 font-semibold rounded border border-amber-200 transition-all"
+                      >
+                        停用
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleActivate(r.container_id)}
+                        className="px-2 py-1 text-[11px] text-emerald-700 bg-emerald-50 hover:bg-emerald-100 font-semibold rounded border border-emerald-200 transition-all"
+                      >
+                        啟用
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleOpenDeleteConfirm(r.container_id, r.container_no)}
+                      className="px-2 py-1 text-[11px] text-rose-700 bg-rose-50 hover:bg-rose-100 font-semibold rounded border border-rose-200 transition-all"
+                    >
+                      刪除
+                    </button>
+                  </div>
                 )
               }
             ]}
@@ -234,12 +312,35 @@ export default function ContainersPage() {
                   { label: '建置成本', value: `$${r.total_setup_cost.toLocaleString()}` }
                 ]}
                 actionButtons={
-                  <button
-                    onClick={() => handleOpenEdit(r)}
-                    className="px-3 py-1 text-xs bg-brand-navy-950 text-white font-semibold rounded"
-                  >
-                    編輯規格
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleOpenEdit(r)}
+                      className="px-3 py-1 text-xs bg-brand-navy-950 text-white font-semibold rounded"
+                    >
+                      編輯規格
+                    </button>
+                    {r.status?.toUpperCase() !== 'RETIRED' ? (
+                      <button
+                        onClick={() => handleDeactivate(r.container_id)}
+                        className="px-3 py-1 text-xs bg-amber-600 text-white font-semibold rounded"
+                      >
+                        停用
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleActivate(r.container_id)}
+                        className="px-3 py-1 text-xs bg-emerald-600 text-white font-semibold rounded"
+                      >
+                        啟用
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleOpenDeleteConfirm(r.container_id, r.container_no)}
+                      className="px-3 py-1 text-xs bg-rose-600 text-white font-semibold rounded"
+                    >
+                      刪除
+                    </button>
+                  </div>
                 }
               />
             ))}
@@ -346,6 +447,16 @@ export default function ContainersPage() {
           </div>
         </div>
       )}
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        title="確認刪除貨櫃"
+        message={`您確定要刪除貨櫃「${deleteTargetNo}」嗎？此操作將會對其進行軟刪除。`}
+        confirmText="確認刪除"
+        cancelText="取消"
+        isDangerous={true}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setIsConfirmOpen(false)}
+      />
     </div>
   );
 }

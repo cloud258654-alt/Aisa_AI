@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { listCustomers, createCustomer, updateCustomer } from '../services/api/customersApi';
+import { listCustomers, createCustomer, updateCustomer, deleteCustomer } from '../services/api/customersApi';
 import { Customer } from '../types/customer';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import PageHeader from '../components/ui/PageHeader';
 import DataTable from '../components/ui/DataTable';
 import MobileRecordCard from '../components/ui/MobileRecordCard';
@@ -13,6 +14,12 @@ import { exportToCsv } from '../utils/csvExport';
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Safety Delete Confirmation States
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deleteTargetName, setDeleteTargetName] = useState('');
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -39,12 +46,43 @@ export default function CustomersPage() {
   const loadData = async () => {
     try {
       setLoading(true);
+      setError(null);
       const data = await listCustomers();
       setCustomers(data);
     } catch (err) {
       console.error("Failed to load customers:", err);
+      setError("載入客戶列表失敗：" + (err instanceof Error ? err.message : String(err)));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleStatus = async (id: string, newStatus: 'ACTIVE' | 'INACTIVE') => {
+    try {
+      setError(null);
+      await updateCustomer(id, { status: newStatus });
+      void loadData();
+    } catch (err) {
+      setError("變更客戶狀態失敗：" + (err instanceof Error ? err.message : String(err)));
+    }
+  };
+
+  const handleOpenDeleteConfirm = (id: string, name: string) => {
+    setDeleteTargetId(id);
+    setDeleteTargetName(name);
+    setIsConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTargetId) return;
+    try {
+      setError(null);
+      await deleteCustomer(deleteTargetId);
+      setIsConfirmOpen(false);
+      void loadData();
+    } catch (err) {
+      setError("刪除客戶失敗：" + (err instanceof Error ? err.message : String(err)));
+      setIsConfirmOpen(false);
     }
   };
 
@@ -87,6 +125,7 @@ export default function CustomersPage() {
     }
 
     try {
+      setError(null);
       const payload = {
         ...formData,
         line_id: ''
@@ -99,7 +138,7 @@ export default function CustomersPage() {
       setIsModalOpen(false);
       void loadData();
     } catch (err) {
-      alert("儲存失敗：" + (err instanceof Error ? err.message : String(err)));
+      setError("儲存失敗：" + (err instanceof Error ? err.message : String(err)));
     }
   };
 
@@ -125,11 +164,17 @@ export default function CustomersPage() {
       c.billing_address || '',
       c.status
     ]);
-    exportToCsv('富田客戶名冊報表', headers, rows);
+    exportToCsv('福田客戶名冊報表', headers, rows);
   };
 
   return (
     <div className="space-y-6">
+      {error && (
+        <div className="p-3.5 bg-rose-50 border border-rose-200 text-status-danger text-xs font-semibold rounded-xl flex items-center justify-between shadow-xs">
+          <span>⚠️ {error}</span>
+          <button onClick={() => setError(null)} className="text-text-secondary hover:text-text-primary ml-2">✕</button>
+        </div>
+      )}
       <PageHeader
         title="客戶資料管理"
         description="維護個人與企業租客聯絡資訊、統一編號、發票寄送地址與狀態控管。"
@@ -194,12 +239,35 @@ export default function CustomersPage() {
               {
                 header: '操作',
                 accessor: (r) => (
-                  <button
-                    onClick={() => handleOpenEdit(r)}
-                    className="px-2.5 py-1 text-xs bg-surface-muted hover:bg-brand-navy-950 hover:text-white font-semibold rounded border border-border-default transition-all"
-                  >
-                    編輯客戶
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => handleOpenEdit(r)}
+                      className="px-2 py-1 text-[11px] bg-surface-muted hover:bg-brand-navy-950 hover:text-white font-semibold rounded border border-border-default transition-all"
+                    >
+                      編輯
+                    </button>
+                    {r.status?.toUpperCase() === 'ACTIVE' ? (
+                      <button
+                        onClick={() => handleToggleStatus(r.customer_id, 'INACTIVE')}
+                        className="px-2 py-1 text-[11px] text-amber-700 bg-amber-50 hover:bg-amber-100 font-semibold rounded border border-amber-200 transition-all"
+                      >
+                        停用
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleToggleStatus(r.customer_id, 'ACTIVE')}
+                        className="px-2 py-1 text-[11px] text-emerald-700 bg-emerald-50 hover:bg-emerald-100 font-semibold rounded border border-emerald-200 transition-all"
+                      >
+                        啟用
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleOpenDeleteConfirm(r.customer_id, r.name)}
+                      className="px-2 py-1 text-[11px] text-rose-700 bg-rose-50 hover:bg-rose-100 font-semibold rounded border border-rose-200 transition-all"
+                    >
+                      刪除
+                    </button>
+                  </div>
                 )
               }
             ]}
@@ -222,12 +290,35 @@ export default function CustomersPage() {
                   { label: '通訊地址', value: r.billing_address || '無' }
                 ]}
                 actionButtons={
-                  <button
-                    onClick={() => handleOpenEdit(r)}
-                    className="px-3 py-1 text-xs bg-brand-navy-950 text-white font-semibold rounded"
-                  >
-                    編輯
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleOpenEdit(r)}
+                      className="px-3 py-1 text-xs bg-brand-navy-950 text-white font-semibold rounded"
+                    >
+                      編輯
+                    </button>
+                    {r.status?.toUpperCase() === 'ACTIVE' ? (
+                      <button
+                        onClick={() => handleToggleStatus(r.customer_id, 'INACTIVE')}
+                        className="px-3 py-1 text-xs bg-amber-600 text-white font-semibold rounded"
+                      >
+                        停用
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleToggleStatus(r.customer_id, 'ACTIVE')}
+                        className="px-3 py-1 text-xs bg-emerald-600 text-white font-semibold rounded"
+                      >
+                        啟用
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleOpenDeleteConfirm(r.customer_id, r.name)}
+                      className="px-3 py-1 text-xs bg-rose-600 text-white font-semibold rounded"
+                    >
+                      刪除
+                    </button>
+                  </div>
                 }
               />
             ))}
@@ -297,7 +388,7 @@ export default function CustomersPage() {
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as 'ACTIVE' | 'INACTIVE' })}
                     className="w-full saas-input"
                   >
-                    <option value="ACTIVE font-semibold text-status-success">正常 (ACTIVE)</option>
+                    <option value="ACTIVE">正常 (ACTIVE)</option>
                     <option value="INACTIVE">停用 (INACTIVE - 禁止新建約)</option>
                   </select>
                 </div>
@@ -342,6 +433,16 @@ export default function CustomersPage() {
           </div>
         </div>
       )}
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        title="確認刪除客戶"
+        message={`您確定要刪除客戶「${deleteTargetName}」嗎？此操作將會對其進行軟刪除。`}
+        confirmText="確認刪除"
+        cancelText="取消"
+        isDangerous={true}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setIsConfirmOpen(false)}
+      />
     </div>
   );
 }

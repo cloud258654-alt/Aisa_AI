@@ -56,7 +56,7 @@ export default function MobileNavDrawer({ isOpen, onClose }: MobileNavDrawerProp
                 <BuildingIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="font-bold text-sm text-white">富田貨櫃出租</h2>
+                <h2 className="font-bold text-sm text-white">福田貨櫃倉儲出租系統</h2>
                 <p className="text-[10px] text-brand-gold-300 font-semibold">SaaS 手機選單</p>
               </div>
             </div>

@@ -1,4 +1,4 @@
-# 富田貨櫃出租系統 — TEST 環境端到端真實 E2E 驗證報告 (E2E_TEST_REPORT.md)
+# 福田貨櫃倉儲出租系統 — TEST 環境端到端真實 E2E 驗證報告 (E2E_TEST_REPORT.md)
 
 - **驗證環境**：TEST 測試環境 (獨立隔離 Google Spreadsheet)
 - **測試日期**：2026-07-22
@@ -27,7 +27,7 @@
 | 步驟 | 測試項目 | 實測操作與輸入資料 | Sheets 工作表對應 | 驗收結果 |
 | :---: | --- | --- | --- | :---: |
 | **1** | 管理員登入 | 輸入管理員帳號與密碼 HMAC 簽章驗證 | `session_logs` | ✅ `PASS` |
-| **2** | 新建客戶 | 新建「富田企業 (CUST-20260722-001)」 | `customers` | ✅ `PASS` |
+| **2** | 新建客戶 | 新建「福田企業 (CUST-20260722-001)」 | `customers` | ✅ `PASS` |
 | **3** | 新建貨櫃 | 新建「CONT-A01 (20呎)」與「CONT-A02 (20呎)」 | `containers` (狀態: `AVAILABLE`) | ✅ `PASS` |
 | **4** | 設定費率 | 新設「20呎年租優惠方案 (48,000/年, 押金 5,000)」 | `rate_plans` | ✅ `PASS` |
 | **5** | 啟用多櫃合約 | 建立含 CONT-A01 與 CONT-A02 之 2 櫃合約 | `contracts`, `contract_items` | ✅ `PASS` (貨櫃自動轉 `RENTED`) |

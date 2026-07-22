@@ -67,7 +67,7 @@
 ---
 
 ## 8. PWA Manifest 與 Service Worker 現況
-- ** Manifest**：`container-rental-app-v1/vite.config.ts` 已整合 Vite PWA Plugin，定義 `manifest.webmanifest`（包含 `name: "富田貨櫃出租管理系統"`, `short_name: "富田貨櫃"`, `theme_color: "#021341"`）。
+- ** Manifest**：`container-rental-app-v1/vite.config.ts` 已整合 Vite PWA Plugin，定義 `manifest.webmanifest`（包含 `name: "福田貨櫃倉儲出租系統"`, `short_name: "福田貨櫃"`, `theme_color: "#021341"`）。
 - **Service Worker**：產出 `dist/sw.js` 實現靜態資源離線快取與 PWA 安裝提示。
 - **離線防呆**：當網路離線 (`!navigator.onLine`) 時，前端按鈕會彈出「⚠️ 目前離線，請恢復網路連線後再進行儲存/異動」明確提示，防範錯覺誤認。
 

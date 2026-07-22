@@ -48,3 +48,34 @@ function updateContainer(id, updates) {
 
   return updateRecord('containers', id, updates);
 }
+
+function deleteContainer(id) {
+  var container = findRecordById("containers", id);
+  if (!container) {
+    throw new AppError("NOT_FOUND", "找不到指定的貨櫃");
+  }
+  
+  var status = (container.status || "").toUpperCase();
+  if (status === "RENTED" || status === "INSPECTION" || status === "MAINTENANCE") {
+    throw new AppError("CONTAINER_NOT_DELETABLE", "貨櫃狀態為 RENTED、INSPECTION 或 MAINTENANCE，無法刪除");
+  }
+  
+  var items = listRecords("contract_items");
+  var hasHistory = false;
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].container_id === id) {
+      hasHistory = true;
+      break;
+    }
+  }
+  
+  if (hasHistory) {
+    throw new AppError("CONTAINER_HAS_HISTORICAL_CONTRACT", "該貨櫃有歷史合約紀錄，無法直接刪除，請將狀態改為 RETIRED");
+  }
+  
+  if (status !== "AVAILABLE") {
+    throw new AppError("CONTAINER_NOT_AVAILABLE", "只有可用 (AVAILABLE) 狀態的貨櫃可以被刪除");
+  }
+  
+  softDeleteRecord("containers", id);
+}

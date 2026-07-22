@@ -212,7 +212,13 @@ function handleSoftDeleteAction(payload) {
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    softDeleteRecord(table, id);
+    if (table === "customers") {
+      deleteCustomer(id);
+    } else if (table === "containers") {
+      deleteContainer(id);
+    } else {
+      softDeleteRecord(table, id);
+    }
     return { ok: true, data: { id: id, deleted: true }, error: null };
   } finally {
     lock.releaseLock();

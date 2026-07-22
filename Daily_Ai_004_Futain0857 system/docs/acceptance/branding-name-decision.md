@@ -1,9 +1,9 @@
 # 品牌與系統統一名稱決策紀錄 (Branding Name Decision)
 
-# PENDING USER DECISION
+# DECIDED - 統一使用「福田貨櫃倉儲出租系統」
 
 - **建立日期**：2026-07-22
-- **狀態**：`PENDING USER DECISION` (等待使用者明確指示統一品牌名稱，嚴禁自動批次修改)
+- **狀態**：`DECIDED` (使用者已於 2026-07-22 明確指示統一品牌名稱為「福田貨櫃倉儲出租系統」)
 
 ---
 

@@ -42,7 +42,7 @@ export default function Sidebar() {
           <BuildingIcon className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="font-extrabold text-base tracking-wide text-white">富田貨櫃出租</h1>
+          <h1 className="font-extrabold text-base tracking-wide text-white">福田貨櫃倉儲出租系統</h1>
           <p className="text-[11px] text-brand-gold-300 font-semibold tracking-wider uppercase">SaaS 營運後台</p>
         </div>
       </div>

@@ -45,7 +45,7 @@ export default function LoginPage() {
             <BuildingIcon className="w-7 h-7 text-white" />
           </div>
           <h2 className="text-2xl font-extrabold tracking-tight text-brand-navy-950">
-            富田貨櫃出租系統
+            福田貨櫃倉儲出租系統
           </h2>
           <p className="text-xs text-text-secondary">請輸入管理員憑證或點選下方快捷按鈕存取系統</p>
         </div>

@@ -29,3 +29,30 @@ function updateCustomer(id, updates) {
   validateCustomerUpdates(updates);
   return updateRecord('customers', id, updates);
 }
+
+function deleteCustomer(id) {
+  var contracts = listRecords("contracts");
+  var hasActive = false;
+  var hasHistorical = false;
+  
+  for (var i = 0; i < contracts.length; i++) {
+    var contract = contracts[i];
+    if (contract.customer_id === id) {
+      var status = (contract.status || "").toUpperCase();
+      if (status === "ACTIVE" || status === "ENDING" || status === "DRAFT") {
+        hasActive = true;
+      } else {
+        hasHistorical = true;
+      }
+    }
+  }
+  
+  if (hasActive) {
+    throw new AppError("CUSTOMER_HAS_ACTIVE_CONTRACT", "該客戶目前有進行中或草稿合約，無法刪除");
+  }
+  if (hasHistorical) {
+    throw new AppError("CUSTOMER_HAS_HISTORICAL_CONTRACT", "該客戶有歷史合約紀錄，無法直接刪除，請將狀態改為 INACTIVE");
+  }
+  
+  softDeleteRecord("customers", id);
+}

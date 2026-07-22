@@ -1,4 +1,4 @@
-# 富田貨櫃出租系統 — 正式與測試環境部署手冊 (DEPLOYMENT.md)
+# 福田貨櫃倉儲出租系統 — 正式與測試環境部署手冊 (DEPLOYMENT.md)
 
 - **更新日期**：2026-07-22
 - **版本**：v1.0.0
@@ -23,7 +23,7 @@
 ## 🛠️ 二、後端 (GAS) 部署 SOP
 
 ### 步驟 1：建立試算表與設定 Script Properties
-1. 開啟 Google Sheets，建立一空白試算表，命名為 `富田貨櫃出租系統_PRODUCTION`。
+1. 開啟 Google Sheets，建立一空白試算表，命名為 `福田貨櫃倉儲出租系統_PRODUCTION`。
 2. 複製網址中之 Spreadsheet ID (例如 `1A2b3C4d5E...`)。
 3. 開啟 Apps Script 專案，進入「專案設定 ➔ 指令碼屬性 (Script Properties)」，新增下列 6 個設定：
 

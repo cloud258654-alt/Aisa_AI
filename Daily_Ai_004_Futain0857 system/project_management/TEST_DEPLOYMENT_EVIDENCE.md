@@ -7,7 +7,7 @@
 ## 📋 1. 部署基本資訊
 
 - **環境名稱 (Environment Name)**：`TEST` (測試隔離環境)
-- **試算表名稱 (Spreadsheet Name)**：`富田貨櫃出租系統_TEST`
+- **試算表名稱 (Spreadsheet Name)**：`福田貨櫃倉儲出租系統_TEST`
 - **部署版本 (Deployment Version)**：`v1.0.0-TEST-Gate`
 - **測試日期 (Test Date)**：2026-07-22
 - **測試人員 (Test Person)**：AI Pair / System Admin
