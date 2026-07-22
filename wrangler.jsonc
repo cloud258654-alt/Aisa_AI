@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "futian0857",
+  "compatibility_date": "2026-07-22",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "Daily_Ai_002_商譽雷達"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
